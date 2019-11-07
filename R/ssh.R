@@ -1,0 +1,92 @@
+
+# == title
+# Connect to submisstion via ssh
+#
+# == details
+# If ssh connection is lost, run this function to reconnect.
+ssh_connect = function() {
+
+	if(!is.null(bsub_opt$ssh_session)) {
+		message("ssh is already connected.")
+	}
+
+	user = Sys.info()['user']
+
+	if(!requireNamespace("ssh")) {
+		message("You need to install ssh package.")
+	}
+
+	for(i in seq_along(bsub_opt$submission_node)) {
+		message(qq("establish ssh connection to @{user}@@{bsub_opt$submission_node[i]}"))
+		oe = try(session <- ssh::ssh_connect(paste0(user, "@", bsub_opt$submission_node[i])))
+
+		if(!inherits(oe, "try-error")) {
+			bsub_opt$ssh_session = session
+			break
+		}
+
+		message(qq("establish ssh connection to @{user}@@{bsub_opt$submission_node[i]}, 2nd try"))
+		oe = try(session <- ssh::ssh_connect(paste0(user, "@", bsub_opt$submission_node[i])))
+
+		if(!inherits(oe, "try-error")) {
+			bsub_opt$ssh_session = session
+			break
+		}
+
+		message(qq("establish ssh connection to @{user}@@{bsub_opt$submission_node[i]}, 3rd try"))
+		oe = try(session <- ssh::ssh_connect(paste0(user, "@", bsub_opt$submission_node[i])))
+
+		if(!inherits(oe, "try-error")) {
+			bsub_opt$ssh_session = session
+			break
+		}
+	}
+
+	if(is.null(bsub_opt$ssh_session)) {
+		stop("cannot connect to submission nodes.")
+	}
+}
+
+
+# == title
+# Disconnect ssh connection
+#
+ssh_disconnect = function() {
+	if(!is.null(bsub_opt$ssh_session)) {
+		ssh::ssh_disconnect(bsub_opt$ssh_session)
+	}
+	bsub_opt$ssh_session = NULL
+}
+
+ssh_exec = function(cmd) {
+
+	ssh_validate()
+
+	ln = ""
+	con = textConnection("ln", "w", local = TRUE)
+    status = ssh::ssh_exec_wait(bsub_opt$ssh_session, command = c(
+        "source /etc/profile",
+        "export LSF_ENVDIR=/opt/lsf/conf",
+        "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc",
+        cmd
+    ), std_out = con, std_err = con)
+    close(con)
+    if(status) {
+    	stop(paste(c("You have an error when executing remote commands", ln), collapse = "\n"))
+    }
+    return(ln)
+}
+
+ssh_validate = function() {
+	if(is.null(bsub_opt$ssh_session)) {
+		ssh_connect()
+	} else {
+		session = bsub_opt$ssh_session
+		if(ssh::ssh_session_info(session)$connected) {
+			return(NULL)
+		} else {
+			bsub_opt$ssh_session = NULL
+			ssh_connect()
+		}
+	}
+}
