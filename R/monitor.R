@@ -9,6 +9,11 @@ job_log = function(job_id) {
 
     job_id = as.character(job_id)
 
+    if(job_status_by_id(job_id) == "PEND") {
+        qqcat("Not yet started.\n")
+        return(invisible(NULL))
+    }
+
     msg = ""
     # check running jobs
     if(on_submission_node()) {
@@ -22,6 +27,7 @@ job_log = function(job_id) {
             msg = qq("More than one of jobs: @{job_id} found.")
         } else {
             cat(readLines(file), sep = "\n")
+            return(invisible(NULL))
         }
     } else {
         ln = ssh_exec(qq("ls /opt/lsf-shared/lsbatch/@{Sys.info()['user']}/*.@{job_id}.out"))
@@ -33,10 +39,12 @@ job_log = function(job_id) {
         } else {
             ln2 = ssh_exec(qq("cat @{ln}"))
             cat(ln2, sep = "\n")
+            return(invisible(NULL))
         }
     }
-    # if it is a runing job
+
     if(msg == "") {
+        cat("No message.\n")
         return(invisible(NULL))
     }
 
@@ -166,7 +174,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL) {
     df$SUBMIT_TIME = as.POSIXct(df$SUBMIT_TIME, format = "%b %d %H:%M:%S %Y")
     df$START_TIME = as.POSIXct(df$START_TIME, format = "%b %d %H:%M:%S %Y")
     df$FINISH_TIME = as.POSIXct(df$FINISH_TIME, format = "%b %d %H:%M:%S %Y")
-    df$TIME_PASSED = Sys.time() - df$START_TIME
+    df$TIME_PASSED = df$FINISH_TIME - df$START_TIME
     l = df$FINISH_TIME < Sys.time()
     l[is.na(l)] = FALSE  # finish time is unavailable
     df$TIME_PASSED[l] = df$FINISH_TIME[l] - df$START_TIME[l]

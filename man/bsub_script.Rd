@@ -19,6 +19,7 @@ bsub_script(script,
     dependency = NULL,
     enforce = bsub_opt$enforce,
     local = bsub_opt$local,
+    sh_head = bsub_opt$sh_head,
     ...)
 }
 \arguments{
@@ -35,6 +36,7 @@ bsub_script(script,
   \item{dependency}{A vector of job IDs that current job depends on.}
   \item{enforce}{If a flag file for the job is found, whether to enforce to rerun the job.}
   \item{local}{Run job locally (not submitting to the LSF cluster)?}
+  \item{sh_head}{Commands that are written as head of the sh script.}
   \item{...}{Command-line arguments can also be specified as name-value pairs.}
 
 }

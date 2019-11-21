@@ -33,6 +33,7 @@ There are following parameters:
   \item{\code{local}}{Run job locally (not submitting to the LSF cluster)?}
   \item{\code{call_Rscript}}{How to call \code{Rscript} by specifying an R version number.}
   \item{\code{submission_node}}{A list of node names for submitting jobs.}
+  \item{\code{sh_head}}{Commands that are written as head of the sh script.}
 }
 }
 \examples{

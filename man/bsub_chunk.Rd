@@ -25,7 +25,8 @@ bsub_chunk(code,
     script = NULL,
     start = NULL,
     end = NULL,
-    save_var = FALSE)
+    save_var = FALSE,
+    sh_head = bsub_opt$sh_head)
 }
 \arguments{
 
@@ -48,6 +49,7 @@ bsub_chunk(code,
   \item{start}{A numeric vector that contains line indices of the starting code chunk or a character vector that contain regular expression to match the start of code chunks.}
   \item{end}{Same setting as \code{start}.}
   \item{save_var}{Whether save the last variable in the code chunk? Later the variable can be retrieved by \code{\link{retrieve_var}}.}
+  \item{sh_head}{Commands that are written as head of the sh script.}
 
 }
 \value{

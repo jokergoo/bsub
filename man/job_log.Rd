@@ -1,10 +1,10 @@
 \name{job_log}
 \alias{job_log}
 \title{
-Log for the running/finished job
+Log for the running/finished/failed job
 }
 \description{
-Log for the running/finished job
+Log for the running/finished/failed job
 }
 \usage{
 job_log(job_id)

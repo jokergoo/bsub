@@ -345,7 +345,7 @@ retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
         }
     }
 
-    status = job_status(name, output_dir)
+    status = job_status_by_name(name, output_dir)
     if(status %in% c("RUN", "PEND")) {
         message(qq("job is running or pending, retry in @{wait} seconds."))
         Sys.sleep(wait)
@@ -359,7 +359,7 @@ retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
     }
 }
 
-job_status = function(job_name, output_dir = bsub_opt$output_dir) {
+job_status_by_name = function(job_name, output_dir = bsub_opt$output_dir) {
     if(on_submission_node()) {
         con = pipe(qq("bjobs -J @{job_name} 2>&1"))
         ln = readLines(con)
@@ -379,6 +379,25 @@ job_status = function(job_name, output_dir = bsub_opt$output_dir) {
         } else {
             return("MISSING")
         }
+    }
+
+    lt = strsplit(ln, "\\s+")
+
+    lt = lt[-1]
+    sapply(lt, "[", 3)
+}
+
+job_status_by_id = function(job_id) {
+    if(on_submission_node()) {
+        con = pipe(qq("bjobs @{job_id} 2>&1"))
+        ln = readLines(con)
+        close(con)
+    } else {
+        ln = ssh_exec(qq("bjobs @{job_id} 2>&1"))
+    }
+
+     if(length(ln) == 1) {
+        return("MISSING")
     }
 
     lt = strsplit(ln, "\\s+")
