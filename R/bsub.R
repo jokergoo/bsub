@@ -389,11 +389,11 @@ job_status_by_name = function(job_name, output_dir = bsub_opt$output_dir) {
 
 job_status_by_id = function(job_id) {
     if(on_submission_node()) {
-        con = pipe(qq("bjobs @{job_id} 2>&1"))
+        con = pipe(qq("bjobs -o \"jobid user stat\" @{job_id} 2>&1"))
         ln = readLines(con)
         close(con)
     } else {
-        ln = ssh_exec(qq("bjobs @{job_id} 2>&1"))
+        ln = ssh_exec(qq("bjobs -o \"jobid user stat\" @{job_id} 2>&1"))
     }
 
      if(length(ln) == 1) {
