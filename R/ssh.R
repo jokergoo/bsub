@@ -10,7 +10,7 @@ ssh_connect = function() {
 		message("ssh is already connected.")
 	}
 
-	user = Sys.info()['user']
+	user = bsub_opt$user
 
 	if(!requireNamespace("ssh")) {
 		message("You need to install ssh package.")

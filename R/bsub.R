@@ -126,6 +126,9 @@ bsub_opt = set_opt(
     sh_head = list(
         .value = "",
         .class = "character"
+    ),
+    user = list(
+        .value = Sys.info()['user']
     )
 )
 
