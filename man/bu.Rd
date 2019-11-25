@@ -20,5 +20,4 @@ Please use \code{\link{bjobs}} instead.
 \examples{
 # There is no example
 NULL
-
 }

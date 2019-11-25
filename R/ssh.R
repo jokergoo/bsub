@@ -65,9 +65,7 @@ ssh_exec = function(cmd) {
 	ln = ""
 	con = textConnection("ln", "w", local = TRUE)
     status = ssh::ssh_exec_wait(bsub_opt$ssh_session, command = c(
-        "source /etc/profile",
-        "export LSF_ENVDIR=/opt/lsf/conf",
-        "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc",
+        bsub_opt$ssh_envir,
         cmd
     ), std_out = con, std_err = con)
     close(con)

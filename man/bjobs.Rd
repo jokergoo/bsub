@@ -26,5 +26,4 @@ A data frame with job summaries.
 \examples{
 # There is no example
 NULL
-
 }

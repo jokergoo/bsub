@@ -18,5 +18,4 @@ Summary of jobs
 \examples{
 # There is no example
 NULL
-
 }

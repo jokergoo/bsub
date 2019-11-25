@@ -14,10 +14,24 @@ job_log = function(job_id) {
         return(invisible(NULL))
     }
 
+    user = bsub_opt$user
+
+    # the temporary job dir
+    ln = run_cmd("bparams -a", print = FALSE)
+    ind = grep("JOB_SPOOL_DIR", ln)
+    if(length(ind)) {
+        job_temp_dir = gsub("^\\s*JOB_SPOOL_DIR = ", "", ln[ind])
+        job_temp_dir = gsub("/%U$", "", job_temp_dir)
+        job_temp_dir = qq("@{job_temp_dir}/@{user}")
+    } else {
+        remote_home = run_cmd("echo $HOME", print = FALSE)
+        job_temp_dir = qq("@{remote_home}/.lsbatch")
+    }
+
     msg = ""
     # check running jobs
     if(on_submission_node()) {
-    	file = list.files(path = qq("/opt/lsf-shared/lsbatch/@{Sys.info()['user']}"),
+    	file = list.files(path = job_temp_dir,
     		pattern = paste0("\\.", job_id, "\\.out"),
     		full.names = TRUE)
 
@@ -30,7 +44,7 @@ job_log = function(job_id) {
             return(invisible(NULL))
         }
     } else {
-        ln = ssh_exec(qq("ls /opt/lsf-shared/lsbatch/@{Sys.info()['user']}/*.@{job_id}.out"))
+        ln = ssh_exec(qq("ls @{job_temp_dir}/*.@{job_id}.out"))
 
         if(length(ln) == 0) {
             msg = qq("No log file for job: @{job_id}.")
@@ -77,13 +91,7 @@ on_submission_node = function() {
 #
 bu = function(stat = c("RUN", "PEND")) {
 
-    if(on_submission_node()) {
-	   con = pipe("bu 2>&1")
-       ln = readLines(con)
-       close(con)
-    } else {
-        ln = ssh_exec("bu 2>&1")
-    }
+    ln = run_cmd("bu 2>&1", print = FALSE)
     
     # job done or exit
     if(length(ln) == 1) {
@@ -154,15 +162,9 @@ class(bu) = "bjobs"
 # A data frame with job summaries.
 #
 bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL) {
-    cmd = "bjobs -a -o 'jobid stat job_name submit_time start_time finish_time slots mem max_mem delimiter=\",\"' 2>&1"
 
-    if(on_submission_node()) {
-       con = pipe(cmd)
-       ln = readLines(con)
-       close(con)
-    } else {
-        ln = ssh_exec(cmd)
-    }
+    cmd = "bjobs -a -o 'jobid stat job_name submit_time start_time finish_time slots mem max_mem delimiter=\",\"' 2>&1"
+    ln = run_cmd(cmd, print = FALSE)
     
     # job done or exit
     if(length(ln) == 1) {
@@ -266,27 +268,20 @@ bkill = function(job_id) {
 
     cmd = qq("bkill @{paste(job_id, collapse = ' ')} 2>&1")
 
-    if(on_submission_node()) {
-       con = pipe(cmd)
-       ln = readLines(con)
-       close(con)
-    } else {
-        ln = ssh_exec(cmd)
-    }
-
-    cat(c(ln, "\n"), sep = "\n")
+    run_cmd(cmd, print = TRUE)
 }
 
 # == title
-# Normal b* command
+# Run command on submission node
 #
 # == param
-# -cmd Command
+# -cmd A single-line command
+# -print Whether print output from the command
 #
-# == details
-# Other command by e.g. ``bsub`` can be directly sent by this function.
+# == value
+# The output of the command
 #
-bcmd = function(cmd) {
+run_cmd = function(cmd, print = FALSE) {
     if(on_submission_node()) {
        con = pipe(cmd)
        ln = readLines(con)
@@ -295,7 +290,8 @@ bcmd = function(cmd) {
         ln = ssh_exec(cmd)
     }
 
-    cat(c(ln, "\n"), sep = "\n")
+    if(print) cat(c(ln, "\n"), sep = "\n")
+    return(invisible(ln))
 }
 
 # == title
@@ -415,3 +411,40 @@ brecent = function(max = 20, filter = NULL) {
 
 class(brecent) = "bjobs"
 
+
+job_status_by_name = function(job_name, output_dir = bsub_opt$output_dir) {
+
+    ln = run_cmd(qq("bjobs -J @{job_name} 2>&1"), print = FALSE)
+
+    # job done or exit
+    if(length(ln) == 1) {
+        flag_file = qq("@{output_dir}/@{job_name}.flag")
+        out_file = qq("@{output_dir}/@{job_name}.out")
+        if(file.exists(flag_file)) {
+            return("DONE")
+        } else if(file.exists(out_file)) {
+            return("EXIT")
+        } else {
+            return("MISSING")
+        }
+    }
+
+    lt = strsplit(ln, "\\s+")
+
+    lt = lt[-1]
+    sapply(lt, "[", 3)
+}
+
+job_status_by_id = function(job_id) {
+
+    ln = run_cmd(qq("bjobs -o \"jobid user stat\" @{job_id} 2>&1"), print = FALSE)
+
+    if(length(ln) == 1) {
+        return("MISSING")
+    }
+
+    lt = strsplit(ln, "\\s+")
+
+    lt = lt[-1]
+    sapply(lt, "[", 3)
+}

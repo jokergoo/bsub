@@ -33,7 +33,7 @@ bsub_chunk(code,
   \item{code}{The code chunk, should be embrached by \code{\{} \code{\}}.}
   \item{name}{If name is not specified, an internal name calculated by \code{\link[digest]{digest}} on the chunk is automatically assigned. }
   \item{packages}{A character vector with package names that will be loaded before running the script.}
-  \item{image}{A character vector of RData/rda files that will be loaded before running the script.}
+  \item{image}{A character vector of RData/rda files that will be loaded before running the script. When \code{image} is set to \code{TRUE}, all variables in \code{.GlobalEnv} will be saved into a temporary file and all attached packages will be recorded. The temporary files will be removed after the job is finished.}
   \item{variables}{A character vector of variable names that will be loaded before running the script.}
   \item{wd}{The working directory.}
   \item{hour}{Running time of the job.}

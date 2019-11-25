@@ -15,5 +15,4 @@ If ssh connection is lost, run this function to reconnect.
 \examples{
 # There is no example
 NULL
-
 }

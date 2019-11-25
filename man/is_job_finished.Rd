@@ -18,5 +18,4 @@ is_job_finished(job_name, output_dir = bsub_opt$output_dir)
 \examples{
 # There is no example
 NULL
-
 }

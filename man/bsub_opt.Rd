@@ -34,7 +34,17 @@ There are following parameters:
   \item{\code{call_Rscript}}{How to call \code{Rscript} by specifying an R version number.}
   \item{\code{submission_node}}{A list of node names for submitting jobs.}
   \item{\code{sh_head}}{Commands that are written as head of the sh script.}
+  \item{\code{user}}{Username on the submission node.}
+  \item{\code{group}}{The user group}
+  \item{\code{ssh_envir}}{The commands for setting bash environment for successfully running bjobs, bsub, ...}
 }
+
+For \code{ssh_envir} option, an example is as follows. The \code{LSF_ENVDIR} and \code{LSF_SERVERDIR} should be defined and exported.
+
+  \preformatted{
+    c("source /etc/profile",
+      "export LSF_ENVDIR=/opt/lsf/conf",
+      "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")  }
 }
 \examples{
 # examples are in the vignette.

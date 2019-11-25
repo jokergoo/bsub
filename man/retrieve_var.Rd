@@ -22,5 +22,4 @@ It retrieve the saved variable in \code{\link{bsub_chunk}} when \code{save_rds =
 \examples{
 # There is no example
 NULL
-
 }

@@ -19,5 +19,4 @@ wait_jobs(job_name, output_dir = bsub_opt$output_dir, wait = 30)
 \examples{
 # There is no example
 NULL
-
 }
