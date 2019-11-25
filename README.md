@@ -28,5 +28,3 @@ bkill(job_id)
 ```
 
 More information can be found in the package vignette.
-
-Note it only works on DKFZ internal HPC.
