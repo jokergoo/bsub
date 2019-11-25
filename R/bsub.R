@@ -657,7 +657,7 @@ fi", con)
     }
 
     system(qq("chmod 755 @{sh_file}"))
-    cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'rusage[mem=@{round(memory*1024)}]' -o '@{output}'")
+    cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -o '@{output}'")
     if(length(dependency)) {
         dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )
         cmd = qq("@{cmd} -w '@{dependency_str}'")
