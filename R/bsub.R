@@ -129,6 +129,9 @@ bsub_opt = set_opt(
     ),
     user = list(
         .value = Sys.info()['user']
+    ),
+    group = list(
+        .value = ""
     )
 )
 
@@ -657,7 +660,11 @@ fi", con)
     }
 
     system(qq("chmod 755 @{sh_file}"))
-    cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -o '@{output}'")
+    if(bsub_opt$group == "") {
+        cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -o '@{output}'")
+    } else {
+        cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -G @{bsub_opt$group} -o '@{output}'")
+    }
     if(length(dependency)) {
         dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )
         cmd = qq("@{cmd} -w '@{dependency_str}'")
