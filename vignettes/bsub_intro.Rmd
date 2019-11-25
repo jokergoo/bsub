@@ -208,6 +208,10 @@ bsub_chunk(name = "example",
 })
 ```
 
+When `image` is set to `TRUE`, all variables in `.GlobalEnv` will be saved
+into a temporary file and all attached packages will be recorded. The temporary files
+will be removed after the job is finished.
+
 Absolute paths should be used instead of relative paths.
 
 ### The working directory

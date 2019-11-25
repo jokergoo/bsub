@@ -139,6 +139,9 @@ bsub_opt$temp_dir = "~/.bsub_temp"
 # -name If name is not specified, an internal name calculated by `digest::digest` on the chunk is automatically assigned. 
 # -packages A character vector with package names that will be loaded before running the script.
 # -image A character vector of RData/rda files that will be loaded before running the script.
+#       When ``image`` is set to ``TRUE``, all variables in ``.GlobalEnv`` will be saved
+#       into a temporary file and all attached packages will be recorded. The temporary files
+#       will be removed after the job is finished.
 # -variables A character vector of variable names that will be loaded before running the script.
 # -wd The working directory.
 # -hour Running time of the job.
@@ -243,6 +246,13 @@ bsub_chunk = function(code,
     }
 
     qqcat("- job: '@{name}' from a code chunk\n")
+
+    # if `image` is true, save all variables and all packages that are loaded
+    if(identical(image, TRUE)) {
+        variables = c(variables, ls(envir = .GlobalEnv, all.names = TRUE))
+        packages = c(packages, names(sessionInfo()$otherPkgs))
+        image = NULL
+    }
 
     head = ""
     tail = ""
