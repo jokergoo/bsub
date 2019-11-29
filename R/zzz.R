@@ -32,3 +32,10 @@ config_odcf = function() {
                            "export LSF_ENVDIR=/opt/lsf/conf",
                            "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
 }
+
+if(identical(environment(), .GlobalEnv)) {
+	if(grepl("odcf", Sys.info()["nodename"])) {
+		message("On ODCF cluster, set general environment.")
+		config_odcf()
+	}
+}
