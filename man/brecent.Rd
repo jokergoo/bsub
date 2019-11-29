@@ -21,4 +21,5 @@ It is \code{bjobs(status = "all", max = 20, filter = ...)}.
 \examples{
 # There is no example
 NULL
+
 }

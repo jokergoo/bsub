@@ -37,6 +37,7 @@ There are following parameters:
   \item{\code{user}}{Username on the submission node.}
   \item{\code{group}}{The user group}
   \item{\code{ssh_envir}}{The commands for setting bash environment for successfully running bjobs, bsub, ...}
+  \item{\code{bsub_template}}{Template for constructing \code{bsub} command.}
 }
 
 For \code{ssh_envir} option, an example is as follows. The \code{LSF_ENVDIR} and \code{LSF_SERVERDIR} should be defined and exported.

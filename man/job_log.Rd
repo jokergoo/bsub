@@ -17,4 +17,5 @@ job_log(job_id)
 \examples{
 # There is no example
 NULL
+
 }

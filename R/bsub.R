@@ -480,7 +480,7 @@ fi", con)
     # } else {
     #     cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -G @{bsub_opt$group} -o '@{output}'")
     # }
-    cmd = bsub_opt$bsub_template(name, hour, memory, core, bsub_opt$group, output)
+    cmd = bsub_opt$bsub_template(name, hour, memory, core, output, bsub_opt$group)
     if(length(dependency)) {
         dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )
         cmd = qq("@{cmd} -w '@{dependency_str}'")

@@ -150,7 +150,7 @@ bsub_opt = set_opt(
     	.value = c("source /etc/profile")
     ),
     bsub_template = list(
-        .value = function(name, hour, memory, core, group, output, ...) {
+        .value = function(name, hour, memory, core, output, group = NULL, ...) {
             if(identical(group, "") || identical(group, NULL)) {
                 cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -o '@{output}'")
             } else {

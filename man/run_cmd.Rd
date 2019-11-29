@@ -21,4 +21,5 @@ The output of the command
 \examples{
 # There is no example
 NULL
+
 }

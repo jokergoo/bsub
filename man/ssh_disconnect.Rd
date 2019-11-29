@@ -12,4 +12,5 @@ ssh_disconnect()
 \examples{
 # There is no example
 NULL
+
 }

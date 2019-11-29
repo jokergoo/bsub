@@ -17,4 +17,5 @@ clear_temp_dir(ask = TRUE)
 \examples{
 # There is no example
 NULL
+
 }
