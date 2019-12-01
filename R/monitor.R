@@ -41,6 +41,7 @@ job_log = function(job_id) {
             msg = qq("More than one of jobs: @{job_id} found.")
         } else {
             cat(readLines(file, warn = FALSE), sep = "\n")
+            qqcat("**** job (@{job_id}) is still running. ****\n")
             return(invisible(NULL))
         }
     } else {
@@ -53,6 +54,7 @@ job_log = function(job_id) {
         } else {
             ln2 = ssh_exec(qq("cat @{ln}"))
             cat(ln2, sep = "\n")
+            qqcat("**** job (@{job_id}) is still running. ****\n")
             return(invisible(NULL))
         }
     }
