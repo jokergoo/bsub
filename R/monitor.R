@@ -40,7 +40,7 @@ job_log = function(job_id) {
     	} else if(length(file) > 1) {
             msg = qq("More than one of jobs: @{job_id} found.")
         } else {
-            cat(readLines(file), sep = "\n")
+            cat(readLines(file, warn = FALSE), sep = "\n")
             return(invisible(NULL))
         }
     } else {
@@ -68,7 +68,7 @@ job_log = function(job_id) {
         if(job_id %in% job_history$job_id) {
             ind = which(job_history$job_id == job_id)
             file = qq("@{job_history$output_dir[ind]}/@{job_history$job_name[ind]}.out")
-            cat(readLines(file), sep = "\n")
+            cat(readLines(file, warn = FALSE), sep = "\n")
             return(invisible(NULL))
         }
     } else {
