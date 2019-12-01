@@ -3,6 +3,9 @@
 
 
 .onAttach = function(libname, pkgname) {
+
+	packageStartupMessage("-----------------------------------\n")
+
 	if(!file.exists("~/.bsub_temp")) {
 	    packageStartupMessage("create temp_dir: ~/.bsub_temp\n")
 	    dir.create("~/.bsub_temp", recursive = TRUE, showWarnings = FALSE)
@@ -17,6 +20,16 @@
 		packageStartupMessage("On ODCF cluster, set general environment.")
 		config_odcf()
 	}
+
+	packageStartupMessage("\n")
+	packageStartupMessage("- submit R code: `bsub_chunk()`\n")
+	packageStartupMessage("- submit R script: `bsub_script()`\n")
+	packageStartupMessage("- submit shell commands: `bsub_cmd()`\n")
+	packageStartupMessage("- kill jobs: `bkill()`\n")
+	packageStartupMessage("- view job summary: `bjobs`/`brecent`\n")
+	packageStartupMessage("- view job log: `job_log()`\n")
+	packageStartupMessage("-----------------------------------\n")
+
 }
 
 
