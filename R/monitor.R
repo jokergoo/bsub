@@ -45,9 +45,12 @@ job_log = function(job_id) {
             return(invisible(NULL))
         }
     } else {
-        ln = ssh_exec(qq("ls @{job_temp_dir}/*.@{job_id}.out"))
+        # if no such file, ssh_exec gives an error
+        oe = try(ln <- ssh_exec(qq("ls @{job_temp_dir}/*.@{job_id}.out")), silent = TRUE)
 
-        if(length(ln) == 0) {
+        if(inherits(oe, "try-error")) {
+            msg = qq("No log file for job: @{job_id}.")
+        } else if(length(ln) == 0) {
             msg = qq("No log file for job: @{job_id}.")
         } else if(length(ln) > 1) {
             msg = qq("More than one of jobs: @{job_id} found.")

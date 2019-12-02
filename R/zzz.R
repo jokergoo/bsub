@@ -20,7 +20,8 @@
 		packageStartupMessage("On ODCF cluster, set general environment.")
 		config_odcf()
 	}
-
+	
+	packageStartupMessage("")
 	packageStartupMessage("- submit R code: `bsub_chunk()`")
 	packageStartupMessage("- submit R script: `bsub_script()`")
 	packageStartupMessage("- submit shell commands: `bsub_cmd()`")
