@@ -181,12 +181,12 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL) {
     df$SUBMIT_TIME = as.POSIXct(df$SUBMIT_TIME, format = "%b %d %H:%M:%S %Y")
     df$START_TIME = as.POSIXct(df$START_TIME, format = "%b %d %H:%M:%S %Y")
     df$FINISH_TIME = as.POSIXct(df$FINISH_TIME, format = "%b %d %H:%M:%S %Y")
-    df$TIME_PASSED = Sys.time() - df$START_TIME
-    l = df$FINISH_TIME < Sys.time()
-    l[is.na(l)] = FALSE  # finish time is unavailable
-    df$TIME_PASSED[l] = df$FINISH_TIME[l] - df$START_TIME[l]
-
-    df$TIME_LEFT = df$FINISH_TIME - Sys.time()
+    # running/pending jobs
+    df$TIME_PASSED = difftime(Sys.time(), df$START_TIME, units = "hours")
+    l = !(df$STAT %in% c("RUN", "PEND"))
+    # l[is.na(l)] = FALSE  # finish time is unavailable
+    df$TIME_PASSED[l] = difftime(df$FINISH_TIME[l], df$START_TIME[l], units = "hours")
+    df$TIME_LEFT = difftime(df$FINISH_TIME, Sys.time(), units = "hours")
     l = df$FINISH_TIME < Sys.time()
     l[is.na(l)] = TRUE
     df$TIME_LEFT[l] = NA
