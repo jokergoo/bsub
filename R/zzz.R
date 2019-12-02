@@ -4,32 +4,41 @@
 
 .onAttach = function(libname, pkgname) {
 
-	packageStartupMessage("-----------------------------------")
+	version = packageDescription(pkgname, fields = "Version")
 
+	packageStartupMessage("========================================")
+	packageStartupMessage(paste0("bsub version ", version))
+	packageStartupMessage("Github page: https://github.com/jokergoo/bsub")
+	packageStartupMessage("")
+
+
+	msg = FALSE
 	if(!file.exists("~/.bsub_temp")) {
 	    packageStartupMessage("create temp_dir: ~/.bsub_temp")
 	    dir.create("~/.bsub_temp", recursive = TRUE, showWarnings = FALSE)
+	    msg = TRUE
 	}
 
 	all_f = list.files("~/.bsub_temp/")
 	if(length(all_f)) {
 		packageStartupMessage(paste0("There are ", length(all_f), " temporary files in ~/.bsub_temp"))
+		msg = TRUE
 	}
 
 	if(grepl("odcf", Sys.info()["nodename"])) {
 		packageStartupMessage("On ODCF cluster, set general environment.")
+		msg = TRUE
 		config_odcf()
 	}
 	
-	packageStartupMessage("")
+	if(msg) packageStartupMessage("")
 	packageStartupMessage("- submit R code: `bsub_chunk()`")
 	packageStartupMessage("- submit R script: `bsub_script()`")
 	packageStartupMessage("- submit shell commands: `bsub_cmd()`")
 	packageStartupMessage("- kill jobs: `bkill()`")
 	packageStartupMessage("- view job summary: `bjobs`/`brecent`")
 	packageStartupMessage("- view job log: `job_log()`")
-	packageStartupMessage("-----------------------------------")
-
+	packageStartupMessage("========================================")
 }
 
 
