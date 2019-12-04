@@ -209,7 +209,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL) {
     }
     if(nrow(df)) {
         ind = (nrow(df):1)[1:min(c(nrow(df), max))]
-        df2 = df[sort(ind), c("JOBID", "STAT", "JOB_NAME", "RECENT", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
+        df2 = df[sort(ind), c("JOBID", "STAT", "JOB_NAME", "RECENT","SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
 
         df2$TIME_PASSED = format_difftime(df2$TIME_PASSED)
         df2$TIME_LEFT = format_difftime(df2$TIME_LEFT)
@@ -224,6 +224,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL) {
                          nchar(colnames(df2)) + 1)
         ow = getOption("width")
         options(width = sum(max_width) + 10)
+        cat(strrep("=", sum(max_width)), "\n")
         print(df2, row.names = FALSE, right = FALSE)
         if(nrow(df2) > 20) {
             for(i in seq_len(ncol(df2))) {
@@ -413,8 +414,55 @@ clear_temp_dir = function(ask = TRUE) {
 brecent = function(max = 20, filter = NULL) {
     bjobs(status = "all", max = max, filter = filter)
 }
-
 class(brecent) = "bjobs"
+
+# == title
+# Running jobs
+#
+# == param
+# -max Maximal number of jobs
+# -filter Regular expression to filter on job names
+#
+bjobs_running = function(max = Inf, filter = NULL) {
+    bjobs(status = "RUN", max = max, filter = filter)
+}
+class(bjobs_running) = "bjobs"
+
+# == title
+# Pending jobs
+#
+# == param
+# -max Maximal number of jobs
+# -filter Regular expression to filter on job names
+#
+bjobs_pending = function(max = Inf, filter = NULL) {
+    bjobs(status = "PEND", max = max, filter = filter)
+}
+class(bjobs_pending) = "bjobs"
+
+# == title
+# Finished jobs
+#
+# == param
+# -max Maximal number of jobs
+# -filter Regular expression to filter on job names
+#
+bjobs_done = function(max = Inf, filter = NULL) {
+    bjobs(status = "DONE", max = max, filter = filter)
+}
+class(bjobs_done) = "bjobs"
+
+# == title
+# Failed jobs
+#
+# == param
+# -max Maximal number of jobs
+# -filter Regular expression to filter on job names
+#
+bjobs_exit = function(max = Inf, filter = NULL) {
+    bjobs(status = "EXIT", max = max, filter = filter)
+}
+class(bjobs_exit) = "bjobs"
 
 
 job_status_by_name = function(job_name, output_dir = bsub_opt$output_dir) {
