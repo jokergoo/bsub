@@ -158,6 +158,7 @@ class(bu) = "bjobs"
 # -status Status of the jobs
 # -max Maximal number of recent jobs
 # -filter Regular expression to filter on job names
+# -print Wether print the table
 #
 # == details
 # There is an additional column "RECENT" which is the order
@@ -166,7 +167,7 @@ class(bu) = "bjobs"
 # == value
 # A data frame with job summaries.
 #
-bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL) {
+bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE) {
 
     cmd = "bjobs -a -o 'jobid stat job_name submit_time start_time finish_time slots mem max_mem delimiter=\",\"' 2>&1"
     ln = run_cmd(cmd, print = FALSE)
@@ -195,6 +196,10 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL) {
     df = df[order(df$JOBID), , drop = FALSE]
     tb = table(df$STAT)
     df_return = df
+
+    if(!print) {
+        return(df_return)
+    }
 
     recent = unlist(unname(tapply(df$JOBID, df$JOB_NAME, function(x) {
         structure(order(-x), names = x)
@@ -453,3 +458,16 @@ job_status_by_id = function(job_id) {
     lt = lt[-1]
     sapply(lt, "[", 3)
 }
+
+
+monitor = function() {
+    
+    if(!on_submission_node()) {
+        ssh_validate()
+    }
+
+    shiny::runApp("~/project/bsub/inst/app")
+    # shiny::runApp(system.file("app", package = "bsub"))
+}
+
+
