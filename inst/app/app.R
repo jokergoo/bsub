@@ -1,5 +1,6 @@
 
 library(DT)
+library(shiny)
 
 ui = basicPage(
 	DT::dataTableOutput("mytable"),
