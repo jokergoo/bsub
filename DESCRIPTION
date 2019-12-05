@@ -1,7 +1,7 @@
 Package: bsub
 Type: Package
 Title: Send R code/R scripts/Shell commands to LSF cluster
-Version: 0.0.2
+Version: 0.0.3
 Date: 2019-11-25
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>

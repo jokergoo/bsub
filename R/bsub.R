@@ -431,9 +431,14 @@ bsub_submit = function(command,
 
     output = qq("@{output_dir}/@{name}.out")
     flag = qq("@{output_dir}/@{name}.flag")
+    pend = qq("@{output_dir}/@{name}.pend")
 
     if(!enforce && file.exists(flag)) {
         qqcat("Job '@{name}' is already done, skip.\n")
+        return(invisible(NULL))
+    }
+    if(!enforce && file.exists(pend)) {
+        qqcat("Job '@{name}' is pending, skip.\n")
         return(invisible(NULL))
     }
 
@@ -446,6 +451,9 @@ bsub_submit = function(command,
     
     sh_file = tempfile(paste0(name, "_"), tmpdir = temp_dir, fileext = ".sh")
     con = file(sh_file, "w")
+    
+    writeLines("rm '@{pend}'\n", con)  # remove the pend flag file
+    
     if(!identical(sh_head, "")) {
         writeLines(sh_head, con)
         writeLines("\n", con)
@@ -488,6 +496,7 @@ fi", con)
     cmd = qq("@{cmd} '@{sh_file}'")
     cat(cmd, "\n")
 
+    file.create(pend)
     txt = run_cmd(cmd, print = FALSE)
 
     job_id = gsub("^.*<(\\d+)>.*$", "\\1", txt)
