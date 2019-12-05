@@ -25,7 +25,7 @@
 		msg = TRUE
 	}
 
-	if(grepl("odcf", Sys.info()["nodename"])) {
+	if(grepl("odcf|w610", Sys.info()["nodename"])) {
 		packageStartupMessage("On ODCF cluster, set general environment.")
 		msg = TRUE
 		config_odcf()
@@ -56,7 +56,7 @@ config_odcf = function() {
 }
 
 if(identical(environment(), .GlobalEnv)) {
-	if(grepl("odcf", Sys.info()["nodename"])) {
+	if(grepl("odcf|w610", Sys.info()["nodename"])) {
 		message("On ODCF cluster, set general environment.")
 		config_odcf()
 	}

@@ -1,13 +1,13 @@
 Package: bsub
 Type: Package
 Title: Send R code/R scripts/Shell commands to LSF cluster
-Version: 0.0.2
+Version: 0.0.3
 Date: 2019-11-25
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.0.0)
 Imports: GlobalOptions (>= 0.1.1), GetoptLong, digest, utils
-Suggests: knitr, ssh
+Suggests: knitr, ssh, DT, shiny (>= 1.0.0)
 Description: Send R code/R scripts/shell commands to LSF cluster without leaving R.
 VignetteBuilder: knitr
 License: MIT + file LICENSE

@@ -152,9 +152,9 @@ bsub_opt = set_opt(
     bsub_template = list(
         .value = function(name, hour, memory, core, output, group = NULL, ...) {
             if(identical(group, "") || identical(group, NULL)) {
-                cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -o '@{output}'")
+                cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'rusage[mem=@{round(memory*1024)}]' -o '@{output}'")
             } else {
-                cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -G @{bsub_opt$group} -o '@{output}'")
+                cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'rusage[mem=@{round(memory*1024)}]' -G @{bsub_opt$group} -o '@{output}'")
             }
             return(cmd)
         },
