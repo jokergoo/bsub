@@ -106,12 +106,6 @@ bsub_chunk = function(code,
     }
 
     output_dir = normalizePath(output_dir)
-    flag = qq("@{output_dir}/@{name}.flag")
-
-    if(!enforce && file.exists(flag)) {
-        qqcat("Job '@{name}' is already done, skip.\n")
-        return(invisible(NULL))
-    }
 
     qqcat("- job: '@{name}' from a code chunk\n")
 
@@ -140,7 +134,6 @@ bsub_chunk = function(code,
             } else {
                 stop("All image files do not exist.")
             }
-
         }
 
         for(f in image) {
@@ -204,7 +197,7 @@ bsub_chunk = function(code,
 retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
     rds_file = qq("@{output_dir}/@{name}_returned_var.rds")
     out_file = qq("@{output_dir}/@{name}.out")
-    flag_file = qq("@{output_dir}/@{name}.flag")
+    flag_file = qq("@{output_dir}/@{name}.done")
 
     if(file.exists(flag_file)) {
         if(file.exists(out_file)) {
@@ -314,12 +307,6 @@ bsub_script = function(script,
     }
 
     output_dir = normalizePath(output_dir)
-    flag = qq("@{output_dir}/@{name}.flag")
-
-    if(!enforce && file.exists(flag)) {
-        qqcat("Job '@{name}' is already done, skip.\n")
-        return(invisible(NULL))
-    }
 
     qqcat("- job: '@{name}' from script @{basename(script)}\n")
     
@@ -389,12 +376,6 @@ bsub_cmd = function(cmd,
     }
 
     output_dir = normalizePath(output_dir)
-    flag = qq("@{output_dir}/@{name}.flag")
-
-    if(!enforce && file.exists(flag)) {
-        qqcat("Job '@{name}' is already done, skip.\n")
-        return(invisible(NULL))
-    }
 
     qqcat("- job: '@{name}' from a list of commands\n")
     
@@ -430,10 +411,11 @@ bsub_submit = function(command,
     temp_dir = normalizePath(temp_dir)
 
     output = qq("@{output_dir}/@{name}.out")
-    flag = qq("@{output_dir}/@{name}.flag")
+    done = qq("@{output_dir}/@{name}.done")
     pend = qq("@{output_dir}/@{name}.pend")
+    run = qq("@{output_dir}/@{name}.run")
 
-    if(!enforce && file.exists(flag)) {
+    if(!enforce && file.exists(done)) {
         qqcat("Job '@{name}' is already done, skip.\n")
         return(invisible(NULL))
     }
@@ -441,9 +423,13 @@ bsub_submit = function(command,
         qqcat("Job '@{name}' is pending, skip.\n")
         return(invisible(NULL))
     }
+    if(!enforce && file.exists(run)) {
+        qqcat("Job '@{name}' is running, skip.\n")
+        return(invisible(NULL))
+    }
 
-    if(file.exists(flag)) {
-        file.remove(flag);
+    if(file.exists(done)) {
+        file.remove(done);
     }
     if(file.exists(output)) {
         file.remove(output);
@@ -453,6 +439,7 @@ bsub_submit = function(command,
     con = file(sh_file, "w")
     
     writeLines("rm '@{pend}'\n", con)  # remove the pend flag file
+    writeLines("touch '@{run}'\n", con)  # add the running flag
     
     if(!identical(sh_head, "")) {
         writeLines(sh_head, con)
@@ -462,17 +449,21 @@ bsub_submit = function(command,
         writeLines(qq("cat '@{sh_file}'\n"), con)
     }
     writeLines(qq("rm '@{sh_file}'\n"), con)
+
+    # wrap command with eval
     writeLines(command, con)
 
     # test the command, 
     writeLines("
 if [ $? -ne 0 ]
 then
+    rm $run
     echo Exit code is not equal to zero. There is an error.
     exit 666
 fi", con)
 
-    writeLines(qq("touch '@{flag}'\n"), con)
+    writeLines(qq("rm '@{run}'\n"), con)
+    writeLines(qq("touch '@{done}'\n"), con)
     close(con)
 
     if(local) {
@@ -483,11 +474,7 @@ fi", con)
     }
 
     system(qq("chmod 755 @{sh_file}"))
-    # if(bsub_opt$group == "") {
-    #     cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -o '@{output}'")
-    # } else {
-    #     cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -G @{bsub_opt$group} -o '@{output}'")
-    # }
+
     cmd = bsub_opt$bsub_template(name, hour, memory, core, output, bsub_opt$group)
     if(length(dependency)) {
         dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )

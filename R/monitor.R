@@ -518,8 +518,15 @@ monitor = function() {
         ssh_validate()
     }
 
-    shiny::runApp("~/project/bsub/inst/app")
-    # shiny::runApp(system.file("app", package = "bsub"))
+    if(identical(topenv(), asNamespace("bsub"))) {
+        shiny::runApp(system.file("app", package = "bsub"))
+    } else if(grepl("odcf", Sys.info()["nodename"])) {
+        shiny::runApp("/desktop-home/guz/project/developmetn/bsub/inst/app")
+    } else if(grepl("w610", Sys.info()["nodename"])) {
+        shiny::runApp("~/project/developmetn/bsub/inst/app")
+    } else {
+        shiny::runApp("~/project/bsub/inst/app")
+    }
 }
 
 
