@@ -10,7 +10,7 @@ ui = basicPage(
 	color: grey;
 }"),
 
-	div(DT::dataTableOutput("mytable"), style = "font-size:80%"),
+	DT::dataTableOutput("mytable"),
 	actionButton("kill", "Kill jobs"),
 	textOutput("job_selected"),
 	hr(),
@@ -31,7 +31,8 @@ server <- function(input, output) {
 		df = bjobs(print = FALSE)
 
 		df2 = df[order(df$JOBID), c("JOBID", "STAT", "JOB_NAME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
-
+        
+		df2$STAT = factor(df2$STAT)
         df2$TIME_PASSED = bsub:::format_difftime(df2$TIME_PASSED)
         df2$TIME_LEFT = bsub:::format_difftime(df2$TIME_LEFT)
         df2$MAX_MEM = bsub:::format_mem(df2$MAX_MEM)
@@ -44,8 +45,9 @@ server <- function(input, output) {
 		colnames(df2) = c("Job ID", "Status", "Job name", "Time passed", "Time left", "Cores", "Memory", "Max memory")
 		df2
 	}, escape = FALSE, rownames = FALSE, filter = 'top',
-		options = list(
-    		searchCols = list(NULL, list(search = c("RUN", "PEND")), NULL, NULL, NULL, NULL, NULL, NULL)))
+	  options = list(
+	    pageLength = 25, autoWidth = TRUE
+	))
 
 	output$generated_time = renderText({
 	    autoInvalidate()

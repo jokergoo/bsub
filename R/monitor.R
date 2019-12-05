@@ -263,8 +263,8 @@ format_difftime = function(x, add_unit = FALSE) {
     min = floor((t - hour)*60)
     
     l = is.na(x)
-    if(add_unit)
-        txt = paste0(hour, "h", ifelse(min < 10, paste0("0", min), min), "m'")
+    if(add_unit) {
+        txt = paste0(hour, "h", ifelse(min < 10, paste0("0", min), min), "m")
     } else {
         txt = paste0(hour, ":", ifelse(min < 10, paste0("0", min), min))
     }
