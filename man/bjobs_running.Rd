@@ -7,7 +7,7 @@ Running jobs
 Running jobs
 }
 \usage{
-bjobs_running(max = 20, filter = NULL)
+bjobs_running(max = Inf, filter = NULL)
 }
 \arguments{
 
@@ -18,4 +18,5 @@ bjobs_running(max = 20, filter = NULL)
 \examples{
 # There is no example
 NULL
+
 }

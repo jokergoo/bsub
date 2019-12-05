@@ -7,13 +7,14 @@ Summary of jobs
 Summary of jobs
 }
 \usage{
-bjobs(status = c("RUN", "PEND"), max = Inf, filter = NULL)
+bjobs(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE)
 }
 \arguments{
 
   \item{status}{Status of the jobs}
   \item{max}{Maximal number of recent jobs}
   \item{filter}{Regular expression to filter on job names}
+  \item{print}{Wether print the table}
 
 }
 \details{

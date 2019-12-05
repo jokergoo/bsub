@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
       </span>
     </div>
 
@@ -121,7 +121,7 @@
     <p>Summary of jobs</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bjobs</span>(<span class='kw'>status</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"RUN"</span>, <span class='st'>"PEND"</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>Inf</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>bjobs</span>(<span class='kw'>status</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"RUN"</span>, <span class='st'>"PEND"</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>Inf</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>print</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,6 +137,10 @@
     <tr>
       <th>filter</th>
       <td><p>Regular expression to filter on job names</p></td>
+    </tr>
+    <tr>
+      <th>print</th>
+      <td><p>Wether print the table</p></td>
     </tr>
     </table>
 

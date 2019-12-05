@@ -7,7 +7,7 @@ Failed jobs
 Failed jobs
 }
 \usage{
-bjobs_exit(max = 20, filter = NULL)
+bjobs_exit(max = Inf, filter = NULL)
 }
 \arguments{
 
@@ -18,4 +18,5 @@ bjobs_exit(max = 20, filter = NULL)
 \examples{
 # There is no example
 NULL
+
 }

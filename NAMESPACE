@@ -26,3 +26,4 @@ importFrom("GetoptLong", qq, qqcat)
 importFrom("digest", digest)
 importFrom("utils", "read.csv")
 importFrom("utils", "sessionInfo")
+
