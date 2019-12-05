@@ -255,7 +255,7 @@ format_mem = function(x) {
     gsub(" (.)bytes", "\\1b", x)
 }
 
-format_difftime = function(x) {
+format_difftime = function(x, add_unit = FALSE) {
     units(x) = "hours"
     t = as.numeric(x)
 
@@ -263,7 +263,11 @@ format_difftime = function(x) {
     min = floor((t - hour)*60)
     
     l = is.na(x)
-    txt = paste0(hour, ":", ifelse(min < 10, paste0("0", min), min))
+    if(add_unit)
+        txt = paste0(hour, "h", ifelse(min < 10, paste0("0", min), min), "m'")
+    } else {
+        txt = paste0(hour, ":", ifelse(min < 10, paste0("0", min), min))
+    }
     txt[l] = "-"
     txt[t == 0] = "-"
     txt
