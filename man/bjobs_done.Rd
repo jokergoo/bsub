@@ -7,7 +7,7 @@ Finished jobs
 Finished jobs
 }
 \usage{
-bjobs_done(max = 20, filter = NULL)
+bjobs_done(max = Inf, filter = NULL)
 }
 \arguments{
 
@@ -18,4 +18,5 @@ bjobs_done(max = 20, filter = NULL)
 \examples{
 # There is no example
 NULL
+
 }

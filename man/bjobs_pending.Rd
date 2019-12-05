@@ -7,7 +7,7 @@ Pending jobs
 Pending jobs
 }
 \usage{
-bjobs_pending(max = 20, filter = NULL)
+bjobs_pending(max = Inf, filter = NULL)
 }
 \arguments{
 
@@ -18,4 +18,5 @@ bjobs_pending(max = 20, filter = NULL)
 \examples{
 # There is no example
 NULL
+
 }
