@@ -10,7 +10,7 @@ ui = basicPage(
 	color: grey;
 }"),
 
-	div(DT::dataTableOutput("mytable"), style = "font-size:80%"),
+	DT::dataTableOutput("mytable"),
 	actionButton("kill", "Kill jobs"),
 	textOutput("job_selected"),
 	hr(),
@@ -43,9 +43,7 @@ server <- function(input, output) {
 
 		colnames(df2) = c("Job ID", "Status", "Job name", "Time passed", "Time left", "Cores", "Memory", "Max memory")
 		df2
-	}, escape = FALSE, rownames = FALSE, filter = 'top',
-		options = list(
-    		searchCols = list(NULL, list(search = c("RUN", "PEND")), NULL, NULL, NULL, NULL, NULL, NULL)))
+	}, escape = FALSE, rownames = FALSE, filter = 'top')
 
 	output$generated_time = renderText({
 	    autoInvalidate()
