@@ -38,12 +38,9 @@ server <- function(input, output) {
         df2$MAX_MEM = bsub:::format_mem(df2$MAX_MEM)
         df2$MEM = bsub:::format_mem(df2$MEM)
 
-		# checkbox = qq("<input type='checkbox' name='job-@{tb$JOB_ID}' value='0' />")
-		# tb = cbind(checkbox, tb)
-		# colnames(tb)[1] = ""
-
 		colnames(df2) = c("Job ID", "Status", "Job name", "Time passed", "Time left", "Cores", "Memory", "Max memory")
 		df2
+
 	}, escape = FALSE, rownames = FALSE, filter = 'top',
 	  options = list(
 	    pageLength = 25, autoWidth = TRUE
