@@ -329,7 +329,7 @@ print.bjobs = function(x, ...) {
 #
 is_job_finished = function(job_name, output_dir = bsub_opt$output_dir) {
     sapply(job_name, function(x) {
-        flag_file = qq("@{output_dir}/@{x}.flag")
+        flag_file = qq("@{output_dir}/@{x}.done")
         file.exists(flag_file)
     })
 }
@@ -474,13 +474,24 @@ bjobs_exit = function(max = Inf, filter = NULL) {
 class(bjobs_exit) = "bjobs"
 
 
+# == title
+# Job status by name
+#
+# == param
+# -job_name Job name.
+# -output_dir The output dir
+#
+# == value
+# If the job is finished, it returns DONE/EXIT/MISSING. If the job is running or pending, it returns the corresponding
+# status. If there are multiple jobs with the same name running or pending, it returns a vector.
+# 
 job_status_by_name = function(job_name, output_dir = bsub_opt$output_dir) {
 
     ln = run_cmd(qq("bjobs -J @{job_name} 2>&1"), print = FALSE)
 
     # job done or exit
     if(length(ln) == 1) {
-        flag_file = qq("@{output_dir}/@{job_name}.flag")
+        flag_file = qq("@{output_dir}/@{job_name}.done")
         out_file = qq("@{output_dir}/@{job_name}.out")
         if(file.exists(flag_file)) {
             return("DONE")
@@ -497,6 +508,15 @@ job_status_by_name = function(job_name, output_dir = bsub_opt$output_dir) {
     sapply(lt, "[", 3)
 }
 
+# == title
+# Job status by id
+#
+# == param
+# -job_id The job id
+#
+# == value
+# If the job has been deleted from the database, it returns MISSING.
+# 
 job_status_by_id = function(job_id) {
 
     ln = run_cmd(qq("bjobs -o \"jobid user stat\" @{job_id} 2>&1"), print = FALSE)
@@ -511,7 +531,9 @@ job_status_by_id = function(job_id) {
     sapply(lt, "[", 3)
 }
 
-
+# == title
+# A shiny-app-based job monitor 
+#
 monitor = function() {
     
     if(!on_submission_node()) {

@@ -1,3 +1,9 @@
+CHANGES in VERSION 0.0.3
+
+* add `monitor()` which opens a shiny app to monitor jobs
+
+---------------------------------------
+
 CHANGES in VERSION 0.0.2
 
 * add `brecent()` which returns status of n most recent jobs

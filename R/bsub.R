@@ -420,12 +420,18 @@ bsub_submit = function(command,
         return(invisible(NULL))
     }
     if(!enforce && file.exists(pend)) {
-        qqcat("Job '@{name}' is pending, skip.\n")
-        return(invisible(NULL))
+        # if the pending job is killed, the pend flag is still there
+        if("PEND" %in% job_status_by_name(name, output_dir)) {
+            qqcat("Job '@{name}' is pending, skip.\n")
+            return(invisible(NULL))
+        }
     }
     if(!enforce && file.exists(run)) {
-        qqcat("Job '@{name}' is running, skip.\n")
-        return(invisible(NULL))
+        # if the running job is killed, the run flag is still there
+        if("RUN" %in% job_status_by_name(name, output_dir)) {
+            qqcat("Job '@{name}' is running, skip.\n")
+            return(invisible(NULL))
+        }
     }
 
     if(file.exists(done)) {
@@ -438,8 +444,8 @@ bsub_submit = function(command,
     sh_file = tempfile(paste0(name, "_"), tmpdir = temp_dir, fileext = ".sh")
     con = file(sh_file, "w")
     
-    writeLines("rm '@{pend}'\n", con)  # remove the pend flag file
-    writeLines("touch '@{run}'\n", con)  # add the running flag
+    writeLines(qq("rm '@{pend}'\n"), con)  # remove the pend flag file
+    writeLines(qq("touch '@{run}'\n"), con)  # add the running flag
     
     if(!identical(sh_head, "")) {
         writeLines(sh_head, con)
