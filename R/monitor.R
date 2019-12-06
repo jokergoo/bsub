@@ -169,7 +169,7 @@ class(bu) = "bjobs"
 #
 bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE) {
 
-    cmd = "bjobs -a -o 'jobid stat job_name submit_time start_time finish_time slots mem max_mem delimiter=\",\"' 2>&1"
+    cmd = "bjobs -a -o 'jobid stat job_name submit_time start_time finish_time slots mem max_mem exec_cwd delimiter=\",\"' 2>&1"
     ln = run_cmd(cmd, print = FALSE)
     
     # job done or exit
@@ -551,4 +551,37 @@ monitor = function() {
     }
 }
 
+# == title
+# Check whether there are dump files
+#
+# == param
+# -print Whether print messages
+#
+# == details
+# For the failed jobs, LSF cluster generates a core dump file and R generates a .RDataTmp file.
+#
+# Note if you manually set working directory in your R code/script, the R dump file can be not caught.
+#
+check_dump_files = function(print = TRUE) {
+    job_tb = bjobs(print = FALSE)
+    wd = job_tb$EXEC_CWD
+    wd = wd[wd != "-"]
+    wd = unique(wd)
 
+    dump_files = NULL
+    for(w in wd) {
+        dump_files = c(dump_files, list.files(path = w, pattern = "^core.\\d$", all.files = TRUE, full.names = TRUE))
+        dump_files = c(dump_files, list.files(path = w, pattern = "^\\.RDataTmp", all.files = TRUE, full.names = TRUE))
+    }
+
+    if(print) {
+        if(length(dump_files)) {
+            qqcat("found @{length(dump_files)} dump files:\n")
+            qqcat("  @{dump_files}\n")
+        } else {
+            cat("no dump file found\n")
+        }
+    }
+
+    return(invisible(dump_files))
+}
