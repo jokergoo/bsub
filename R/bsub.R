@@ -412,10 +412,11 @@ bsub_submit = function(command,
 
     output = qq("@{output_dir}/@{name}.out")
     done = qq("@{output_dir}/@{name}.done")
+    old_flag = qq("@{output_dir}/@{name}.flag")
     pend = qq("@{output_dir}/@{name}.pend")
     run = qq("@{output_dir}/@{name}.run")
 
-    if(!enforce && file.exists(done)) {
+    if(!enforce && (file.exists(done) || file.exists(old_flag))) {
         qqcat("Job '@{name}' is already done, skip.\n")
         return(invisible(NULL))
     }
