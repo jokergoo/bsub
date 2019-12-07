@@ -237,6 +237,11 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
             df2$RECENT = NULL
         }
 
+        l = nchar(df2$JOB_NAME) > 50
+        if(any(l)) {
+            substr(df2$JOB_NAME[l], 49, nchar(df2$JOB_NAME[l]) = ".."
+        }
+
         max_width = pmax(apply(df2, 2, function(x) max(nchar(x)+1)),
                          nchar(colnames(df2)) + 1)
         ow = getOption("width")
