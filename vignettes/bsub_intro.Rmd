@@ -466,7 +466,8 @@ bsub_opt
 ## Other functions
 
 - `bkill(job_id)` kills a job or a list jobs.
-- `job_log(job_id)` prints the log of a specified running/finished/failed job.
+- `job_log(job_id)` prints the log of a specified running/finished/failed job. A vector
+  of jobs can also be sent at the same time that last 10 lines of each job are printed.
 - `check_dump_files()` searches the dump files (`core.xxx` by LSF cluster or `.RDataTmpxxx` by R).
 - `ssh_connect()` establishes the SSH connection to the submission node if it is lost.
 - `monitor()` opens a shiny-app-based job monitor.

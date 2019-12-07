@@ -3,12 +3,31 @@
 # Log for the running/finished/failed job
 #
 # == param
-# -job_id The job id
+# -job_id The job id. It can be a single job or a vector of job ids.
 # -print Whether print the log message.
+# -n_line Number of last lines for each job to show when multiple jobs are queried.
 # 
 # == value
 # The log message as a vector.
-job_log = function(job_id, print = TRUE) {
+job_log = function(job_id, print = TRUE, n_line = 10) {
+
+    if(length(job_id) > 1) {
+        txt2 = NULL
+        for(id in job_id) {
+            txt = job_log(id, print = FALSE)
+            if(length(txt) > n_line) {
+                txt2 = c(txt2, qq("\n######### log for job @{id}, last @{n_line} lines #########"))
+                txt2 = c(txt2, txt[seq(length(txt) - n_line + 1, length(txt))])
+            } else {
+                txt2 = c(txt2, qq("\n######### log for job @{id} ###############################"))
+                txt2 = c(txt2, txt)
+            }
+        }
+        if(print) {
+            cat(txt2, sep = "\n")
+        }
+        return(invisible(txt2))
+    }
 
     ln = run_cmd(qq("bjobs -o \"stat output_file\" @{job_id} 2>&1"), print = FALSE)
 
@@ -167,7 +186,7 @@ class(bu) = "bjobs"
 # Summary of jobs
 # 
 # == param
-# -status Status of the jobs
+# -status Status of the jobs. Use "all" for all jobs.
 # -max Maximal number of recent jobs
 # -filter Regular expression to filter on job names
 # -print Wether print the table
@@ -177,9 +196,10 @@ class(bu) = "bjobs"
 # for the job with the same name. 1 means the most recent job.
 #
 # == value
-# A data frame with job summaries.
+# A data frame with selected job summaries.
 #
 bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE) {
+
 
     cmd = "bjobs -a -o 'jobid stat job_name submit_time start_time finish_time slots mem max_mem exec_cwd delimiter=\",\"' 2>&1"
     ln = run_cmd(cmd, print = FALSE)
@@ -225,8 +245,8 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         df = df[grepl(filter, df$JOB_NAME), , drop = FALSE]
     }
     if(nrow(df)) {
-        ind = (nrow(df):1)[1:min(c(nrow(df), max))]
-        df2 = df[sort(ind), c("JOBID", "STAT", "JOB_NAME", "RECENT","SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
+        ind = sort((nrow(df):1)[1:min(c(nrow(df), max))])
+        df2 = df[ind, c("JOBID", "STAT", "JOB_NAME", "RECENT","SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
 
         df2$TIME_PASSED = format_difftime(df2$TIME_PASSED)
         df2$TIME_LEFT = format_difftime(df2$TIME_LEFT)
@@ -260,10 +280,12 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         cat(" ", paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week.\n", sep = "")
         cat(" You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.\n")
         options(width = ow)
+
+        return(invisible(df[ind, , drop = FALSE]))
     } else {
         cat("No job found.\n")
+        return(invisible(NULL))
     }
-    return(invisible(df_return))
 }
 
 class(bjobs) = "bjobs"
@@ -580,7 +602,7 @@ monitor = function() {
 # Note if you manually set working directory in your R code/script, the R dump file can be not caught.
 #
 check_dump_files = function(print = TRUE) {
-    job_tb = bjobs(print = FALSE)
+    job_tb = bjobs(status = "all", print = FALSE)
     wd = job_tb$EXEC_CWD
     wd = wd[wd != "-"]
     wd = unique(wd)

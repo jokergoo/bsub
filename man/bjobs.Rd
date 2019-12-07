@@ -11,7 +11,7 @@ bjobs(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE)
 }
 \arguments{
 
-  \item{status}{Status of the jobs}
+  \item{status}{Status of the jobs. Use "all" for all jobs.}
   \item{max}{Maximal number of recent jobs}
   \item{filter}{Regular expression to filter on job names}
   \item{print}{Wether print the table}
@@ -22,7 +22,7 @@ There is an additional column "RECENT" which is the order
 for the job with the same name. 1 means the most recent job.
 }
 \value{
-A data frame with job summaries.
+A data frame with selected job summaries.
 }
 \examples{
 # There is no example

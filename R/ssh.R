@@ -16,6 +16,10 @@ ssh_connect = function() {
 		message("You need to install ssh package.")
 	}
 
+	if(length(bsub_opt$submission_node)) {
+		stop("bsub_opt$submission_node is not defined.")
+	}
+
 	for(i in seq_along(bsub_opt$submission_node)) {
 		message(qq("establish ssh connection to @{user}@@{bsub_opt$submission_node[i]}"))
 		oe = try(session <- ssh::ssh_connect(paste0(user, "@", bsub_opt$submission_node[i])))
