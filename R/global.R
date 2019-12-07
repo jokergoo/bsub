@@ -40,7 +40,8 @@
 #
 #
 # == example
-# # examples are in the vignette.
+# # The default bsub_opt
+# bsub_opt
 #
 bsub_opt = function(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FALSE) {}
 bsub_opt = set_opt(

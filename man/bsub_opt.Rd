@@ -48,5 +48,6 @@ For \code{ssh_envir} option, an example is as follows. The \code{LSF_ENVDIR} and
       "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")  }
 }
 \examples{
-# examples are in the vignette.
+# The default bsub_opt
+bsub_opt
 }
