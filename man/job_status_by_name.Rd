@@ -22,4 +22,5 @@ status. If there are multiple jobs with the same name running or pending, it ret
 \examples{
 # There is no example
 NULL
+
 }

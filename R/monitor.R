@@ -3,9 +3,12 @@
 # Log for the running/finished/failed job
 #
 # == param
-# -job_id the job id
+# -job_id The job id
+# -print Whether print the log message.
 # 
-job_log = function(job_id) {
+# == value
+# The log message as a vector.
+job_log = function(job_id, print = TRUE) {
 
     ln = run_cmd(qq("bjobs -o \"stat output_file\" @{job_id} 2>&1"), print = FALSE)
 
@@ -18,11 +21,13 @@ job_log = function(job_id) {
     output_file = gsub("^\\S+\\s+", "", ln)
 
     if(status == "MISSING") {
-        qqcat("Cannot find output file for job (@{job_id}.\n")
-        return(invisible(NULL))
+        txt = qq("Cannot find output file for job (@{job_id}.")
+        if(print) cat(txt, sep = "\n")
+        return(invisible(txt))
     } else if(status == "PEND") {
-        qqcat("Job (@{job_id} is still pending.\n")
-        return(invisible(NULL))
+        txt = qq("Job (@{job_id} is still pending.")
+        if(print) cat(txt, sep = "\n")
+        return(invisible(txt))
     } else if(status == "RUN") {
         # bpeek is slow, we first directly check the temporary output file
         user = bsub_opt$user
@@ -47,9 +52,10 @@ job_log = function(job_id) {
             if(length(file) == 0) {
                 no_file_flag = TRUE
             } else {
-                cat(readLines(file, warn = FALSE), sep = "\n")
-                qqcat("**** job (@{job_id}) is still running. ****\n")
-                return(invisible(NULL))
+                txt = readLines(file, warn = FALSE)
+                txt = c(txt, qq("**** job (@{job_id}) is still running. ****"))
+                if(print) cat(txt, sep = "\n")
+                return(invisible(txt))
             }
         } else {
             # if no such file, ssh_exec gives an error
@@ -60,27 +66,30 @@ job_log = function(job_id) {
             } else if(length(ln) == 0) {
                 no_file_flag = TRUE
             } else {
-                ln2 = ssh_exec(qq("cat @{ln}"))
-                cat(ln2, sep = "\n")
-                qqcat("**** job (@{job_id}) is still running. ****\n")
-                return(invisible(NULL))
+                txt = ssh_exec(qq("cat @{ln}"))
+                txt = c(txt, qq("**** job (@{job_id}) is still running. ****"))
+                if(print) cat(txt, sep = "\n")
+                return(invisible(txt))
             }
         }
 
         if(no_file_flag) {
             ln = run_cmd(qq("bpeek @{job_id}"), print = FALSE)[-1]
             if(length(ln) == 0) {
-                qqcat("Cannot find output file for job (@{job_id}.\n")
-                return(invisible(NULL))
+                txt = qq("Cannot find output file for job (@{job_id}.")
+                if(print) cat(txt, sep = "\n")
+                return(invisible(txt))
             } else {
-                cat(ln, sep = "\n")
-                qqcat("**** job (@{job_id}) is still running. ****\n")
-                return(invisible(NULL))
+                txt = ln
+                txt = c(txt, qq("**** job (@{job_id}) is still running. ****"))
+                if(print) cat(txt, sep = "\n")
+                return(invisible(txt))
             }
         }
     } else {
-        cat(readLines(output_file, warn = FALSE), sep = "\n")
-        return(invisible(NULL))
+        txt = readLines(output_file, warn = FALSE)
+        if(print) cat(txt, sep = "\n")
+        return(invisible(txt))
     }
 }
 

@@ -20,4 +20,5 @@ If the job has been deleted from the database, it returns MISSING.
 \examples{
 # There is no example
 NULL
+
 }

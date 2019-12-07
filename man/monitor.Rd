@@ -12,4 +12,5 @@ monitor()
 \examples{
 # There is no example
 NULL
+
 }

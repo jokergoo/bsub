@@ -22,4 +22,5 @@ Note if you manually set working directory in your R code/script, the R dump fil
 \examples{
 # There is no example
 NULL
+
 }

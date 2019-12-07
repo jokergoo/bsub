@@ -7,12 +7,16 @@ Log for the running/finished/failed job
 Log for the running/finished/failed job
 }
 \usage{
-job_log(job_id)
+job_log(job_id, print = TRUE)
 }
 \arguments{
 
-  \item{job_id}{the job id}
+  \item{job_id}{The job id}
+  \item{print}{Whether print the log message.}
 
+}
+\value{
+The log message as a vector.
 }
 \examples{
 # There is no example
