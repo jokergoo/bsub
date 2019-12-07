@@ -7,77 +7,80 @@
 # 
 job_log = function(job_id) {
 
-    job_id = as.character(job_id)
+    ln = run_cmd(qq("bjobs -o \"stat output_file\" @{job_id} 2>&1"), print = FALSE)
 
-    if(job_status_by_id(job_id) == "PEND") {
-        qqcat("Not yet started.\n")
+    if(length(ln) == 1) {
+        status = "MISSING"
+    }
+
+    ln = ln[-1]  # remove header
+    status = gsub("\\s.*$", "", ln)
+    output_file = gsub("^\\S+\\s+", "", ln)
+
+    if(status == "MISSING") {
+        qqcat("Cannot find output file for job (@{job_id}.\n")
         return(invisible(NULL))
-    }
-
-    user = bsub_opt$user
-
-    # the temporary job dir
-    ln = run_cmd("bparams -a", print = FALSE)
-    ind = grep("JOB_SPOOL_DIR", ln)
-    if(length(ind)) {
-        job_temp_dir = gsub("^\\s*JOB_SPOOL_DIR = ", "", ln[ind])
-        job_temp_dir = gsub("/%U$", "", job_temp_dir)
-        job_temp_dir = qq("@{job_temp_dir}/@{user}")
-    } else {
-        remote_home = run_cmd("echo $HOME", print = FALSE)
-        job_temp_dir = qq("@{remote_home}/.lsbatch")
-    }
-
-    msg = ""
-    # check running jobs
-    if(on_submission_node()) {
-    	file = list.files(path = job_temp_dir,
-    		pattern = paste0("\\.", job_id, "\\.out"),
-    		full.names = TRUE)
-
-    	if(length(file) == 0) {
-    		msg = qq("No log file for job: @{job_id}.")
-    	} else if(length(file) > 1) {
-            msg = qq("More than one of jobs: @{job_id} found.")
-        } else {
-            cat(readLines(file, warn = FALSE), sep = "\n")
-            qqcat("**** job (@{job_id}) is still running. ****\n")
-            return(invisible(NULL))
-        }
-    } else {
-        # if no such file, ssh_exec gives an error
-        oe = try(ln <- ssh_exec(qq("ls @{job_temp_dir}/*.@{job_id}.out")), silent = TRUE)
-
-        if(inherits(oe, "try-error")) {
-            msg = qq("No log file for job: @{job_id}.")
-        } else if(length(ln) == 0) {
-            msg = qq("No log file for job: @{job_id}.")
-        } else if(length(ln) > 1) {
-            msg = qq("More than one of jobs: @{job_id} found.")
-        } else {
-            ln2 = ssh_exec(qq("cat @{ln}"))
-            cat(ln2, sep = "\n")
-            qqcat("**** job (@{job_id}) is still running. ****\n")
-            return(invisible(NULL))
-        }
-    }
-
-    if(msg == "") {
-        cat("No message.\n")
+    } else if(status == "PEND") {
+        qqcat("Job (@{job_id} is still pending.\n")
         return(invisible(NULL))
-    }
+    } else if(status == "RUN") {
+        # bpeek is slow, we first directly check the temporary output file
+        user = bsub_opt$user
 
-    # check finished jobs
-    if(file.exists("~/.bsub_history.rds")) {
-        job_history = readRDS("~/.bsub_history.rds")
-        if(job_id %in% job_history$job_id) {
-            ind = which(job_history$job_id == job_id)
-            file = qq("@{job_history$output_dir[ind]}/@{job_history$job_name[ind]}.out")
-            cat(readLines(file, warn = FALSE), sep = "\n")
-            return(invisible(NULL))
+        # the temporary job dir
+        ln = run_cmd("bparams -a", print = FALSE)
+        ind = grep("JOB_SPOOL_DIR", ln)
+        if(length(ind)) {
+            job_temp_dir = gsub("^\\s*JOB_SPOOL_DIR = ", "", ln[ind])
+            job_temp_dir = gsub("/%U$", "", job_temp_dir)
+            job_temp_dir = qq("@{job_temp_dir}/@{user}")
+        } else {
+            remote_home = run_cmd("echo $HOME", print = FALSE)
+            job_temp_dir = qq("@{remote_home}/.lsbatch")
+        }
+
+        no_file_flag = FALSE
+        # check running jobs
+        if(on_submission_node()) {
+            file = list.files(path = job_temp_dir, pattern = paste0("\\.", job_id, "\\.out"), full.names = TRUE)
+
+            if(length(file) == 0) {
+                no_file_flag = TRUE
+            } else {
+                cat(readLines(file, warn = FALSE), sep = "\n")
+                qqcat("**** job (@{job_id}) is still running. ****\n")
+                return(invisible(NULL))
+            }
+        } else {
+            # if no such file, ssh_exec gives an error
+            oe = try(ln <- ssh_exec(qq("ls @{job_temp_dir}/*.@{job_id}.out")), silent = TRUE)
+
+            if(inherits(oe, "try-error")) {
+                no_file_flag = TRUE
+            } else if(length(ln) == 0) {
+                no_file_flag = TRUE
+            } else {
+                ln2 = ssh_exec(qq("cat @{ln}"))
+                cat(ln2, sep = "\n")
+                qqcat("**** job (@{job_id}) is still running. ****\n")
+                return(invisible(NULL))
+            }
+        }
+
+        if(no_file_flag) {
+            ln = run_cmd(qq("bpeek @{job_id}"), print = FALSE)[-1]
+            if(length(ln) == 0) {
+                qqcat("Cannot find output file for job (@{job_id}.\n")
+                return(invisible(NULL))
+            } else {
+                cat(ln, sep = "\n")
+                qqcat("**** job (@{job_id}) is still running. ****\n")
+                return(invisible(NULL))
+            }
         }
     } else {
-        stop(msg)
+        cat(readLines(output_file, warn = FALSE), sep = "\n")
+        return(invisible(NULL))
     }
 }
 
