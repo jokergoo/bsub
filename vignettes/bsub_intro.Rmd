@@ -419,19 +419,11 @@ bsub_cmd(c("cmd1", "cmd2", ...), name = ..., memory = ..., core = ..., ...)
 
 The binary and the arguments should all be set in the first argument of `bsub_cmd()`.
 
-## Global Parameters
+## Job Summary
 
-```{r}
-bsub_opt
-```
-
-## Other functions
-
-- `bjobs()` or just entering `bjobs` gives a summary of running jobs. Job status (by default is `RUN`
-  and `PEND`) is controlled by `status` argument. Number of most recent jobs is controlled by `max` argument.
-  Filtering on the job name is controlled by `filter` argument.
-- `job_log(job_id)` prints the log of a specified running/finished/failed job.
-- `ssh_connect()` establishes the SSH connection to the submission node if it is lost.
+`bjobs()` or just entering `bjobs` gives a summary of running jobs. Job status (by default is `RUN`
+and `PEND`) is controlled by `status` argument. Number of most recent jobs is controlled by `max` argument.
+Filtering on the job name is controlled by `filter` argument.
 
 ```{r}
 library(GetoptLong)
@@ -456,6 +448,28 @@ bjobs(status = "all", filter = "example")
 ```{r}
 brecent
 ```
+
+There are some helper functions which only list running/pending/done/failed jobs:
+
+- `bjobs_running`
+- `bjobs_pending`
+- `bjobs_done`
+- `bjobs_exit`
+
+
+## Global Parameters
+
+```{r}
+bsub_opt
+```
+
+## Other functions
+
+- `bkill(job_id)` kills a job or a list jobs.
+- `job_log(job_id)` prints the log of a specified running/finished/failed job.
+- `check_dump_files()` searches the dump files (`core.xxx` by LSF cluster or `.RDataTmpxxx` by R).
+- `ssh_connect()` establishes the SSH connection to the submission node if it is lost.
+- `monitor()` opens a shiny-app-based job monitor.
 
 ## On other clusters
 
