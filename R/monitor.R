@@ -317,7 +317,7 @@ run_cmd = function(cmd, print = FALSE) {
         ln = ssh_exec(cmd)
     }
 
-    if(print) cat(c(ln, "\n"), sep = "\n")
+    if(print) cat(ln, sep = "\n")
     return(invisible(ln))
 }
 
