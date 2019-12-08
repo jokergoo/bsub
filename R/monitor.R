@@ -11,6 +11,11 @@
 # The log message as a vector.
 job_log = function(job_id, print = TRUE, n_line = 10) {
 
+    if(missing(job_id)) {
+        tb = bjobs(print = FALSE)
+        return(job_log(tb[, 1]))
+    }
+
     if(length(job_id) > 1) {
         txt2 = NULL
         for(id in job_id) {
@@ -227,11 +232,6 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
     df$JOBID = as.numeric(df$JOBID)
     df = df[order(df$JOBID), , drop = FALSE]
     tb = table(df$STAT)
-    df_return = df
-
-    if(!print) {
-        return(df_return)
-    }
 
     recent = unlist(unname(tapply(df$JOBID, df$JOB_NAME, function(x) {
         structure(order(-x), names = x)
@@ -246,6 +246,11 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
     }
     if(nrow(df)) {
         ind = sort((nrow(df):1)[1:min(c(nrow(df), max))])
+
+        if(!print) {
+            return(df[ind, , drop = FALSE])
+        }
+
         df2 = df[ind, c("JOBID", "STAT", "JOB_NAME", "RECENT","SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
 
         df2$TIME_PASSED = format_difftime(df2$TIME_PASSED)
@@ -259,7 +264,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 
         l = nchar(df2$JOB_NAME) > 50
         if(any(l)) {
-            substr(df2$JOB_NAME[l], 49, nchar(df2$JOB_NAME[l]) = ".."
+            substr(df2$JOB_NAME[l], 49, nchar(df2$JOB_NAME[l])) = ".."
         }
 
         max_width = pmax(apply(df2, 2, function(x) max(nchar(x)+1)),
@@ -283,6 +288,10 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 
         return(invisible(df[ind, , drop = FALSE]))
     } else {
+        if(!print) {
+            return(NULL)
+        }
+
         cat("No job found.\n")
         return(invisible(NULL))
     }
