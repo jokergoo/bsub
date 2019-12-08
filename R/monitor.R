@@ -13,11 +13,6 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
     
     if(missing(job_id)) {
         tb = bjobs(print = FALSE)
-        return(job_log(tb[, 1]))
-    }
-
-    if(missing(job_id)) {
-        tb = bjobs(print = FALSE)
         return(job_log(tb[, 1], print = print, n_line = n_line))
     }
 
