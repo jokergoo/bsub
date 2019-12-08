@@ -618,6 +618,9 @@ check_dump_files = function(print = TRUE) {
 
     dump_files = NULL
     for(w in wd) {
+        if(print) {
+            qqcat("checking @{w}\n")
+        }
         dump_files = c(dump_files, list.files(path = w, pattern = "^core.\\d$", all.files = TRUE, full.names = TRUE))
         dump_files = c(dump_files, list.files(path = w, pattern = "^\\.RDataTmp", all.files = TRUE, full.names = TRUE))
     }
