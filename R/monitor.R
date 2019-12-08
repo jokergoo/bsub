@@ -10,6 +10,11 @@
 # == value
 # The log message as a vector.
 job_log = function(job_id, print = TRUE, n_line = 10) {
+    
+    if(missing(job_id)) {
+        tb = bjobs(print = FALSE)
+        return(job_log(tb[, 1]))
+    }
 
     if(length(job_id) > 1) {
         txt2 = NULL
@@ -259,7 +264,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 
         l = nchar(df2$JOB_NAME) > 50
         if(any(l)) {
-            substr(df2$JOB_NAME[l], 49, nchar(df2$JOB_NAME[l]) = ".."
+            substr(df2$JOB_NAME[l], 49, nchar(df2$JOB_NAME[l])) = ".."
         }
 
         max_width = pmax(apply(df2, 2, function(x) max(nchar(x)+1)),
