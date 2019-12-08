@@ -20,7 +20,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
         txt2 = NULL
         for(id in job_id) {
             if(print) qqcat("retrieve log for job @{id}\n")
-            txt = job_log(id, print = FALSE)
+            txt = job_log(id, print = FALSE, n_line = n_line)
             if(length(txt) > n_line) {
                 txt2 = c(txt2, "\n", paste0(strrep(symbol$double_line, 10), qq(" log for job @{id}, last @{n_line} lines "), strrep(symbol$double_line, 10)))
                 txt2 = c(txt2, txt[seq(length(txt) - n_line + 1, length(txt))])
