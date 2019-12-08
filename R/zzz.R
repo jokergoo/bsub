@@ -47,12 +47,15 @@
 }
 
 
-config_odcf = function() {
+config_odcf = function(user) {
 	bsub_opt$call_Rscript = function(version) qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript")
 	bsub_opt$submission_node = c("odcf-worker01", "odcf-cn34u03s10", "odcf-cn34u03s12")
 	bsub_opt$ssh_envir = c("source /etc/profile",
                            "export LSF_ENVDIR=/opt/lsf/conf",
                            "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
+	if(!missing(user)) {
+		bsub_opt$user = user
+	}
 }
 
 if(identical(environment(), .GlobalEnv)) {
