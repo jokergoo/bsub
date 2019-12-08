@@ -24,12 +24,13 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
     if(length(job_id) > 1) {
         txt2 = NULL
         for(id in job_id) {
+            if(print) qqcat("retrieve log for job @{id}\n")
             txt = job_log(id, print = FALSE)
             if(length(txt) > n_line) {
-                txt2 = c(txt2, qq("\n######### log for job @{id}, last @{n_line} lines #########"))
+                txt2 = c(txt2, "\n", paste0(strrep(symbol$double_line, 10), qq(" log for job @{id}, last @{n_line} lines "), strrep(symbol$double_line, 10)))
                 txt2 = c(txt2, txt[seq(length(txt) - n_line + 1, length(txt))])
             } else {
-                txt2 = c(txt2, qq("\n######### log for job @{id} ###############################"))
+                txt2 = c(txt2, "\n", paste0(strrep(symbol$double_line, 10), qq(" log for job @{id} "), strrep(symbol$double_line, 10)))
                 txt2 = c(txt2, txt)
             }
         }
@@ -82,7 +83,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
                 no_file_flag = TRUE
             } else {
                 txt = readLines(file, warn = FALSE)
-                txt = c(txt, qq("**** job (@{job_id}) is still running. ****"))
+                txt = c(txt, paste0(symbol$warning, qq(" job (@{job_id}) is still running.")))
                 if(print) cat(txt, sep = "\n")
                 return(invisible(txt))
             }
@@ -96,7 +97,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
                 no_file_flag = TRUE
             } else {
                 txt = ssh_exec(qq("cat @{ln}"))
-                txt = c(txt, qq("**** job (@{job_id}) is still running. ****"))
+                txt = c(txt, paste0(symbol$warning, qq(" job (@{job_id}) is still running.")))
                 if(print) cat(txt, sep = "\n")
                 return(invisible(txt))
             }
@@ -110,7 +111,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
                 return(invisible(txt))
             } else {
                 txt = ln
-                txt = c(txt, qq("**** job (@{job_id}) is still running. ****"))
+                txt = c(txt, paste0(symbol$warning, qq(" job (@{job_id}) is still running.")))
                 if(print) cat(txt, sep = "\n")
                 return(invisible(txt))
             }
@@ -220,7 +221,8 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         return(invisible(NULL))
     }
 
-    df = read.csv(textConnection(paste(ln, collapse = "\n")))
+    df = read.csv(textConnection(paste(ln, collapse = "\n")), stringsAsFactors = FALSE)
+    df$STAT = factor(df$STAT)
     df$SUBMIT_TIME = as.POSIXct(df$SUBMIT_TIME, format = "%b %d %H:%M:%S %Y")
     df$START_TIME = as.POSIXct(df$START_TIME, format = "%b %d %H:%M:%S %Y")
     df$FINISH_TIME = as.POSIXct(df$FINISH_TIME, format = "%b %d %H:%M:%S %Y")
@@ -276,7 +278,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
                          nchar(colnames(df2)) + 1)
         ow = getOption("width")
         options(width = sum(max_width) + 10)
-        cat(strrep("=", sum(max_width)), "\n")
+        cat(strrep(symbol$line, sum(max_width)), "\n")
         print(df2, row.names = FALSE, right = FALSE)
         if(nrow(df2) > 20) {
             for(i in seq_len(ncol(df2))) {
@@ -286,7 +288,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
             }
             cat("\n")
         }
-        cat(strrep("=", sum(max_width)), "\n")
+        cat(strrep(symbol$line, sum(max_width)), "\n")
         cat(" ", paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week.\n", sep = "")
         cat(" You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.\n")
         options(width = ow)
@@ -623,6 +625,9 @@ check_dump_files = function(print = TRUE) {
 
     dump_files = NULL
     for(w in wd) {
+        if(print) {
+            qqcat("checking @{w}\n")
+        }
         dump_files = c(dump_files, list.files(path = w, pattern = "^core.\\d$", all.files = TRUE, full.names = TRUE))
         dump_files = c(dump_files, list.files(path = w, pattern = "^\\.RDataTmp", all.files = TRUE, full.names = TRUE))
     }

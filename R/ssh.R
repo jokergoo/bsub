@@ -16,7 +16,7 @@ ssh_connect = function() {
 		message("You need to install ssh package.")
 	}
 
-	if(length(bsub_opt$submission_node)) {
+	if(length(bsub_opt$submission_node) == 0) {
 		stop("bsub_opt$submission_node is not defined.")
 	}
 
