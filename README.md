@@ -40,14 +40,19 @@ bsub_opt$call_Rscript = function(version) {
 }
 ```
 
-2. The names of the nodes where the jobs are submitted.
+2. Your username on the submission node.
+
+```{r, eval = FALSE}
+bsub_opt$user = ...
+```
+
+3. The names of the nodes where the jobs are submitted.
 
 ```r
 bsub_opt$submission_node = ...
 ```
 
-
-3. Bash environment. It is basically for properly finding `bsub`/`bjobs`/... Following is how we set up
+4. Bash environment. It is basically for properly finding `bsub`/`bjobs`/... Following is how we set up
 on our cluster.
 
 ```r
@@ -56,7 +61,7 @@ bsub_opt$ssh_envir = c("source /etc/profile",
                        "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
 ```
 
-4. The template of `bsub` command. The self-defined function should accepts following arguments:
+5. The template of `bsub` command. The self-defined function should accepts following arguments:
 
 - `name` job name.
 - `hour` running time.
