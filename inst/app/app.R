@@ -4,14 +4,16 @@ library(shiny)
 library(GetoptLong)
 
 ui = fluidPage(
-
+    tags$style("body {
+        font-size:1.2em;
+    }"),
     titlePanel("LSF Job Monitor"),
-    div(textOutput("info"), style = "background-color:#FFE0E0;"),
+    div(textOutput("info"), style = "background-color:#FFE0E0;padding:5px 5px; border: 1px solid red;"),
     actionButton("reload", "Reload"),
     DT::dataTableOutput("mytable"),
     actionButton("kill", "Kill selected jobs"),
     hr(),
-    p("built by ", a("bsub package", href='https://github.com/jokergoo/bsub', target='_blank'))
+    p("built with ", a("bsub package", href='https://github.com/jokergoo/bsub', target='_blank'))
 )
 
 server <- function(input, output, session) {
@@ -63,7 +65,7 @@ server <- function(input, output, session) {
 
 	}, escape = FALSE, rownames = FALSE, filter = 'top',
 	  options = list(
-	    pageLength = 25, autoWidth = TRUE, searching = FALSE
+	    pageLength = 25, autoWidth = TRUE
 	))
 	
 	output$info = renderText({
