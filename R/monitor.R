@@ -135,9 +135,36 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
             }
         }
     } else {
-        txt = readLines(output_file, warn = FALSE)
-        if(print) cat(txt, sep = "\n")
-        return(invisible(txt))
+        no_file_flag = FALSE
+        if(on_submission_node()) {
+            
+            if(!file.exists(output_file)) {
+                no_file_flag = TRUE
+            } else {
+                txt = readLines(output_file, warn = FALSE)
+                if(print) cat(txt, sep = "\n")
+                return(invisible(txt))
+            }
+        } else {
+            # if no such file, ssh_exec gives an error
+            oe = try(ln <- ssh_exec(qq("ls @{output_file}")), silent = TRUE)
+
+            if(inherits(oe, "try-error")) {
+                no_file_flag = TRUE
+            } else if(length(ln) == 0) {
+                no_file_flag = TRUE
+            } else {
+                txt = ssh_exec(qq("cat @{ln}"))
+                if(print) cat(txt, sep = "\n")
+                return(invisible(txt))
+            }
+        }
+
+        if(no_file_flag) {
+            txt = qq("Cannot find output file for job (@{job_id}.")
+            if(print) cat(txt, sep = "\n")
+            return(invisible(txt))
+        }
     }
 }
 
