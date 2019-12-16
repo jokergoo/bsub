@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -121,17 +121,28 @@
     <p>Log for the running/finished/failed job</p>
     </div>
 
-    <pre class="usage"><span class='fu'>job_log</span>(<span class='no'>job_id</span>)</pre>
+    <pre class="usage"><span class='fu'>job_log</span>(<span class='no'>job_id</span>, <span class='kw'>print</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>n_line</span> <span class='kw'>=</span> <span class='fl'>10</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>job_id</th>
-      <td><p>the job id</p></td>
+      <td><p>The job id. It can be a single job or a vector of job ids.</p></td>
+    </tr>
+    <tr>
+      <th>print</th>
+      <td><p>Whether print the log message.</p></td>
+    </tr>
+    <tr>
+      <th>n_line</th>
+      <td><p>Number of last lines for each job to show when multiple jobs are queried.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The log message as a vector.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># There is no example</span>
@@ -142,6 +153,7 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

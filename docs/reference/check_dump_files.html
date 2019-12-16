@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Retrieve saved variable — retrieve_var • bsub</title>
+<title>Check whether there are dump files — check_dump_files • bsub</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Retrieve saved variable — retrieve_var" />
-<meta property="og:description" content="Retrieve saved variable" />
+<meta property="og:title" content="Check whether there are dump files — check_dump_files" />
+<meta property="og:description" content="Check whether there are dump files" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,37 +112,30 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Retrieve saved variable</h1>
+    <h1>Check whether there are dump files</h1>
     
-    <div class="hidden name"><code>retrieve_var.Rd</code></div>
+    <div class="hidden name"><code>check_dump_files.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Retrieve saved variable</p>
+    <p>Check whether there are dump files</p>
     </div>
 
-    <pre class="usage"><span class='fu'>retrieve_var</span>(<span class='no'>name</span>, <span class='kw'>output_dir</span> <span class='kw'>=</span> <span class='no'>bsub_opt</span>$<span class='no'>output_dir</span>, <span class='kw'>wait</span> <span class='kw'>=</span> <span class='fl'>30</span>)</pre>
+    <pre class="usage"><span class='fu'>check_dump_files</span>(<span class='kw'>print</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>name</th>
-      <td><p>Job name</p></td>
-    </tr>
-    <tr>
-      <th>output_dir</th>
-      <td><p>The output dir set in <code><a href='bsub_chunk.html'>bsub_chunk</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>wait</th>
-      <td><p>Seconds to wait.</p></td>
+      <th>print</th>
+      <td><p>Whether print messages</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>It retrieve the saved variable in <code><a href='bsub_chunk.html'>bsub_chunk</a></code> when <code>save_rds = TRUE</code> is set.</p>
+    <p>For the failed jobs, LSF cluster generates a core dump file and R generates a .RDataTmp file.</p>
+<p>Note if you manually set working directory in your R code/script, the R dump file can be not caught.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># There is no example</span>

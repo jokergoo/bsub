@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -90,7 +90,7 @@
 <h1 class="hasAnchor">
 <a href="#send-r-coder-scriptsshell-commands-to-lsf-cluster" class="anchor"></a>Send R code/R scripts/shell commands to LSF cluster</h1>
 <p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2019-12-05</p>
+<p><strong>Date</strong>: 2019-12-16</p>
 <hr>
 <p>Load the library:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(bsub)</a></code></pre></div>
@@ -110,8 +110,8 @@
 <a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">})</a></code></pre></div>
 <pre><code>## - job: 'R_code_c3481a47' from a code chunk
-## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/R_code_c3481a47.out' '/home/guz/.bsub_temp/R_code_c3481a47_348762a5a6f1.sh'</code></pre>
-<pre><code>## [1] "2272227"</code></pre>
+## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/R_code_c3481a47.out' '/home/guz/.bsub_temp/R_code_c3481a47_e4764fba599e.sh'</code></pre>
+<pre><code>## [1] "2417718"</code></pre>
 <p>The value returned by <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> is the job ID from LSF cluster.</p>
 <div id="job-settings" class="section level3">
 <h3 class="hasAnchor">
@@ -122,8 +122,8 @@
 <a class="sourceLine" id="cb6-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">})</a></code></pre></div>
 <pre><code>## - job: 'example' from a code chunk
-## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' -o '/home/guz/.bsub_temp/example.out' '/home/guz/.bsub_temp/example_348738a08aea.sh'</code></pre>
-<pre><code>## [1] "2272228"</code></pre>
+## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' -o '/home/guz/.bsub_temp/example.out' '/home/guz/.bsub_temp/example_e476398e9cae.sh'</code></pre>
+<pre><code>## [1] "2417719"</code></pre>
 <p>If <code>name</code> is not specified, an internal name calculated by <code><a href="https://rdrr.io/pkg/digest/man/digest.html">digest::digest()</a></code> on the chunk is automatically assigned. The unit of <code>memory</code> is GB.</p>
 </div>
 <div id="r-version" class="section level3">
@@ -253,8 +253,8 @@
 <a class="sourceLine" id="cb23-4" data-line-number="4">    <span class="dv">1</span><span class="op">+</span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb23-5" data-line-number="5">})</a></code></pre></div>
 <pre><code>## - job: 'example2' from a code chunk
-## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example2.out' '/home/guz/.bsub_temp/example2_3487344647da.sh'</code></pre>
-<pre><code>## [1] "2272229"</code></pre>
+## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example2.out' '/home/guz/.bsub_temp/example2_e4767e2c8271.sh'</code></pre>
+<pre><code>## [1] "2417720"</code></pre>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="../reference/retrieve_var.html">retrieve_var</a></span>(<span class="st">"example2"</span>)</a></code></pre></div>
 <pre><code>## job is running or pending, retry in 30 seconds.</code></pre>
 <pre><code>## [1] 2</code></pre>
@@ -342,7 +342,7 @@
 <a class="sourceLine" id="cb39-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"blablabla...</span><span class="ch">\n</span><span class="st">"</span>)</a>
 <a class="sourceLine" id="cb39-4" data-line-number="4">})</a></code></pre></div>
 <pre><code>## - job: 'example' from a code chunk
-## bash /home/guz/.bsub_temp/example_34872e8d6c93.sh</code></pre>
+## bash /home/guz/.bsub_temp/example_e4767841f945.sh</code></pre>
 </div>
 </div>
 <div id="send-r-script" class="section level2">
@@ -365,10 +365,99 @@
 <a class="sourceLine" id="cb44-2" data-line-number="2"><span class="kw"><a href="../reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"cmd1"</span>, <span class="st">"cmd2"</span>, ...), <span class="dt">name =</span> ..., <span class="dt">memory =</span> ..., <span class="dt">core =</span> ..., ...)</a></code></pre></div>
 <p>The binary and the arguments should all be set in the first argument of <code><a href="../reference/bsub_cmd.html">bsub_cmd()</a></code>.</p>
 </div>
+<div id="job-summary" class="section level2">
+<h2 class="hasAnchor">
+<a href="#job-summary" class="anchor"></a>Job Summary</h2>
+<p><code><a href="../reference/bjobs.html">bjobs()</a></code> or just entering <code>bjobs</code> gives a summary of running jobs. Job status (by default is <code>RUN</code> and <code>PEND</code>) is controlled by <code>status</code> argument. Number of most recent jobs is controlled by <code>max</code> argument. Filtering on the job name is controlled by <code>filter</code> argument.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)</a>
+<a class="sourceLine" id="cb45-2" data-line-number="2"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb45-3" data-line-number="3">    <span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"example_@{i}"</span>),</a>
+<a class="sourceLine" id="cb45-4" data-line-number="4">    { </a>
+<a class="sourceLine" id="cb45-5" data-line-number="5">        <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb45-6" data-line-number="6">    })</a>
+<a class="sourceLine" id="cb45-7" data-line-number="7">}</a></code></pre></div>
+<pre><code>## - job: 'example_1' from a code chunk
+## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_1.out' '/home/guz/.bsub_temp/example_1_e4766c02de0b.sh' 
+## - job: 'example_2' from a code chunk
+## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_2.out' '/home/guz/.bsub_temp/example_2_e47615e63cf9.sh' 
+## - job: 'example_3' from a code chunk
+## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_3.out' '/home/guz/.bsub_temp/example_3_e4766fd40c4e.sh' 
+## - job: 'example_4' from a code chunk
+## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_4.out' '/home/guz/.bsub_temp/example_4_e4765d24e6f0.sh'</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">bjobs</a></code></pre></div>
+<pre><code>## ─────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME  SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  2417721 PEND example_1 2019-12-16 23:06:43 -           -         -     -   -      
+##  2417722 PEND example_2 2019-12-16 23:06:43 -           -         -     -   -      
+##  2417723 PEND example_3 2019-12-16 23:06:43 -           -         -     -   -      
+##  2417724 PEND example_4 2019-12-16 23:06:43 -           -         -     -   -      
+## ─────────────────────────────────────────────────────────────────────────────────── 
+##  1702 DONE jobs, 22 EXIT jobs, 4 PEND jobs within one week.
+##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
+<p>There is one additional column <code>RECENT</code> in the summary table which shows the order of the jobs with the same job name. The most recent job has the value 1.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw"><a href="../reference/bjobs.html">bjobs</a></span>(<span class="dt">status =</span> <span class="st">"all"</span>, <span class="dt">filter =</span> <span class="st">"example"</span>)</a></code></pre></div>
+<pre><code>## ────────────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  2412525 DONE example   3      2019-12-16 15:23:10 0:00        -         4     -   42Mb   
+##  2412526 DONE example2  3      2019-12-16 15:23:10 0:00        -         1     -   41Mb   
+##  2412583 DONE example_1 3      2019-12-16 15:23:52 0:00        -         1     -   41Mb   
+##  2412584 DONE example_2 3      2019-12-16 15:23:52 0:00        -         1     -   41Mb   
+##  2412585 DONE example_3 3      2019-12-16 15:23:52 0:00        -         1     -   12Mb   
+##  2412586 DONE example_4 3      2019-12-16 15:23:53 0:00        -         1     -   41Mb   
+##  2412826 DONE example   2      2019-12-16 15:35:02 0:00        -         4     -   41Mb   
+##  2412827 DONE example2  2      2019-12-16 15:35:03 0:00        -         1     -   41Mb   
+##  2412849 DONE example_1 2      2019-12-16 15:35:44 0:00        -         1     -   12Mb   
+##  2412850 DONE example_2 2      2019-12-16 15:35:44 0:00        -         1     -   12Mb   
+##  2412851 DONE example_3 2      2019-12-16 15:35:44 0:00        -         1     -   12Mb   
+##  2412852 DONE example_4 2      2019-12-16 15:35:45 0:00        -         1     -   39Mb   
+##  2417719 DONE example   1      2019-12-16 23:06:01 0:00        -         4     -   12Mb   
+##  2417720 DONE example2  1      2019-12-16 23:06:01 0:00        -         1     -   41Mb   
+##  2417721 PEND example_1 1      2019-12-16 23:06:43 -           -         -     -   -      
+##  2417722 PEND example_2 1      2019-12-16 23:06:43 -           -         -     -   -      
+##  2417723 PEND example_3 1      2019-12-16 23:06:43 -           -         -     -   -      
+##  2417724 PEND example_4 1      2019-12-16 23:06:43 -           -         -     -   -      
+## ────────────────────────────────────────────────────────────────────────────────────────── 
+##  1702 DONE jobs, 22 EXIT jobs, 4 PEND jobs within one week.
+##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
+<p><code><a href="../reference/brecent.html">brecent()</a></code> returns 20 most recent jobs.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">brecent</a></code></pre></div>
+<pre><code>## ──────────────────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME        RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  2412525 DONE example         3      2019-12-16 15:23:10 0:00        -         4     -   42Mb   
+##  2412526 DONE example2        3      2019-12-16 15:23:10 0:00        -         1     -   41Mb   
+##  2412583 DONE example_1       3      2019-12-16 15:23:52 0:00        -         1     -   41Mb   
+##  2412584 DONE example_2       3      2019-12-16 15:23:52 0:00        -         1     -   41Mb   
+##  2412585 DONE example_3       3      2019-12-16 15:23:52 0:00        -         1     -   12Mb   
+##  2412586 DONE example_4       3      2019-12-16 15:23:53 0:00        -         1     -   41Mb   
+##  2412825 DONE R_code_c3481a47 2      2019-12-16 15:35:02 0:00        -         1     -   9Mb    
+##  2412826 DONE example         2      2019-12-16 15:35:02 0:00        -         4     -   41Mb   
+##  2412827 DONE example2        2      2019-12-16 15:35:03 0:00        -         1     -   41Mb   
+##  2412849 DONE example_1       2      2019-12-16 15:35:44 0:00        -         1     -   12Mb   
+##  2412850 DONE example_2       2      2019-12-16 15:35:44 0:00        -         1     -   12Mb   
+##  2412851 DONE example_3       2      2019-12-16 15:35:44 0:00        -         1     -   12Mb   
+##  2412852 DONE example_4       2      2019-12-16 15:35:45 0:00        -         1     -   39Mb   
+##  2417718 DONE R_code_c3481a47 1      2019-12-16 23:06:00 0:00        -         1     -   12Mb   
+##  2417719 DONE example         1      2019-12-16 23:06:01 0:00        -         4     -   12Mb   
+##  2417720 DONE example2        1      2019-12-16 23:06:01 0:00        -         1     -   41Mb   
+##  2417721 PEND example_1       1      2019-12-16 23:06:43 -           -         -     -   -      
+##  2417722 PEND example_2       1      2019-12-16 23:06:43 -           -         -     -   -      
+##  2417723 PEND example_3       1      2019-12-16 23:06:43 -           -         -     -   -      
+##  2417724 PEND example_4       1      2019-12-16 23:06:43 -           -         -     -   -      
+## ──────────────────────────────────────────────────────────────────────────────────────────────── 
+##  1702 DONE jobs, 22 EXIT jobs, 4 PEND jobs within one week.
+##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
+<p>There are some helper functions which only list running/pending/done/failed jobs:</p>
+<ul>
+<li><code>bjobs_running</code></li>
+<li><code>bjobs_pending</code></li>
+<li><code>bjobs_done</code></li>
+<li><code>bjobs_exit</code></li>
+</ul>
+</div>
 <div id="global-parameters" class="section level2">
 <h2 class="hasAnchor">
 <a href="#global-parameters" class="anchor"></a>Global Parameters</h2>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">bsub_opt</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">bsub_opt</a></code></pre></div>
 <pre><code>##           Option                                    Value
 ##         packages                                     NULL
 ##            image                                     NULL
@@ -392,186 +481,41 @@
 <a href="#other-functions" class="anchor"></a>Other functions</h2>
 <ul>
 <li>
-<code><a href="../reference/bjobs.html">bjobs()</a></code> or just entering <code>bjobs</code> gives a summary of running jobs. Job status (by default is <code>RUN</code> and <code>PEND</code>) is controlled by <code>status</code> argument. Number of most recent jobs is controlled by <code>max</code> argument. Filtering on the job name is controlled by <code>filter</code> argument.</li>
+<code><a href="../reference/bkill.html">bkill(job_id)</a></code> kills a job or a list jobs.</li>
 <li>
-<code><a href="../reference/job_log.html">job_log(job_id)</a></code> prints the log of a specified running/finished/failed job.</li>
+<code><a href="../reference/job_log.html">job_log(job_id)</a></code> prints the log of a specified running/finished/failed job. A vector of jobs can also be sent at the same time that last 10 lines of each job are printed.</li>
+<li>
+<code><a href="../reference/check_dump_files.html">check_dump_files()</a></code> searches the dump files (<code>core.xxx</code> by LSF cluster or <code>.RDataTmpxxx</code> by R).</li>
 <li>
 <code><a href="../reference/ssh_connect.html">ssh_connect()</a></code> establishes the SSH connection to the submission node if it is lost.</li>
+<li>
+<code><a href="../reference/monitor.html">monitor()</a></code> opens a browser-based interactive job monitor.</li>
 </ul>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)</a>
-<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
-<a class="sourceLine" id="cb47-3" data-line-number="3">    <span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"example_@{i}"</span>),</a>
-<a class="sourceLine" id="cb47-4" data-line-number="4">    { </a>
-<a class="sourceLine" id="cb47-5" data-line-number="5">        <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb47-6" data-line-number="6">    })</a>
-<a class="sourceLine" id="cb47-7" data-line-number="7">}</a></code></pre></div>
-<pre><code>## - job: 'example_1' from a code chunk
-## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_1.out' '/home/guz/.bsub_temp/example_1_34872ebb2cf4.sh' 
-## - job: 'example_2' from a code chunk
-## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_2.out' '/home/guz/.bsub_temp/example_2_348779d5abfe.sh' 
-## - job: 'example_3' from a code chunk
-## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_3.out' '/home/guz/.bsub_temp/example_3_3487630bbb1a.sh' 
-## - job: 'example_4' from a code chunk
-## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_4.out' '/home/guz/.bsub_temp/example_4_34871b1b3f3a.sh'</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">bjobs</a></code></pre></div>
-<pre><code>## ============================================================================================================ 
-##  JOBID   STAT JOB_NAME                        SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM    MAX_MEM
-##  2213548 RUN  cola_recount_SRP048759          2019-12-02 19:31:26 19:29       0:30      4     8.3Gb  9.5Gb  
-##  2213549 RUN  cola_recount_SRP048801          2019-12-02 19:31:26 19:27       0:32      4     3.3Gb  8Gb    
-##  2213552 RUN  cola_recount_SRP049593          2019-12-02 19:31:27 18:46       1:13      4     8.2Gb  8.4Gb  
-##  2213557 RUN  cola_recount_SRP050223          2019-12-02 19:31:28 18:10       1:49      4     3.5Gb  8.6Gb  
-##  2213561 RUN  cola_recount_SRP050892          2019-12-02 19:31:29 17:46       2:13      4     3.5Gb  8.1Gb  
-##  2213562 RUN  cola_recount_SRP050992          2019-12-02 19:31:29 17:42       2:17      4     8.8Gb  8.9Gb  
-##  2213567 RUN  cola_recount_SRP051844          2019-12-02 19:31:30 16:55       3:04      4     3.5Gb  9.3Gb  
-##  2213568 RUN  cola_recount_SRP051848          2019-12-02 19:31:30 16:51       3:08      4     6.8Gb  6.9Gb  
-##  2213569 RUN  cola_recount_SRP052740          2019-12-02 19:31:30 16:49       3:10      4     2.2Gb  6.8Gb  
-##  2213572 RUN  cola_recount_SRP055153          2019-12-02 19:31:31 16:32       3:27      4     5Gb    5.8Gb  
-##  2213574 RUN  cola_recount_SRP055513          2019-12-02 19:31:32 15:54       4:05      4     5Gb    5.8Gb  
-##  2213584 RUN  cola_recount_SRP057196          2019-12-02 19:31:34 14:22       5:37      4     8.2Gb  8.8Gb  
-##  2213586 RUN  cola_recount_SRP057500          2019-12-02 19:31:34 14:04       5:55      4     2.9Gb  7.8Gb  
-##  2213593 RUN  cola_recount_SRP059039          2019-12-02 19:31:36 12:05       7:54      4     6.5Gb  6.9Gb  
-##  2213595 RUN  cola_recount_SRP059172          2019-12-02 19:31:36 11:43       8:16      4     6.1Gb  6.4Gb  
-##  2213607 RUN  cola_recount_SRP063496          2019-12-02 19:31:39 8:42        11:17     4     1.7Gb  6.1Gb  
-##  2213608 RUN  cola_recount_SRP063840          2019-12-02 19:31:39 8:36        11:23     4     5.7Gb  5.8Gb  
-##  2213612 RUN  cola_recount_SRP065812          2019-12-02 19:31:40 7:04        12:55     4     5.3Gb  5.9Gb  
-##  2213613 RUN  cola_recount_TCGA_adrenal_gland 2019-12-02 19:31:40 7:02        12:57     4     7.1Gb  7.3Gb  
-##  2213614 RUN  cola_recount_TCGA_bladder       2019-12-02 19:31:40 6:46        13:13     4     8.5Gb  8.7Gb  
-##  2213615 RUN  cola_recount_TCGA_bone_marrow   2019-12-02 19:31:40 6:45        13:14     4     4.6Gb  11.4Gb 
-##  2213616 RUN  cola_recount_TCGA_brain         2019-12-02 19:31:41 6:41        13:18     4     9.6Gb  9.9Gb  
-##  2213617 RUN  cola_recount_TCGA_breast        2019-12-02 19:31:41 6:37        13:22     4     7.8Gb  10.5Gb 
-##  2213618 RUN  cola_recount_TCGA_cervix        2019-12-02 19:31:41 6:35        13:24     4     4.7Gb  7.7Gb  
-##  2213619 RUN  cola_recount_TCGA_colorectal    2019-12-02 19:31:41 6:29        13:30     4     7.9Gb  9.8Gb  
-##  2213620 RUN  cola_recount_TCGA_esophagus     2019-12-02 19:31:42 6:08        13:51     4     6.6Gb  7Gb    
-##  2213621 RUN  cola_recount_TCGA_eye           2019-12-02 19:31:42 5:54        14:05     4     9.7Gb  9.8Gb  
-##  2213622 RUN  cola_recount_TCGA_head_and_neck 2019-12-02 19:31:42 5:50        14:09     4     7.9Gb  9.7Gb  
-##  2213623 RUN  cola_recount_TCGA_kidney        2019-12-02 19:31:42 5:21        14:38     4     9.8Gb  10.1Gb 
-##  2213624 RUN  cola_recount_TCGA_liver         2019-12-02 19:31:42 5:21        14:38     4     8.7Gb  8.8Gb  
-##  2213625 RUN  cola_recount_TCGA_lung          2019-12-02 19:31:43 5:21        14:38     4     10.2Gb 10.2Gb 
-##  2213626 RUN  cola_recount_TCGA_ovary         2019-12-02 19:31:43 5:19        14:40     4     8.7Gb  8.7Gb  
-##  2213627 RUN  cola_recount_TCGA_pancreas      2019-12-02 19:31:43 4:41        15:18     4     2.9Gb  6.9Gb  
-##  2213628 RUN  cola_recount_TCGA_pleura        2019-12-02 19:31:43 4:34        15:25     4     5.1Gb  5.2Gb  
-##  2213629 RUN  cola_recount_TCGA_prostate      2019-12-02 19:31:43 4:27        15:32     4     9.6Gb  9.6Gb  
-##  2213630 RUN  cola_recount_TCGA_skin          2019-12-02 19:31:44 4:02        15:57     4     9.2Gb  9.3Gb  
-##  2213631 RUN  cola_recount_TCGA_soft_tissue   2019-12-02 19:31:44 3:50        16:09     4     7Gb    7.2Gb  
-##  2213632 RUN  cola_recount_TCGA_stomach       2019-12-02 19:31:44 3:26        16:33     4     8.9Gb  8.9Gb  
-##  2213633 RUN  cola_recount_TCGA_testis        2019-12-02 19:31:44 3:26        16:33     4     6.1Gb  6.4Gb  
-##  2213634 RUN  cola_recount_TCGA_thymus        2019-12-02 19:31:45 3:15        16:44     4     5.9Gb  6Gb    
-##  2213635 RUN  cola_recount_TCGA_thyroid       2019-12-02 19:31:45 2:43        17:16     4     9.2Gb  9.7Gb  
-##  2213636 RUN  cola_recount_TCGA_uterus        2019-12-02 19:31:45 2:42        17:17     4     9.4Gb  9.7Gb  
-##  2272231 PEND example_1                       2019-12-05 19:44:28 -           -         -     -      -      
-##  2272232 PEND example_2                       2019-12-05 19:44:28 -           -         -     -      -      
-##  2272233 PEND example_3                       2019-12-05 19:44:28 -           -         -     -      -      
-##  2272234 PEND example_4                       2019-12-05 19:44:28 -           -         -     -      -      
-##  JOBID   STAT JOB_NAME                        SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM    MAX_MEM
-## ============================================================================================================ 
-##  422 DONE jobs, 63 EXIT jobs, 4 PEND jobs, 42 RUN jobs within one week.
-##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
-<p>There is one additional column <code>RECENT</code> in the summary table which shows the order of the jobs with the same job name. The most recent job has the value 1.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw"><a href="../reference/bjobs.html">bjobs</a></span>(<span class="dt">status =</span> <span class="st">"all"</span>, <span class="dt">filter =</span> <span class="st">"example"</span>)</a></code></pre></div>
-<pre><code>## ========================================================================================== 
-##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  2190912 DONE example   11     2019-12-01 17:42:01 0:00        -         4     -   6Mb    
-##  2190913 DONE example2   9     2019-12-01 17:42:01 0:00        -         1     -   41Mb   
-##  2190914 DONE example_1  7     2019-12-01 17:42:43 0:00        -         1     -   37Mb   
-##  2190915 DONE example_2  7     2019-12-01 17:42:43 0:00        -         1     -   37Mb   
-##  2190916 DONE example_3  7     2019-12-01 17:42:43 0:00        -         1     -   37Mb   
-##  2190917 DONE example_4  7     2019-12-01 17:42:43 0:00        -         1     -   37Mb   
-##  2198294 DONE example   10     2019-12-02 09:34:25 0:00        -         4     -   16Mb   
-##  2198295 DONE example2   8     2019-12-02 09:34:26 0:00        -         1     -   41Mb   
-##  2198300 DONE example_1  6     2019-12-02 09:35:07 0:00        -         1     -   41Mb   
-##  2198301 DONE example_2  6     2019-12-02 09:35:07 0:00        -         1     -   41Mb   
-##  2198302 DONE example_3  6     2019-12-02 09:35:07 0:00        -         1     -   41Mb   
-##  2198303 DONE example_4  6     2019-12-02 09:35:07 0:00        -         1     -   41Mb   
-##  2212998 DONE example    9     2019-12-02 19:15:02 0:00        -         4     -   28Mb   
-##  2213099 DONE example2   7     2019-12-02 19:15:05 0:00        -         1     -   41Mb   
-##  2213101 DONE example_1  5     2019-12-02 19:16:16 0:00        -         1     -   37Mb   
-##  2213102 DONE example_2  5     2019-12-02 19:16:16 0:00        -         1     -   37Mb   
-##  2213103 DONE example_3  5     2019-12-02 19:16:17 0:00        -         1     -   37Mb   
-##  2213104 DONE example_4  5     2019-12-02 19:16:17 0:00        -         1     -   17Mb   
-##  2218159 DONE example    8     2019-12-03 11:48:24 0:00        -         4     -   37Mb   
-##  2218160 DONE example2   6     2019-12-03 11:48:25 0:00        -         1     -   37Mb   
-##  2218229 DONE example    7     2019-12-03 11:52:06 0:00        -         1     -   41Mb   
-##  2218230 DONE example_1  4     2019-12-03 11:52:08 0:00        -         1     -   41Mb   
-##  2218231 DONE example_2  4     2019-12-03 11:52:08 0:00        -         1     -   39Mb   
-##  2218232 DONE example_3  4     2019-12-03 11:52:08 0:00        -         1     -   39Mb   
-##  2218233 DONE example_4  4     2019-12-03 11:52:08 0:00        -         1     -   41Mb   
-##  2230228 DONE example    6     2019-12-04 10:35:24 0:00        -         4     -   41Mb   
-##  2230229 DONE example2   5     2019-12-04 10:35:24 0:00        -         1     -   41Mb   
-##  2230238 DONE example    5     2019-12-04 10:43:33 0:00        -         4     -   42Mb   
-##  2230239 DONE example2   4     2019-12-04 10:43:33 0:00        -         1     -   41Mb   
-##  2230247 DONE example    4     2019-12-04 10:49:27 0:00        -         4     -   41Mb   
-##  2230248 DONE example2   3     2019-12-04 10:49:27 0:00        -         1     -   41Mb   
-##  2232502 DONE example    3     2019-12-04 11:24:45 0:00        -         1     -   35Mb   
-##  2232503 DONE example_1  3     2019-12-04 11:24:47 0:00        -         1     -   41Mb   
-##  2232504 DONE example_2  3     2019-12-04 11:24:47 0:00        -         1     -   41Mb   
-##  2232505 DONE example_3  3     2019-12-04 11:24:47 0:00        -         1     -   34Mb   
-##  2232506 DONE example_4  3     2019-12-04 11:24:47 0:00        -         1     -   41Mb   
-##  2272166 DONE example    2     2019-12-05 19:31:48 0:00        -         4     -   40Mb   
-##  2272167 DONE example2   2     2019-12-05 19:31:48 0:00        -         1     -   42Mb   
-##  2272169 DONE example_1  2     2019-12-05 19:32:30 0:00        -         1     -   6Mb    
-##  2272170 DONE example_2  2     2019-12-05 19:32:30 0:00        -         1     -   6Mb    
-##  2272171 DONE example_3  2     2019-12-05 19:32:30 0:00        -         1     -   6Mb    
-##  2272172 DONE example_4  2     2019-12-05 19:32:31 0:00        -         1     -   6Mb    
-##  2272228 DONE example    1     2019-12-05 19:43:46 0:00        -         4     -   39Mb   
-##  2272229 DONE example2   1     2019-12-05 19:43:46 0:00        -         1     -   41Mb   
-##  2272231 PEND example_1  1     2019-12-05 19:44:28 -           -         -     -   -      
-##  2272232 PEND example_2  1     2019-12-05 19:44:28 -           -         -     -   -      
-##  2272233 PEND example_3  1     2019-12-05 19:44:28 -           -         -     -   -      
-##  2272234 PEND example_4  1     2019-12-05 19:44:28 -           -         -     -   -      
-##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-## ========================================================================================== 
-##  422 DONE jobs, 63 EXIT jobs, 4 PEND jobs, 42 RUN jobs within one week.
-##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
-<p><code><a href="../reference/brecent.html">brecent()</a></code> returns 20 most recent jobs.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">brecent</a></code></pre></div>
-<pre><code>## ================================================================================================ 
-##  JOBID   STAT JOB_NAME        RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  2230248 DONE example2        3      2019-12-04 10:49:27 0:00        -         1     -   41Mb   
-##  2232502 DONE example         3      2019-12-04 11:24:45 0:00        -         1     -   35Mb   
-##  2232503 DONE example_1       3      2019-12-04 11:24:47 0:00        -         1     -   41Mb   
-##  2232504 DONE example_2       3      2019-12-04 11:24:47 0:00        -         1     -   41Mb   
-##  2232505 DONE example_3       3      2019-12-04 11:24:47 0:00        -         1     -   34Mb   
-##  2232506 DONE example_4       3      2019-12-04 11:24:47 0:00        -         1     -   41Mb   
-##  2272165 DONE R_code_c3481a47 2      2019-12-05 19:31:47 0:00        -         1     -   42Mb   
-##  2272166 DONE example         2      2019-12-05 19:31:48 0:00        -         4     -   40Mb   
-##  2272167 DONE example2        2      2019-12-05 19:31:48 0:00        -         1     -   42Mb   
-##  2272169 DONE example_1       2      2019-12-05 19:32:30 0:00        -         1     -   6Mb    
-##  2272170 DONE example_2       2      2019-12-05 19:32:30 0:00        -         1     -   6Mb    
-##  2272171 DONE example_3       2      2019-12-05 19:32:30 0:00        -         1     -   6Mb    
-##  2272172 DONE example_4       2      2019-12-05 19:32:31 0:00        -         1     -   6Mb    
-##  2272227 DONE R_code_c3481a47 1      2019-12-05 19:43:46 0:00        -         1     -   41Mb   
-##  2272228 DONE example         1      2019-12-05 19:43:46 0:00        -         4     -   39Mb   
-##  2272229 DONE example2        1      2019-12-05 19:43:46 0:00        -         1     -   41Mb   
-##  2272231 PEND example_1       1      2019-12-05 19:44:28 -           -         -     -   -      
-##  2272232 PEND example_2       1      2019-12-05 19:44:28 -           -         -     -   -      
-##  2272233 PEND example_3       1      2019-12-05 19:44:28 -           -         -     -   -      
-##  2272234 PEND example_4       1      2019-12-05 19:44:28 -           -         -     -   -      
-## ================================================================================================ 
-##  422 DONE jobs, 63 EXIT jobs, 4 PEND jobs, 42 RUN jobs within one week.
-##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
 </div>
 <div id="on-other-clusters" class="section level2">
 <h2 class="hasAnchor">
 <a href="#on-other-clusters" class="anchor"></a>On other clusters</h2>
 <p>The <strong>bsub</strong> package is only tested on DKFZ ODCF cluster. It is also possible for other clusters that use LSF system to use <strong>bsub</strong> package. Following global options should be properly configured:</p>
-<ol style="list-style-type: decimal">
-<li>How to call the <code>Rscript</code> binary, especially when you have different versions of R installed. Following is how we call <code>Rscript</code> on our cluster (we use <code>module</code> to manage the bash environment).</li>
-</ol>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript"</span>)</a></code></pre></div>
-<ol start="2" style="list-style-type: decimal">
-<li>The names of the nodes where the jobs are submitted.</li>
-</ol>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">bsub_opt<span class="op">$</span>submission_node =<span class="st"> </span>...</a></code></pre></div>
-<ol start="3" style="list-style-type: decimal">
-<li>Bash environment. It is basically for finding <code>bsub</code>/<code>bjobs</code>/… Following is how we set up on our cluster.</li>
-</ol>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1">bsub_opt<span class="op">$</span>ssh_envir =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"source /etc/profile"</span>,</a>
-<a class="sourceLine" id="cb57-2" data-line-number="2">                       <span class="st">"export LSF_ENVDIR=/opt/lsf/conf"</span>,</a>
-<a class="sourceLine" id="cb57-3" data-line-number="3">                       <span class="st">"export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc"</span>)</a></code></pre></div>
-<ol start="4" style="list-style-type: decimal">
-<li>The template of <code>bsub</code> command. The self-defined function should accepts following arguments:</li>
-</ol>
 <ul>
+<li>How to call the <code>Rscript</code> binary, especially when you have different versions of R installed. Following is how we call <code>Rscript</code> on our cluster (we use <code>module</code> to manage the bash environment).</li>
+</ul>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript"</span>)</a></code></pre></div>
+<ul>
+<li>The names of the nodes where the jobs are submitted.</li>
+</ul>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">bsub_opt<span class="op">$</span>submission_node =<span class="st"> </span>...</a></code></pre></div>
+<ul>
+<li>You username on the submission node.</li>
+</ul>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1">bsub_opt<span class="op">$</span>user =<span class="st"> </span>...</a></code></pre></div>
+<ul>
+<li>Bash environment. It is basically for finding <code>bsub</code>/<code>bjobs</code>/… Following is how we set up on our cluster.</li>
+</ul>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1">bsub_opt<span class="op">$</span>ssh_envir =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"source /etc/profile"</span>,</a>
+<a class="sourceLine" id="cb58-2" data-line-number="2">                       <span class="st">"export LSF_ENVDIR=/opt/lsf/conf"</span>,</a>
+<a class="sourceLine" id="cb58-3" data-line-number="3">                       <span class="st">"export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc"</span>)</a></code></pre></div>
+<ul>
+<li><p>The template of <code>bsub</code> command. The self-defined function should accepts following arguments:</p></li>
 <li>
 <code>name</code> job name.</li>
 <li>
@@ -580,19 +524,17 @@
 <code>memory</code> memory, in GB.</li>
 <li>
 <code>core</code> number of cores to use.</li>
-<li>
-<code>output</code> path of output file</li>
+<li><p><code>output</code> path of output file</p></li>
 </ul>
 <p><code>...</code> should be added as the last argument of the function. Following is a simple example for calling <code>bsub</code>.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(glue)</a>
-<a class="sourceLine" id="cb58-2" data-line-number="2">bsub_opt<span class="op">$</span>bsub_template =<span class="st"> </span><span class="cf">function</span>(name, hour, memory, core, output, ...) {</a>
-<a class="sourceLine" id="cb58-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/pkg/glue/man/glue.html">glue</a></span>(<span class="st">"bsub -J '{name}' -W '{hour}:00' -n {core} -R 'rusage[mem={memory}GB]' -o '{output}'"</span>)</a>
-<a class="sourceLine" id="cb58-4" data-line-number="4">}</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1">bsub_opt<span class="op">$</span>bsub_template =<span class="st"> </span><span class="cf">function</span>(name, hour, memory, core, output, ...) {</a>
+<a class="sourceLine" id="cb59-2" data-line-number="2">    glue<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/glue/man/glue.html">glue</a></span>(<span class="st">"bsub -J '{name}' -W '{hour}:00' -n {core} -R 'rusage[mem={memory}GB]' -o '{output}'"</span>)</a>
+<a class="sourceLine" id="cb59-3" data-line-number="3">}</a></code></pre></div>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h2>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
 <pre><code>## R version 3.6.0 (2019-04-26)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: CentOS Linux 7 (Core)
@@ -613,18 +555,18 @@
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] GetoptLong_0.1.7 bsub_0.0.3      
+## [1] GetoptLong_0.1.7 bsub_0.99.0     
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.3          rprojroot_1.3-2     crayon_1.3.4       
-##  [4] digest_0.6.23       assertthat_0.2.1    MASS_7.3-51.4      
-##  [7] R6_2.4.1            backports_1.1.5     magrittr_1.5       
-## [10] evaluate_0.14       GlobalOptions_0.1.1 stringi_1.4.3      
-## [13] rlang_0.4.2         fs_1.3.1            rmarkdown_1.17     
-## [16] pkgdown_1.4.1       desc_1.2.0          rjson_0.2.20       
-## [19] tools_3.6.0         stringr_1.4.0       xfun_0.11          
-## [22] compiler_3.6.0      memoise_1.1.0       htmltools_0.4.0    
-## [25] knitr_1.26</code></pre>
+##  [1] Rcpp_1.0.3          clisymbols_1.2.0    rprojroot_1.3-2    
+##  [4] crayon_1.3.4        digest_0.6.23       assertthat_0.2.1   
+##  [7] MASS_7.3-51.4       R6_2.4.1            backports_1.1.5    
+## [10] magrittr_1.5        evaluate_0.14       GlobalOptions_0.1.1
+## [13] stringi_1.4.3       rlang_0.4.2         fs_1.3.1           
+## [16] rmarkdown_1.18      pkgdown_1.4.1       desc_1.2.0         
+## [19] rjson_0.2.20        tools_3.6.0         stringr_1.4.0      
+## [22] xfun_0.11           compiler_3.6.0      memoise_1.1.0      
+## [25] htmltools_0.4.0     knitr_1.26</code></pre>
 </div>
 </div>
   </div>
@@ -640,6 +582,7 @@
 <li><a href="#send-r-code">Send R code</a></li>
       <li><a href="#send-r-script">Send R script</a></li>
       <li><a href="#send-other-shell-commands">Send other shell commands</a></li>
+      <li><a href="#job-summary">Job Summary</a></li>
       <li><a href="#global-parameters">Global Parameters</a></li>
       <li><a href="#other-functions">Other functions</a></li>
       <li><a href="#on-other-clusters">On other clusters</a></li>
