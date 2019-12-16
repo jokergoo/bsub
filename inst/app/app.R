@@ -6,13 +6,15 @@ library(GetoptLong)
 ui = fluidPage(
     tags$style("body {
         font-size:1.2em;
+        width:1000px;
     }"),
     titlePanel("LSF Job Monitor"),
-    div(textOutput("info"), style = "background-color:#FFE0E0;padding:5px 5px; border: 1px solid red;"),
-    actionButton("reload", "Reload"),
+    div(textOutput("info"), style = "background-color:#EEFFEE; padding:5px 5px; margin: 15px 0px 15px 0px; border: 1px solid green;"),
+    p(actionButton("reload", "Manually reload"), "The monitor automatically reloads every 5 minutes."),
+    hr(style = "border-top: 1px solid black;"),
     DT::dataTableOutput("mytable"),
     actionButton("kill", "Kill selected jobs"),
-    hr(),
+    hr(style = "border-top: 1px solid black;"),
     p("built with ", a("bsub package", href='https://github.com/jokergoo/bsub', target='_blank'))
 )
 
@@ -65,7 +67,7 @@ server <- function(input, output, session) {
 
 	}, escape = FALSE, rownames = FALSE, filter = 'top',
 	  options = list(
-	    pageLength = 25, autoWidth = TRUE
+	    pageLength = 10
 	))
 	
 	output$info = renderText({
