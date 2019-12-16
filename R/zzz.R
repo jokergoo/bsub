@@ -4,9 +4,9 @@
 
 .onAttach = function(libname, pkgname) {
 
-	version = packageDescription(pkgname, fields = "Version")
+	version = utils::packageDescription(pkgname, fields = "Version")
 
-	packageStartupMessage("========================================")
+	packageStartupMessage("==================================================================")
 	packageStartupMessage(paste0("bsub version ", version))
 	packageStartupMessage("Github page: https://github.com/jokergoo/bsub")
 	packageStartupMessage("")
@@ -21,7 +21,7 @@
 
 	all_f = list.files("~/.bsub_temp/")
 	if(length(all_f)) {
-		packageStartupMessage(paste0("There are ", length(all_f), " temporary files in ~/.bsub_temp"))
+		packageStartupMessage(paste0("There are ", length(all_f), " temporary files in ~/.bsub_temp\n"))
 		msg = TRUE
 	}
 
@@ -34,11 +34,21 @@
 	if(msg) packageStartupMessage("")
 	packageStartupMessage("- submit R code: `bsub_chunk()`")
 	packageStartupMessage("- submit R script: `bsub_script()`")
-	packageStartupMessage("- submit shell commands: `bsub_cmd()`")
+	packageStartupMessage("- submit shell commands: ``bsub_script()`")
 	packageStartupMessage("- kill jobs: `bkill()`")
-	packageStartupMessage("- view job summary: `bjobs`/`brecent`")
+	packageStartupMessage("- view job summary: `bjobs`/`brecent`/`bjobs_running`/")
+	packageStartupMessage("                    `bjobs_pending`/`bjobs_done`/`bjobs_exit`")
 	packageStartupMessage("- view job log: `job_log()`")
-	packageStartupMessage("========================================")
+	packageStartupMessage("- remove temporary files : `clear_temp_dir()`/`check_dump_files()`")
+	packageStartupMessage("- interactive job monitor: `monitor()`")
+
+	packageStartupMessage("")
+	packageStartupMessage("`bsub_chunk()`/`bsub_script()`/`bsub_script()` should only been")
+	packageStartupMessage("applied on the node that has the same file system as the computing")
+	packageStartupMessage("nodes. Other functions for monitoring and cleaning jobs can be")
+	packageStartupMessage("applied on any computer.")
+
+	packageStartupMessage("==================================================================")
 }
 
 
