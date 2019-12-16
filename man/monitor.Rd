@@ -1,10 +1,10 @@
 \name{monitor}
 \alias{monitor}
 \title{
-A shiny-app-based job monitor
+A browser-based interactive job monitor
 }
 \description{
-A shiny-app-based job monitor
+A browser-based interactive job monitor
 }
 \usage{
 monitor()

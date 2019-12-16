@@ -11,10 +11,20 @@
 # The log message as a vector.
 job_log = function(job_id, print = TRUE, n_line = 10) {
     
+    tb = bjobs(print = FALSE, status = "all")
+    
     if(missing(job_id)) {
         tb = bjobs(print = FALSE)
+    
+        if(is.null(tb)) {
+            txt = ("No running job\n")
+            if(print) cat(txt, sep = "\n")
+            return(invisible(txt))
+        }
         return(job_log(tb[, 1], print = print, n_line = n_line))
     }
+
+    job_id = as.numeric(job_id)
 
     if(length(job_id) > 1) {
         txt2 = NULL
@@ -33,6 +43,19 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
             cat(txt2, sep = "\n")
         }
         return(invisible(txt2))
+    }
+
+    # if the job with job_id is not the newest one with the same job name
+    job_name = tb$JOB_NAME[tb$JOBID == job_id]
+    tb_subset = tb[tb$JOB_NAME == job_name, , drop = FALSE]
+    nrr = nrow(tb_subset)
+    if(nrr > 1) {
+        tb_subset = tb_subset[order(tb_subset$JOBID), , drop = FALSE]
+        if(tb_subset$JOBID[nrr] != job_id) {
+            txt = qq("Log file for job @{job_id} has been overwriten by job @{tb_subset$JOBID[nrr]} which is the newest job with the same job name '@{tb_subset$JOB_NAME[nrr]}'.")
+            if(print) cat(txt, sep = "\n")
+            return(invisible(txt))
+        }
     }
 
     ln = run_cmd(qq("bjobs -o \"stat output_file\" @{job_id} 2>&1"), print = FALSE)
@@ -421,12 +444,18 @@ clear_temp_dir = function(ask = TRUE) {
         return(invisible(NULL))
     }
     if(!ask) {
-        file.remove(files)
-        return(invisible(NULL))
+        if(length(files)) {
+            file.remove(files)
+            return(invisible(NULL))
+        }
     }
 
     file_types = gsub("^.*\\.([^.]+)$", "\\1", files)
     tb = table(file_types)
+    job_tb = bjobs(status = "all", print = FALSE)
+    if(any(job_tb$JOB_STAT %in% c("RUN", "PEND"))) {
+        cat("There are still running/pending jobs. Deleting the temporary files might affect some of the jobs.\n")
+    }
     cat(qq("There @{ifelse(length(files) > 1, 'are', 'is')} "), qq("@{tb} .@{names(tb)} file@{ifelse(tb > 1, 's', '')}, "), "delete all? [y|n|s] ", sep = "")
     while(1) {
         answer = readline()
@@ -582,7 +611,7 @@ job_status_by_id = function(job_id) {
 }
 
 # == title
-# A shiny-app-based job monitor 
+# A browser-based interactive job monitor 
 #
 monitor = function() {
     

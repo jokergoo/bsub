@@ -10,6 +10,10 @@ ssh_connect = function() {
 		message("ssh is already connected.")
 	}
 
+	if(Sys.info()["nodename"] %in% bsub_opt$submission_node) {
+		message("already on submission node. No need to reconnect.")
+	}
+
 	user = bsub_opt$user
 
 	if(!requireNamespace("ssh")) {
