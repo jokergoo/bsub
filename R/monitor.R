@@ -47,7 +47,8 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
 
     # if the job with job_id is not the newest one with the same job name
     job_name = tb$JOB_NAME[tb$JOBID == job_id]
-    tb_subset = tb[tb$JOB_NAME == job_name, , drop = FALSE]
+    job_wd = tb$EXEC_CWD[tb$JOBID == job_id]  
+    tb_subset = tb[tb$JOB_NAME == job_name & tb$EXEC_CWD == job_wd, , drop = FALSE]
     nrr = nrow(tb_subset)
     if(nrr > 1) {
         tb_subset = tb_subset[order(tb_subset$JOBID), , drop = FALSE]
