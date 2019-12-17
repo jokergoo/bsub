@@ -6,7 +6,9 @@ library(bsub)
 # R code
 bsub_chunk(name = "example", memory = 10, hour = 10, core = 4, 
 {
-    NMF::nmf(...)
+    fit = NMF::nmf(...)
+    # you better save `fit` into a permanent file
+    saveRDS(fit, file = "fit.rds")
 })
 
 # R script
@@ -71,8 +73,7 @@ bsub_opt$ssh_envir = c("source /etc/profile",
     * `memory` memory, in GB.
     * `core` number of cores to use.
     * `output` path of output file
-    * `...` should be added as the last argument of the function. Following is a simple example
-for calling `bsub`.
+    * `...` should be added as the last argument of the function. Following is a simple example for calling `bsub`.
 
 ```r
 bsub_opt$bsub_template = function(name, hour, memory, core, output, ...) {
