@@ -491,7 +491,7 @@ bsub_opt$call_Rscript = function(version) qq("module load gcc/7.2.0; module load
 bsub_opt$submission_node = ...
 ```
 
-- You username on the submission node.
+- Your username on the submission node.
 
 ```{r, eval = FALSE}
 bsub_opt$user = ...

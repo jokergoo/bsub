@@ -10,5 +10,6 @@ Imports: GlobalOptions (>= 0.1.1), GetoptLong, digest, utils, stats, clisymbols
 Suggests: knitr, ssh, DT, shiny (>= 1.0.0)
 Description: Send R code/R scripts/shell commands to LSF cluster without leaving R.
 VignetteBuilder: knitr
+URL: https://github.com/jokergoo/bsub
 License: MIT + file LICENSE
 NeedsCompilation: no
