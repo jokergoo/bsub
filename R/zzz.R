@@ -43,7 +43,7 @@
 	packageStartupMessage("- interactive job monitor: `monitor()`")
 
 	packageStartupMessage("")
-	packageStartupMessage("`bsub_chunk()`/`bsub_script()`/`bsub_script()` should only been")
+	packageStartupMessage("`bsub_chunk()`/`bsub_script()`/`bsub_script()` should only be")
 	packageStartupMessage("applied on the node that has the same file system as the computing")
 	packageStartupMessage("nodes. Other functions for monitoring and cleaning jobs can be")
 	packageStartupMessage("applied on any computer.")

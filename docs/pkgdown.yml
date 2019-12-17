@@ -3,4 +3,5 @@ pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
   bsub_intro: bsub_intro.html
+  how_to: how_to.html
 

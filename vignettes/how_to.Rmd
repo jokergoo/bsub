@@ -1,0 +1,63 @@
+
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{2. How to use bsub package on different computers}
+-->
+
+How to use bsub package on different computers
+=====================================
+
+**Author**: Zuguang Gu ( z.gu@dkfz.de )
+
+**Date**: `r Sys.Date()`
+
+-------------------------------------------------------------
+
+## Work with ODCF cluster
+
+### On odcf-worker01
+
+You can submit and monitor jobs by entering commands (under command-line
+mode), but you cannot use the interactive job monitor (because web browser is
+not available on `odcf-worker01`).
+
+### On B080/W610 pc
+
+You will be asked for the password for connecting to the submission node via
+ssh. Don't submit the jobs there because the file system is different from
+that on the submission nodes. You can open the interactive job monitor by
+`monitor()`. You might have the following problem saying you cannot open the
+web browser:
+
+```
+monitor()
+# Listening on http://127.0.0.1:5298
+# Couldn't get a file descriptor referring to the console
+```
+
+You can directly copy `http://127.0.0.1:5298` (the port can be different for
+you) and paste it to the web browser, or you need to set the global option for
+finding the browser:
+
+```{r, eval = FALSE}
+options("browser" = Sys.which("firefox"))
+monitor()  # now firefox will be automatically opened.
+```
+
+### On your own laptop
+
+You need to connect VPN first, and then load the ODCF configuration:
+
+```{r, eval = FALSE}
+bsub:::config_odcf(your_user_name)
+```
+
+After that you can use the interactive job monitor.
+
+### On Rstudio server
+
+You can submit jobs, and also monitor your jobs with the interactive job monitor.
+
+## Work for other institutes
+
+Please see [the last section in the main vignette](bsub_intro.html).
