@@ -56,10 +56,20 @@
 <li>
       <a href="articles/bsub_intro.html">UNKNOWN TITLE</a>
     </li>
+    <li>
+      <a href="articles/how_to.html">UNKNOWN TITLE</a>
+    </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/jokergoo/bsub">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -96,27 +106,34 @@
 <a class="sourceLine" id="cb1-21" data-line-number="21"><span class="kw"><a href="reference/job_log.html">job_log</a></span>(job_id)</a>
 <a class="sourceLine" id="cb1-22" data-line-number="22"></a>
 <a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co"># kill jobs</span></a>
-<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="kw"><a href="reference/bkill.html">bkill</a></span>(job_id)</a></code></pre></div>
+<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="kw"><a href="reference/bkill.html">bkill</a></span>(job_id)</a>
+<a class="sourceLine" id="cb1-25" data-line-number="25"></a>
+<a class="sourceLine" id="cb1-26" data-line-number="26"><span class="co"># interactive job monitor</span></a>
+<a class="sourceLine" id="cb1-27" data-line-number="27"><span class="kw"><a href="reference/monitor.html">monitor</a></span>()</a></code></pre></div>
 <p>The <strong>bsub</strong> package is only tested on DKFZ ODCF cluster. It is also possible for other clusters that use LSF system to use <strong>bsub</strong> package. Following global options should be properly configured:</p>
-<ol>
+<ul>
 <li>How to call the <code>Rscript</code> binary, especially when you have different versions of R installed. Following is how we call <code>Rscript</code> on our cluster (we use <code>module</code> to manage the bash environment).</li>
-</ol>
+</ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) {</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">    <span class="kw">qq</span>(<span class="st">"module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript"</span>)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">}</a></code></pre></div>
-<ol>
+<ul>
+<li>Your username on the submission node.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">bsub_opt<span class="op">$</span>user =<span class="st"> </span>...</a></code></pre></div>
+<ul>
 <li>The names of the nodes where the jobs are submitted.</li>
-</ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">bsub_opt<span class="op">$</span>submission_node =<span class="st"> </span>...</a></code></pre></div>
-<ol>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">bsub_opt<span class="op">$</span>submission_node =<span class="st"> </span>...</a></code></pre></div>
+<ul>
 <li>Bash environment. It is basically for properly finding <code>bsub</code>/<code>bjobs</code>/… Following is how we set up on our cluster.</li>
-</ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">bsub_opt<span class="op">$</span>ssh_envir =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"source /etc/profile"</span>,</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">                       <span class="st">"export LSF_ENVDIR=/opt/lsf/conf"</span>,</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">                       <span class="st">"export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc"</span>)</a></code></pre></div>
-<ol>
-<li>The template of <code>bsub</code> command. The self-defined function should accepts following arguments:</li>
-</ol>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">bsub_opt<span class="op">$</span>ssh_envir =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"source /etc/profile"</span>,</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">                       <span class="st">"export LSF_ENVDIR=/opt/lsf/conf"</span>,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                       <span class="st">"export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc"</span>)</a></code></pre></div>
+<ul>
+<li>
+<p>The template of <code>bsub</code> command. The self-defined function should accepts following arguments:</p>
 <ul>
 <li>
 <code>name</code> job name.</li>
@@ -128,18 +145,27 @@
 <code>core</code> number of cores to use.</li>
 <li>
 <code>output</code> path of output file</li>
+<li>
+<code>...</code> should be added as the last argument of the function. Following is a simple example for calling <code>bsub</code>.</li>
 </ul>
-<p><code>...</code> should be added as the last argument of the function. Following is a simple example for calling <code>bsub</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(glue)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">bsub_opt<span class="op">$</span>bsub_template =<span class="st"> </span><span class="cf">function</span>(name, hour, memory, core, output, ...) {</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/pkg/glue/man/glue.html">glue</a></span>(<span class="st">"bsub -J '{name}' -W '{hour}:00' -n {core} -R 'rusage[mem={memory}GB]' -o '{output}'"</span>)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">}</a></code></pre></div>
-<p>More information can be found in the package vignette.</p>
+</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">bsub_opt<span class="op">$</span>bsub_template =<span class="st"> </span><span class="cf">function</span>(name, hour, memory, core, output, ...) {</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">    glue<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/glue/man/glue.html">glue</a></span>(<span class="st">"bsub -J '{name}' -W '{hour}:00' -n {core} -R 'rusage[mem={memory}GB]' -o '{output}'"</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">}</a></code></pre></div>
+<p>More information can be found in <a href="https://jokergoo.github.io/bsub/articles/bsub_intro.html">the package vignette</a>.</p>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/jokergoo/bsub">https://​github.com/​jokergoo/​bsub</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li>

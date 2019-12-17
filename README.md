@@ -45,7 +45,7 @@ bsub_opt$call_Rscript = function(version) {
 
 - Your username on the submission node.
 
-```{r, eval = FALSE}
+```r
 bsub_opt$user = ...
 ```
 
@@ -66,13 +66,12 @@ bsub_opt$ssh_envir = c("source /etc/profile",
 
 - The template of `bsub` command. The self-defined function should accepts following arguments:
 
-- `name` job name.
-- `hour` running time.
-- `memory` memory, in GB.
-- `core` number of cores to use.
-- `output` path of output file
-
-`...` should be added as the last argument of the function. Following is a simple example
+    * `name` job name.
+    * `hour` running time.
+    * `memory` memory, in GB.
+    * `core` number of cores to use.
+    * `output` path of output file
+    * `...` should be added as the last argument of the function. Following is a simple example
 for calling `bsub`.
 
 ```r
