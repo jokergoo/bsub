@@ -54,6 +54,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
         tb_subset = tb_subset[order(tb_subset$JOBID), , drop = FALSE]
         if(tb_subset$JOBID[nrr] != job_id) {
             txt = qq("Log file for job @{job_id} has been overwriten by job @{tb_subset$JOBID[nrr]} which is the newest job with the same job name '@{tb_subset$JOB_NAME[nrr]}'.")
+            txt = strwrap(txt)
             if(print) cat(txt, sep = "\n")
             return(invisible(txt))
         }
@@ -304,21 +305,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
             return(df[ind, , drop = FALSE])
         }
 
-        df2 = df[ind, c("JOBID", "STAT", "JOB_NAME", "RECENT","SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
-
-        df2$TIME_PASSED = format_difftime(df2$TIME_PASSED)
-        df2$TIME_LEFT = format_difftime(df2$TIME_LEFT)
-        df2$MAX_MEM = format_mem(df2$MAX_MEM)
-        df2$MEM = format_mem(df2$MEM)
-
-        if(all(df2$RECENT == 1)) {
-            df2$RECENT = NULL
-        }
-
-        l = nchar(df2$JOB_NAME) > 50
-        if(any(l)) {
-            substr(df2$JOB_NAME[l], 49, nchar(df2$JOB_NAME[l])) = ".."
-        }
+        df2 = format_summary_table(df[ind, , drop = FALSE])
 
         max_width = pmax(apply(df2, 2, function(x) max(nchar(x)+1)),
                          nchar(colnames(df2)) + 1)
@@ -351,6 +338,28 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 }
 
 class(bjobs) = "bjobs"
+
+format_summary_table = function(df) {
+    df2 = df[, c("JOBID", "STAT", "JOB_NAME", "RECENT","SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
+
+    df2$TIME_PASSED = format_difftime(df2$TIME_PASSED)
+    df2$TIME_LEFT = format_difftime(df2$TIME_LEFT)
+    df2$MAX_MEM = format_mem(df2$MAX_MEM)
+    df2$MEM = format_mem(df2$MEM)
+
+    if(all(df2$RECENT == 1)) {
+        df2$RECENT = NULL
+    }
+
+    l = nchar(df2$JOB_NAME) > 50
+    if(any(l)) {
+        foo = substr(df2$JOB_NAME[l], 1, 48)
+        foo = paste(foo, "..", sep = "")
+        df2$JOB_NAME[l] = foo
+    }
+
+    return(df2)
+}
 
 format_mem = function(x) {
     gsub(" (.)bytes", "\\1b", x)
@@ -650,9 +659,9 @@ monitor = function() {
     if(identical(topenv(), asNamespace("bsub"))) {
         shiny::runApp(system.file("app", package = "bsub"))
     } else if(grepl("odcf", Sys.info()["nodename"])) {
-        shiny::runApp("/desktop-home/guz/project/developmetn/bsub/inst/app")
+        shiny::runApp("/desktop-home/guz/project/development/bsub/inst/app")
     } else if(grepl("w610", Sys.info()["nodename"])) {
-        shiny::runApp("~/project/developmetn/bsub/inst/app")
+        shiny::runApp("~/project/development/bsub/inst/app")
     } else {
         shiny::runApp("~/project/bsub/inst/app")
     }
