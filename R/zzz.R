@@ -86,9 +86,15 @@ config_sanger = function(user = NULL, group = NULL) {
                            "export LSF_ENVDIR=/opt/lsf/conf",
                            "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
 	if(!is.null(user)) bsub_opt$user = user
-	if(!is.null(group)) bsub_opt$group = group
-	bsub_opt$bsub_template = function(name, hour, memory, core, output, ...) {
-    		qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -G @{bsub_opt$group} -o '@{output}'")
+	if(is.null(group) && is.null(bsub_opt$group)) {
+		bsub_opt$bsub_template = function(name, hour, memory, core, output, ...) {
+			qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -o '@{output}'")
+		}
+	} else {
+		if(is.null(group) && !is.null(bsub_opt$group)) group = bsub_opt$group
+		bsub_opt$bsub_template = function(name, hour, memory, core, output, ...) {
+			qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -G @{group} -o '@{output}'")
+		}
 	}
 	invisible(NULL)
 }
