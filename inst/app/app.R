@@ -72,12 +72,16 @@ server <- function(input, output, session) {
         }
         
 		colnames(df2) = c("Job ID", "Status", "Job name", "Time passed", "Time left", "Cores", "Memory", "Max memory")
-		df2
+		
+        dt = datatable(df2, escape = FALSE, rownames = FALSE, filter = 'top', 
+            options = list(
+                pageLength = 10, autoWidth = TRUE
+            )
+        )
 
-	}, escape = FALSE, rownames = FALSE, filter = 'top', 
-	  options = list(
-	    pageLength = 10, autoWidth = TRUE
-	))
+        formatStyle(dt, "Status", color = styleEqual(c("RUN", "PEND", "DONE", "EXIT"), c("blue", "purple", "black", "red")))
+
+	})
 	
 	output$info = renderText({
 	    
@@ -94,11 +98,12 @@ server <- function(input, output, session) {
 
 	    job_name_selected = gsub("job_name_id_", "", input$select_link)
         job_name = df$JOB_NAME[df$JOBID == job_name_selected]
+        job_status = df$STAT[df$JOBID == job_name_selected]
 	    message(qq("[@{Sys.time()}] clicked job name @{input$select_link}"))
 
 	    output$job_log = renderText({
 	        showNotification("Fetching job log...", duration = 5)
-	        message(qq("[@{Sys.time()}] Fetching job log for @{job_name_selected} <@{job_name}>"))
+	        message(qq("[@{Sys.time()}] Fetching job log for @{job_name_selected} <@{job_name}> @{job_status}"))
 	        log = job_log(job_name_selected, print = FALSE)
 	        paste(log, collapse = "\n")
 	    })

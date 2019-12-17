@@ -1,11 +1,11 @@
-
-<!--
-%\VignetteEngine{knitr}
-%\VignetteIndexEntry{1. Send R code/R scripts/shell commands to LSF cluster}
--->
-
-Send R code/R scripts/shell commands to LSF cluster
-=====================================
+---
+title: "Send R code/R scripts/shell commands to LSF cluster"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{1. Send R code/R scripts/shell commands to LSF cluster}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
 **Author**: Zuguang Gu ( z.gu@dkfz.de )
 

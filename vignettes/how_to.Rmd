@@ -1,11 +1,11 @@
-
-<!--
-%\VignetteEngine{knitr}
-%\VignetteIndexEntry{2. How to use bsub package on different computers}
--->
-
-How to use bsub package on different computers
-=====================================
+---
+title: "How to use bsub package on different computers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{2. How to use bsub package on different computers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
 **Author**: Zuguang Gu ( z.gu@dkfz.de )
 
