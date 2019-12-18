@@ -49,14 +49,14 @@
 #     echo $LSF_SERVERDIR
 #
 # The time strings by LSF ``bjobs`` command might be different for different configurations. The **bsub**
-# package needs to convert the time strings to `POSIXct` objects for calculating the time difference. Thus, if
+# package needs to convert the time strings to `POSIXlt` objects for calculating the time difference. Thus, if
 # the default time string parsing fails, users need to provide a user-defined function and set with ``parse_time``
-# option in `bsub_opt`. The function accepts a vector of time strings and returns a `POSIXct` object. For example,
+# option in `bsub_opt`. The function accepts a vector of time strings and returns a `POSIXlt` object. For example,
 # if the time string returned from ``bjobs`` command is in a form of ``Dec 1 18:00:00 2019``, the parsing function
 # can be defined as:
 #
 #     bsub_opt$parse_time = function(x) {
-#         as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
+#         as.POSIXlt(x, format = "%b %d %H:%M:%S %Y")
 #     }
 #
 # == example

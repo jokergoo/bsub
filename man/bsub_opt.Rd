@@ -38,14 +38,37 @@ There are following parameters:
   \item{\code{group}}{The user group}
   \item{\code{ssh_envir}}{The commands for setting bash environment for successfully running bjobs, bsub, ...}
   \item{\code{bsub_template}}{Template for constructing \code{bsub} command.}
+  \item{\code{parse_time}}{A function that parses time string from the LSF \code{bjobs} command to a \code{\link{POSIXct}} object.}
 }
 
-For \code{ssh_envir} option, an example is as follows. The \code{LSF_ENVDIR} and \code{LSF_SERVERDIR} should be defined and exported.
+\code{ssh_envir} should be properly set so that LSF binaries such as \code{bsub} or \code{bjobs} can be properly found.
+There are some environment variables initialized when logging in the bash terminal while they are not initialized with the
+ssh connection. Thus, some environment variables should be manually set.
+
+An example for \code{ssh_envir} is as follows. The \code{LSF_ENVDIR} and \code{LSF_SERVERDIR} should be defined and exported.
 
   \preformatted{
     c("source /etc/profile",
       "export LSF_ENVDIR=/opt/lsf/conf",
       "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")  }
+
+The values of these two variables can be obtained by entering following commands in your bash terminal (on the submission node):
+
+  \preformatted{
+    echo $LSF_ENVDIR
+    echo $LSF_SERVERDIR  }
+
+The time strings by LSF \code{bjobs} command might be different for different configurations. The **bsub**
+package needs to convert the time strings to \code{\link{POSIXct}} objects for calculating the time difference. Thus, if
+the default time string parsing fails, users need to provide a user-defined function and set with \code{parse_time}
+option in \code{\link{bsub_opt}}. The function accepts a vector of time strings and returns a \code{\link{POSIXct}} object. For example,
+if the time string returned from \code{bjobs} command is in a form of \code{Dec 1 18:00:00 2019}, the parsing function
+can be defined as:
+
+  \preformatted{
+    bsub_opt$parse_time = function(x) \{
+        as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
+    \}  }
 }
 \examples{
 # The default bsub_opt

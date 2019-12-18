@@ -183,27 +183,30 @@ convert_to_POSIXct = function(x) {
 }
 
 
-convert_to_POSIXct = function(x) {
+convert_to_POSIXlt = function(x) {
 
     if(is.null(bsub_opt$parse_time)) {
 
         if(all(grepl("^\\w+ \\d+ \\d+:\\d+$", x[1]))) { # Dec 1 18:00
-            t = as.POSIXct(x, format = "%b %d %H:%M")
-        } if(all(grepl("^\\w+ \\d+ \\d+:\\d+:\\d+$", x[1]))) { # Dec 1 18:00:00
-            t = as.POSIXct(x, format = "%b %d %H:%M:%S")
+            t = as.POSIXlt(x, format = "%b %d %H:%M")
+        } else if(all(grepl("^\\w+ \\d+ \\d+:\\d+:\\d+$", x[1]))) { # Dec 1 18:00:00
+            t = as.POSIXlt(x, format = "%b %d %H:%M:%S")
         } else {                                        # Dec 1 18:00:00 2019
-            t = as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
+            t = as.POSIXlt(x, format = "%b %d %H:%M:%S %Y")
         }
     } else {
         t = bsub_opt$parse_time(x)
     }
 
-    if(any(is.na(t))) {
-        stop_wrap(qq("Cannot convert time string (e.g. '@{x[1]}'') to a POSIXct object. Please set a proper parsing function for `bsub_opt$parse_time`. See ?bsub_opt for more details."))
+    if(any(is.na(t) & x != "-")) {
+        stop_wrap(qq("Cannot convert time string (e.g. '@{x[which(is.na(t))[1]]}'') to a `POSIXlt` object. Please set a proper parsing function for `bsub_opt$parse_time`. See ?bsub_opt for more details."))
     }
+
+    if(inherits(t, "POSIXct")) t = as.POSIXlt(t)
 
     current_t = as.POSIXlt(Sys.time())
     l = t$year > current_t$year
+    l[is.na(l)] = FALSE
     if(any(l)) {
         t[l]$year = t[l]$year - 1
     }
@@ -241,9 +244,9 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 
     df = read.csv(textConnection(paste(ln, collapse = "\n")), stringsAsFactors = FALSE)
     df$STAT = factor(df$STAT)
-    df$SUBMIT_TIME = convert_to_POSIXct(df$SUBMIT_TIME)
-    df$START_TIME = convert_to_POSIXct(df$START_TIME)
-    df$FINISH_TIME = convert_to_POSIXct(df$FINISH_TIME)
+    df$SUBMIT_TIME = convert_to_POSIXlt(df$SUBMIT_TIME)
+    df$START_TIME = convert_to_POSIXlt(df$START_TIME)
+    df$FINISH_TIME = convert_to_POSIXlt(df$FINISH_TIME)
     # running/pending jobs
     df$TIME_PASSED = difftime(Sys.time(), df$START_TIME, units = "hours")
     l = !(df$STAT %in% c("RUN", "PEND"))

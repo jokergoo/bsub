@@ -3,5 +3,6 @@ pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
   bsub_intro: bsub_intro.html
-  how_to: how_to.html
+  dkfz_odcf: dkfz_odcf.html
+  other_insititute: other_insititute.html
 
