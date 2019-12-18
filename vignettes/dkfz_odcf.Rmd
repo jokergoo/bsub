@@ -1,8 +1,8 @@
 ---
-title: "How to use bsub package on different computers"
+title: "Use bsub package on the DKFZ ODCF cluster"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2. How to use bsub package on different computers}
+  %\VignetteIndexEntry{2. Use bsub package on the DKFZ ODCF cluster}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,8 +12,6 @@ vignette: >
 **Date**: `r Sys.Date()`
 
 -------------------------------------------------------------
-
-## Work with ODCF cluster
 
 ### On odcf-worker01
 
@@ -57,7 +55,3 @@ After that you can use the interactive job monitor.
 ### On Rstudio server
 
 You can submit jobs, and also monitor your jobs with the interactive job monitor.
-
-## Work for other institutes
-
-Please see [the last section in the main vignette](bsub_intro.html).

@@ -525,6 +525,12 @@ message_wrap = function (..., appendLF = TRUE) {
     message(x, appendLF = appendLF)
 }
 
+stop_wrap = function (...) {
+    x = paste0(...)
+    x = paste(strwrap(x), collapse = "\n")
+    stop(x)
+}
+
 random_job = function(name = paste0("R_random_job_", digest::digest(runif(1), "crc32"))) {
     bsub_chunk({
         Sys.sleep(30*60)

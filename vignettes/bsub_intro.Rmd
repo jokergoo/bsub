@@ -459,12 +459,6 @@ There are some helper functions which only list running/pending/done/failed jobs
 - `bjobs_exit`
 
 
-## Global Parameters
-
-```{r}
-bsub_opt
-```
-
 ## Other functions
 
 - `bkill(job_id)` kills a job or a list jobs.
@@ -474,53 +468,11 @@ bsub_opt
 - `ssh_connect()` establishes the SSH connection to the submission node if it is lost.
 - `monitor()` opens a browser-based interactive job monitor.
 
-## On other clusters
 
-The **bsub** package is only tested on DKFZ ODCF cluster. It is also possible for other 
-clusters that use LSF system to use **bsub** package. Following global options should be
-properly configured:
+## Global Parameters
 
-- How to call the `Rscript` binary, especially when you have different versions of R installed.
-Following is how we call `Rscript` on our cluster (we use `module` to manage the bash environment).
-
-```{r, eval = FALSE}
-bsub_opt$call_Rscript = function(version) qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript")
-```
-
-- The names of the nodes where the jobs are submitted.
-
-```{r, eval = FALSE}
-bsub_opt$submission_node = ...
-```
-
-- Your username on the submission node.
-
-```{r, eval = FALSE}
-bsub_opt$user = ...
-```
-
-- Bash environment. It is basically for finding `bsub`/`bjobs`/... Following is how we set up
-on our cluster.
-
-```{r, eval = FALSE}
-bsub_opt$ssh_envir = c("source /etc/profile",
-                       "export LSF_ENVDIR=/opt/lsf/conf",
-                       "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
-```
-
-- The template of `bsub` command. The self-defined function should accepts following arguments:
-
-    * `name` job name.
-    * `hour` running time.
-    * `memory` memory, in GB.
-    * `core` number of cores to use.
-    * `output` path of output file
-    * `...` should be added as the last argument of the function. Following is a simple example for calling `bsub`.
-
-```{r, eval = FALSE}
-bsub_opt$bsub_template = function(name, hour, memory, core, output, ...) {
-	glue::glue("bsub -J '{name}' -W '{hour}:00' -n {core} -R 'rusage[mem={memory}GB]' -o '{output}'")
-}
+```{r}
+bsub_opt
 ```
 
 ## Session Info

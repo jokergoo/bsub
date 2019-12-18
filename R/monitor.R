@@ -173,72 +173,43 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
 on_submission_node = function() {
     Sys.info()["nodename"] %in% bsub_opt$submission_node
 }
-
-# == title
-# Summary of jobs
-#
-# == param
-# -stat status of the jobs
-#
-# == details
-# Please use `bjobs` instead.
-#
-bu = function(stat = c("RUN", "PEND")) {
-
-    ln = run_cmd("bu 2>&1", print = FALSE)
     
-    # job done or exit
-    if(length(ln) == 1) {
-        cat(ln, "\n")
-        return(invisible(NULL))
-    }
-
-    header = strsplit(ln[1], "\\s+")[[1]]
-    pos = lapply(header, function(x) gregexpr(x, ln[1])[[1]])
-    offset = unlist(pos)
-    nf = length(offset)
-    width = numeric(nf)
-    width[-nf] = offset[-1] - offset[-nf]
-    width[nf] = nchar(ln[1]) - offset[nf] + 1
-
-    lt = lapply(1:nf, function(i) {
-    	x = substr(ln[-1], offset[i], offset[i] + width[i] - 1)
-    	gsub("\\s+$", "", x)
-    })
-    names(lt) = header
-    df = do.call(cbind, lt)
-    df = as.data.frame(df)
-
-    df$SUBMIT_TIME = as.POSIXct(df$SUBMIT_TIME, format = "%b %d %H:%M:%S %Y")
-    df$START_TIME = as.POSIXct(df$START_TIME, format = "%b %d %H:%M:%S %Y")
-    df$FINISH_TIME = as.POSIXct(df$FINISH_TIME, format = "%b %d %H:%M:%S %Y")
-    df$TIME_PASSED = Sys.time() - df$START_TIME
-    # df$TIME_LEFT = df$FINISH_TIME - Sys.time()
-
-    df$JOBID = as.numeric(df$JOBID)
-    df = df[order(df$JOBID), , drop = FALSE]
-    tb = table(df$STAT)
-    df = df[df$STAT %in% stat, , drop = FALSE]
-    if(nrow(df)) {
-        df2 = df[, c("JOBID", "STAT", "JOB_NAME", "TIME_LEFT", "SLOTS", "MAX_MEM")]
-
-        max_width = pmax(apply(df2, 2, function(x) max(nchar(x)+1)),
-        	             nchar(colnames(df2)) + 1)
-        ow = getOption("width")
-        options(width = sum(max_width) + 10)
-        print(df2, row.names = FALSE, right = FALSE)
-        cat(strrep("=", sum(max_width)), "\n")
-        cat(" ", paste(qq("@{tb} @{names(tb)} jobs", collapse = FALSE), collapse = ", "), ".\n", sep = "")
-        options(width = ow)
+convert_to_POSIXct = function(x) {
+    if(all(grepl("^\\w+ \\d+ \\d+:\\d+$", x))) {
+        as.POSIXct(x, format = "%b %d %H:%M")
     } else {
-        cat("No job.\n")
+        as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
     }
-
-    cat("!!! Please use `bjobs()` instead. !!!\n")
-    return(invisible(df))
 }
 
-class(bu) = "bjobs"
+
+convert_to_POSIXct = function(x) {
+
+    if(is.null(bsub_opt$parse_time)) {
+
+        if(all(grepl("^\\w+ \\d+ \\d+:\\d+$", x[1]))) { # Dec 1 18:00
+            t = as.POSIXct(x, format = "%b %d %H:%M")
+        } if(all(grepl("^\\w+ \\d+ \\d+:\\d+:\\d+$", x[1]))) { # Dec 1 18:00:00
+            t = as.POSIXct(x, format = "%b %d %H:%M:%S")
+        } else {                                        # Dec 1 18:00:00 2019
+            t = as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
+        }
+    } else {
+        t = bsub_opt$parse_time(x)
+    }
+
+    if(any(is.na(t))) {
+        stop_wrap(qq("Cannot convert time string (e.g. '@{x[1]}'') to a POSIXct object. Please set a proper parsing function for `bsub_opt$parse_time`. See ?bsub_opt for more details."))
+    }
+
+    current_t = as.POSIXlt(Sys.time())
+    l = t$year > current_t$year
+    if(any(l)) {
+        t[l]$year = t[l]$year - 1
+    }
+
+    return(t)
+}
 
 # == title
 # Summary of jobs
@@ -270,9 +241,9 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 
     df = read.csv(textConnection(paste(ln, collapse = "\n")), stringsAsFactors = FALSE)
     df$STAT = factor(df$STAT)
-    df$SUBMIT_TIME = as.POSIXct(df$SUBMIT_TIME, format = "%b %d %H:%M:%S %Y")
-    df$START_TIME = as.POSIXct(df$START_TIME, format = "%b %d %H:%M:%S %Y")
-    df$FINISH_TIME = as.POSIXct(df$FINISH_TIME, format = "%b %d %H:%M:%S %Y")
+    df$SUBMIT_TIME = convert_to_POSIXct(df$SUBMIT_TIME)
+    df$START_TIME = convert_to_POSIXct(df$START_TIME)
+    df$FINISH_TIME = convert_to_POSIXct(df$FINISH_TIME)
     # running/pending jobs
     df$TIME_PASSED = difftime(Sys.time(), df$START_TIME, units = "hours")
     l = !(df$STAT %in% c("RUN", "PEND"))

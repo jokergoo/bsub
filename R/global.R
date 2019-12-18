@@ -31,13 +31,33 @@
 # -``group`` The user group
 # -``ssh_envir`` The commands for setting bash environment for successfully running bjobs, bsub, ...
 # -``bsub_template`` Template for constructing ``bsub`` command.
+# -``parse_time`` A function that parses time string from the LSF ``bjobs`` command to a `POSIXct` object.
 #
-# For ``ssh_envir`` option, an example is as follows. The ``LSF_ENVDIR`` and ``LSF_SERVERDIR`` should be defined and exported.
+# ``ssh_envir`` should be properly set so that LSF binaries such as ``bsub`` or ``bjobs`` can be properly found.
+# There are some environment variables initialized when logging in the bash terminal while they are not initialized with the
+# ssh connection. Thus, some environment variables should be manually set.
+#
+# An example for ``ssh_envir`` is as follows. The ``LSF_ENVDIR`` and ``LSF_SERVERDIR`` should be defined and exported.
 # 
 #     c("source /etc/profile",
 #       "export LSF_ENVDIR=/opt/lsf/conf",
 #       "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
 #
+# The values of these two variables can be obtained by entering following commands in your bash terminal (on the submission node):
+#
+#     echo $LSF_ENVDIR
+#     echo $LSF_SERVERDIR
+#
+# The time strings by LSF ``bjobs`` command might be different for different configurations. The **bsub**
+# package needs to convert the time strings to `POSIXct` objects for calculating the time difference. Thus, if
+# the default time string parsing fails, users need to provide a user-defined function and set with ``parse_time``
+# option in `bsub_opt`. The function accepts a vector of time strings and returns a `POSIXct` object. For example,
+# if the time string returned from ``bjobs`` command is in a form of ``Dec 1 18:00:00 2019``, the parsing function
+# can be defined as:
+#
+#     bsub_opt$parse_time = function(x) {
+#         as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
+#     }
 #
 # == example
 # # The default bsub_opt
@@ -159,6 +179,10 @@ bsub_opt = set_opt(
             }
             return(cmd)
         },
+        .class = "function"
+    ),
+    parse_time = list(
+        .value = NULL,
         .class = "function"
     )
 )
