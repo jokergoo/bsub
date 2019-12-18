@@ -1,4 +1,8 @@
-This package sends R code/scripts or normal shell commands to LSF clusters.
+# Submitter and monitor of LSF cluster
+
+It Sends R code/R scripts/shell commands to LSF cluster without leaving R.
+
+## Examples
 
 ```r
 library(bsub)
@@ -31,6 +35,8 @@ bkill(job_id)
 # interactive job monitor
 monitor()
 ```
+
+## Using in other institutes
 
 The **bsub** package is only tested on DKFZ ODCF cluster. It is also possible for other 
 clusters that use LSF system to use **bsub** package. Following global options should be
