@@ -10,43 +10,25 @@ ui = fluidPage(
         margin: auto;
     }"),
     titlePanel("LSF Job Monitor"),
-    div(textOutput("info"), style = "background-color:#EEFFEE; padding:5px 5px; margin: 15px 0px 15px 0px; border: 1px solid green;"),
-    p(actionButton("reload", "Manually reload"), "The monitor automatically reloads every 5 minutes."),
     hr(style = "border-top: 1px solid black;"),
     DT::dataTableOutput("mytable"),
     actionButton("kill", "Kill selected jobs"),
-    # actionButton("unselect", "Unselect all jobs", onclick="$('tr.selected').removeClass('selected')"),
     hr(style = "border-top: 1px solid black;"),
     p("built with ", a("bsub package", href='https://github.com/jokergoo/bsub', target='_blank'))
 )
 
 server <- function(input, output, session) {
-    
-    autoInvalidate <- reactiveTimer(1000 * 60*5)  # every 5 min
-    
-    observe({
-        autoInvalidate()
-    })
         
     job_summary_df = reactive({
-        
-        autoInvalidate()
-        
+                
         showNotification("Fetching job summary table...", duration = 1, type = "message")
         message(qq("[@{Sys.time()}] Fetching job summary table"))
         df = bjobs(print = FALSE, status = "all")
         df[order(df$JOBID, decreasing = TRUE), , drop = FALSE]
     })
-	
-    observeEvent(input$reload, {
-        message(qq("[@{Sys.time()}] Manually reloading the app."))
-        session$reload()  
-    })
-    
+
 	output$mytable = DT::renderDataTable({
-	    
-	    autoInvalidate()
-	    
+	    	    
 		df = job_summary_df()
 		nr = nrow(df)
         
@@ -64,11 +46,6 @@ server <- function(input, output, session) {
             foo = substr(df2$JOB_NAME[l], 1, 48)
             foo = paste(foo, "..", sep = "")
             df2$JOB_NAME[l] = foo
-        }
-        
-        for(i in 1:nr) {
-            df2$JOB_NAME[i] = as.character(actionLink(paste0("job_name_id_", df2$JOBID[i]), df2$JOB_NAME[i], 
-                onclick = "Shiny.onInputChange('select_link', 0);Shiny.onInputChange('select_link', this.id); var class_attr=this.parentElement.parentElement.getAttribute('class'); class_attr = /selected/.test(class_attr) ? class_attr.replace(/ selected/, '') : class_attr + ' selected'; this.parentElement.parentElement.setAttribute('class', class_attr)"))
         }
         
 		colnames(df2) = c("Job ID", "Status", "Job name", "Time passed", "Time left", "Cores", "Memory", "Max memory")
@@ -117,79 +94,6 @@ server <- function(input, output, session) {
 	    ))
 	})
 
-    observeEvent(input$close_job_log, {
-        removeModal()
-    })
-
-    observeEvent(input$mytable_rows_selected, {
-        selected_row = input$mytable_rows_selected
-        if(length(selected_row) == 0) {
-            message(qq("[@{Sys.time()}] No row is selected"))
-        } else {
-            message(qq("[@{Sys.time()}] @{length(selected_row)} rows are selected"))
-        }
-    })
-    
-    observeEvent(input$kill, {
-        selected_row = input$mytable_rows_selected
-        tb = job_summary_df()
-        if(length(selected_row) == 0) {
-            output$kill_job_info = renderText({
-                "No job was selected."
-            })
-            showModal(modal_kill_nothing)
-        } else {
-            tb = tb[input$mytable_rows_selected, , drop = FALSE]
-            killing_job_id = tb$JOBID[tb$STAT %in% c("RUN", "PEND")]
-            if(length(killing_job_id) == 0) {
-                output$kill_job_info = renderText({
-                    "No RUN/PEND job is selected."
-                })
-                showModal(modal_kill_nothing)
-            } else {
-                output$kill_job_info = renderText({
-                    paste0("Kill following jobs? ", paste(killing_job_id, collapse = ","))
-                })
-                
-                m = structure(names = paste0(tb$JOBID, " <", tb$JOB_NAME, ">"), tb$JOBID)
-                
-                showModal(modalDialog(
-                    title = "Kill jobs",
-                    checkboxGroupInput("killing_job_id", "Kill following jobs?", m[m %in% killing_job_id], selected = killing_job_id),
-                    footer = list(
-                        actionButton("kill_job_cancel", "Cancel"),
-                        actionButton("kill_job_confirm", "Kill them!")
-                    )
-                ))
-            }
-        }
-    })
-    
-    observeEvent(input$kill_no_job, {
-        removeModal()
-    })
-    
-    observeEvent(input$kill_job_confirm, {
-        killing_job_id = input$killing_job_id
-        showNotification(qq("Killing @{length(killing_job_id)} jobs..."), duration = 5)
-        message(qq("[@{Sys.time()}] Killing jobs: @{paste(killing_job_id, collapse=', ')}"))
-        bkill(killing_job_id)
-        removeModal()
-        message(qq("[@{Sys.time()}] sleep 5s before reloading the app"))
-        Sys.sleep(5)
-        session$reload()
-    })
-    
-    observeEvent(input$kill_job_cancel, {
-        removeModal()
-    })
 }
-
-modal_kill_nothing = modalDialog(
-    title = "Kill jobs",
-    textOutput("kill_job_info"),
-    footer =  actionButton("kill_no_job", "OK"),
-    easyClose = TRUE
-)
 
 shinyApp(ui, server)

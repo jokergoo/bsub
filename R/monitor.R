@@ -173,6 +173,14 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
 on_submission_node = function() {
     Sys.info()["nodename"] %in% bsub_opt$submission_node
 }
+    
+convert_to_POSIXct = function(x) {
+    if(all(grepl("^\\w+ \\d+ \\d+:\\d+$", x))) {
+        as.POSIXct(x, format = "%b %d %H:%M")
+    } else {
+        as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
+    }
+}
 
 
 convert_to_POSIXct = function(x) {
@@ -217,7 +225,7 @@ bu = function(stat = c("RUN", "PEND")) {
     names(lt) = header
     df = do.call(cbind, lt)
     df = as.data.frame(df)
-
+                 
     df$SUBMIT_TIME = convert_to_POSIXct(df$SUBMIT_TIME)
     df$START_TIME = convert_to_POSIXct(df$START_TIME)
     df$FINISH_TIME = convert_to_POSIXct(df$FINISH_TIME)
