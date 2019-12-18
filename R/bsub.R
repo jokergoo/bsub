@@ -38,7 +38,7 @@
 # - `bsub_cmd`submits shell commands.
 #
 # == example
-# # exaples are in the vignette.
+# # examples are in the vignette.
 #
 bsub_chunk = function(code, 
     name = NULL,

@@ -15,6 +15,9 @@ bjobs_pending(max = Inf, filter = NULL)
   \item{filter}{Regular expression to filter on job names}
 
 }
+\details{
+You can directly type \code{bjobs_pending} without parentheses which runs \code{\link{bjobs_pending}} with defaults.
+}
 \examples{
 # There is no example
 NULL

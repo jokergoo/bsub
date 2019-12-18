@@ -20,6 +20,8 @@ bjobs(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE)
 \details{
 There is an additional column "RECENT" which is the order
 for the job with the same name. 1 means the most recent job.
+
+You can directly type \code{bjobs} without parentheses which runs \code{\link{bjobs}} with defaults.
 }
 \value{
 A data frame with selected job summaries.

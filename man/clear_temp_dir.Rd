@@ -11,8 +11,12 @@ clear_temp_dir(ask = TRUE)
 }
 \arguments{
 
-  \item{ask}{whether promote}
+  \item{ask}{Whether promote.}
 
+}
+\details{
+The temporary files might be used by the running/pending jobs. Deleting them might affect some of the jobs.
+You better delete them after all jobs are done.
 }
 \examples{
 # There is no example

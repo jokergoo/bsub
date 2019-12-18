@@ -16,7 +16,7 @@ brecent(max = 20, filter = NULL)
 
 }
 \details{
-It is \code{bjobs(status = "all", max = 20, filter = ...)}.
+You can directly type \code{brecent} without parentheses which runs \code{\link{brecent}} with defaults.
 }
 \examples{
 # There is no example

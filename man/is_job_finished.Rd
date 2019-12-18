@@ -15,6 +15,9 @@ is_job_finished(job_name, output_dir = bsub_opt$output_dir)
   \item{output_dir}{Output dir}
 
 }
+\details{
+It tests whether the ".done" flag files exist
+}
 \examples{
 # There is no example
 NULL

@@ -173,15 +173,6 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
 on_submission_node = function() {
     Sys.info()["nodename"] %in% bsub_opt$submission_node
 }
-    
-convert_to_POSIXct = function(x) {
-    if(all(grepl("^\\w+ \\d+ \\d+:\\d+$", x))) {
-        as.POSIXct(x, format = "%b %d %H:%M")
-    } else {
-        as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
-    }
-}
-
 
 convert_to_POSIXlt = function(x) {
 
@@ -226,6 +217,8 @@ convert_to_POSIXlt = function(x) {
 # == details
 # There is an additional column "RECENT" which is the order
 # for the job with the same name. 1 means the most recent job.
+#
+# You can directly type ``bjobs`` without parentheses which runs `bjobs` with defaults.
 #
 # == value
 # A data frame with selected job summaries.
@@ -374,8 +367,11 @@ bkill = function(job_id) {
 # Run command on submission node
 #
 # == param
-# -cmd A single-line command
-# -print Whether print output from the command
+# -cmd A single-line command.
+# -print Whether print output from the command.
+#
+# == details
+# If current node is not the submission node, the command is executed via ssh.
 #
 # == value
 # The output of the command
@@ -410,6 +406,9 @@ print.bjobs = function(x, ...) {
 # == param
 # -job_name A vector of job names
 # -output_dir Output dir
+#
+# == details
+# It tests whether the ".done" flag files exist
 #
 is_job_finished = function(job_name, output_dir = bsub_opt$output_dir) {
     sapply(job_name, function(x) {
@@ -446,7 +445,11 @@ wait_jobs = function(job_name, output_dir = bsub_opt$output_dir, wait = 30) {
 # Clear temporary dir
 #
 # == param
-# -ask whether promote
+# -ask Whether promote.
+#
+# == details
+# The temporary files might be used by the running/pending jobs. Deleting them might affect some of the jobs.
+# You better delete them after all jobs are done.
 #
 clear_temp_dir = function(ask = TRUE) {
     files = list.files(bsub_opt$temp_dir, full.names = TRUE)
@@ -508,8 +511,8 @@ clear_temp_dir = function(ask = TRUE) {
 # -filter Regular expression to filter on job names
 #
 # == details
-# It is ``bjobs(status = "all", max = 20, filter = ...)``.
-#
+# You can directly type ``brecent`` without parentheses which runs `brecent` with defaults.
+#   
 brecent = function(max = 20, filter = NULL) {
     bjobs(status = "all", max = max, filter = filter)
 }
@@ -521,6 +524,9 @@ class(brecent) = "bjobs"
 # == param
 # -max Maximal number of jobs
 # -filter Regular expression to filter on job names
+#
+# == details
+# You can directly type ``bjobs_running`` without parentheses which runs `bjobs_running` with defaults.
 #
 bjobs_running = function(max = Inf, filter = NULL) {
     bjobs(status = "RUN", max = max, filter = filter)
@@ -534,6 +540,9 @@ class(bjobs_running) = "bjobs"
 # -max Maximal number of jobs
 # -filter Regular expression to filter on job names
 #
+# == details
+# You can directly type ``bjobs_pending`` without parentheses which runs `bjobs_pending` with defaults.
+#
 bjobs_pending = function(max = Inf, filter = NULL) {
     bjobs(status = "PEND", max = max, filter = filter)
 }
@@ -546,6 +555,9 @@ class(bjobs_pending) = "bjobs"
 # -max Maximal number of jobs
 # -filter Regular expression to filter on job names
 #
+# == details
+# You can directly type ``bjobs_done`` without parentheses which runs `bjobs_done` with defaults.
+#
 bjobs_done = function(max = Inf, filter = NULL) {
     bjobs(status = "DONE", max = max, filter = filter)
 }
@@ -557,6 +569,9 @@ class(bjobs_done) = "bjobs"
 # == param
 # -max Maximal number of jobs
 # -filter Regular expression to filter on job names
+#
+# == details
+# You can directly type ``bjobs_exit`` without parentheses which runs `bjobs_exit` with defaults.
 #
 bjobs_exit = function(max = Inf, filter = NULL) {
     bjobs(status = "EXIT", max = max, filter = filter)
@@ -624,6 +639,8 @@ job_status_by_id = function(job_id) {
 # == title
 # A browser-based interactive job monitor 
 #
+# == details
+# The monitor is implemented as a shiny app.
 monitor = function() {
     
     if(!on_submission_node()) {

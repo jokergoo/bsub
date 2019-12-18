@@ -59,15 +59,15 @@ The values of these two variables can be obtained by entering following commands
     echo $LSF_SERVERDIR  }
 
 The time strings by LSF \code{bjobs} command might be different for different configurations. The **bsub**
-package needs to convert the time strings to \code{\link{POSIXct}} objects for calculating the time difference. Thus, if
+package needs to convert the time strings to \code{\link{POSIXlt}} objects for calculating the time difference. Thus, if
 the default time string parsing fails, users need to provide a user-defined function and set with \code{parse_time}
-option in \code{\link{bsub_opt}}. The function accepts a vector of time strings and returns a \code{\link{POSIXct}} object. For example,
+option in \code{\link{bsub_opt}}. The function accepts a vector of time strings and returns a \code{\link{POSIXlt}} object. For example,
 if the time string returned from \code{bjobs} command is in a form of \code{Dec 1 18:00:00 2019}, the parsing function
 can be defined as:
 
   \preformatted{
     bsub_opt$parse_time = function(x) \{
-        as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
+        as.POSIXlt(x, format = "%b %d %H:%M:%S %Y")
     \}  }
 }
 \examples{

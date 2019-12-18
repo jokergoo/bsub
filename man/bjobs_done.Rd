@@ -15,6 +15,9 @@ bjobs_done(max = Inf, filter = NULL)
   \item{filter}{Regular expression to filter on job names}
 
 }
+\details{
+You can directly type \code{bjobs_done} without parentheses which runs \code{\link{bjobs_done}} with defaults.
+}
 \examples{
 # There is no example
 NULL

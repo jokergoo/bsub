@@ -15,6 +15,9 @@ bjobs_exit(max = Inf, filter = NULL)
   \item{filter}{Regular expression to filter on job names}
 
 }
+\details{
+You can directly type \code{bjobs_exit} without parentheses which runs \code{\link{bjobs_exit}} with defaults.
+}
 \examples{
 # There is no example
 NULL
