@@ -507,14 +507,6 @@ fi", con)
             stringsAsFactors = FALSE
         )
 
-    if(file.exists("~/.bsub_history.rds")) {
-        job_history = readRDS("~/.bsub_history.rds")
-        job_history = rbind(job_history, job_tb)
-    } else {
-        job_history = job_tb
-    }
-    saveRDS(job_history, file = "~/.bsub_history.rds")
-
     return(job_id)
 }
 
@@ -531,8 +523,10 @@ stop_wrap = function (...) {
     stop(x)
 }
 
-random_job = function(name = paste0("R_random_job_", digest::digest(runif(1), "crc32"))) {
+random_job = function(name = paste0("R_random_job_", digest::digest(runif(1), "crc32")), ...) {
     bsub_chunk({
         Sys.sleep(30*60)
-    }, name = name)
+    }, name = name, ...)
 }
+
+

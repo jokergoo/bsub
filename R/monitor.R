@@ -226,7 +226,7 @@ convert_to_POSIXlt = function(x) {
 bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE) {
 
 
-    cmd = "bjobs -a -o 'jobid stat job_name submit_time start_time finish_time slots mem max_mem exec_cwd delimiter=\",\"' 2>&1"
+    cmd = "bjobs -a -o 'jobid stat job_name submit_time start_time finish_time slots mem max_mem dependency exec_cwd delimiter=\",\"' 2>&1"
     ln = run_cmd(cmd, print = FALSE)
     
     # job done or exit
@@ -694,4 +694,70 @@ check_dump_files = function(print = TRUE) {
     }
 
     return(invisible(dump_files))
+}
+
+# get the dependency data frame p->c for all jobs
+get_dependency = function() {
+    job_tb = bjobs(status = "all", print = FALSE)
+    job_tb = job_tb[, c("JOBID", "STAT", "JOB_NAME", "DEPENDENCY"), drop = FALSE]
+
+    id2name = structure(job_tb$JOB_NAME, names = job_tb$JOBID)
+    id2stat = structure(job_tb$STAT, names = job_tb$JOBID)
+
+    job_tb2 = job_tb[job_tb$DEPENDENCY != "-", , drop = FALSE]
+    
+    if(nrow(job_tb2) == 0) {
+        return(NULL)
+    }
+    
+    dep = lapply(strsplit(job_tb2$DEPENDENCY, " && "), function(x) {
+        gsub("^done\\( (\\d+) \\)$", "\\1", x)
+    })
+
+    n = sapply(dep, length)
+    dep_mat = cbind(parent = unlist(dep),
+        child = rep(job_tb2$JOBID, times = n))
+    dep_mat = as.character(dep_mat[, 1])
+
+    all_nodes = unique(dep_mat)
+    id2name = id2name[all_nodes]; names(id2name) = all_nodes
+    id2stat = id2stat[all_nodes]; names(id2stat) = all_nodes
+
+    return(list(dep_mat = dep_mat, id2name = id2name, id2stat = id2stat))
+}
+
+plot_dependency = function(job_id) {
+    job_dep = get_dependency()
+
+    if(is.null(job_dep)) {
+        # no dependency
+    }
+
+    if(!job_id %in% names(job_dep$id2name)) {
+        # no dependency
+    }
+
+    g = graph.edgelist(job_dep$dep_mat)
+    g2 = graph.edgelist(job_dep$dep_mat, directed = FALSE)
+
+    dist = distances(g2, v = job_id)
+
+    # node in the connected sub-graph
+    nodes = names(which(apply(dist, 2, function(x) any(is.finite(x)))))
+
+    g = induced_subgraph(g, nodes)
+
+    node_label = job_dep$id2name[V(g)$name]
+    node_label[is.na(node_label)] = "unknown"
+    node_label = paste0(V(g)$name, "\n", "<", node_label, ">")
+    node_stat = job_dep$id2stat[V(g)$name]
+    node_stat[is.na(node_stat)] = "unknown"
+
+    V(g)$label = node_label
+    stat_col = c("blue", "purple", "black", "red", "grey")
+    names(stat_col) = c("RUN", "PEND", "DONE", "EXIT", "unknown") 
+    V(g)$color = stat_col[node_stat]
+    V(g)$shape = "crectangle"
+
+    plot(g, layout = layout_as_tree)
 }
