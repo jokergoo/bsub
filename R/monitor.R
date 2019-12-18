@@ -174,6 +174,15 @@ on_submission_node = function() {
     Sys.info()["nodename"] %in% bsub_opt$submission_node
 }
 
+
+convert_to_POSIXct = function(x) {
+    if(all(grepl("^\\w+ \\d+ \\d+:\\d+$", x))) {
+        as.POSIXct(x, format = "%b %d %H:%M")
+    } else {
+        as.POSIXct(x, format = "%b %d %H:%M:%S %Y")
+    }
+}
+
 # == title
 # Summary of jobs
 #
@@ -209,9 +218,9 @@ bu = function(stat = c("RUN", "PEND")) {
     df = do.call(cbind, lt)
     df = as.data.frame(df)
 
-    df$SUBMIT_TIME = as.POSIXct(df$SUBMIT_TIME, format = "%b %d %H:%M:%S %Y")
-    df$START_TIME = as.POSIXct(df$START_TIME, format = "%b %d %H:%M:%S %Y")
-    df$FINISH_TIME = as.POSIXct(df$FINISH_TIME, format = "%b %d %H:%M:%S %Y")
+    df$SUBMIT_TIME = convert_to_POSIXct(df$SUBMIT_TIME)
+    df$START_TIME = convert_to_POSIXct(df$START_TIME)
+    df$FINISH_TIME = convert_to_POSIXct(df$FINISH_TIME)
     df$TIME_PASSED = Sys.time() - df$START_TIME
     # df$TIME_LEFT = df$FINISH_TIME - Sys.time()
 
@@ -270,9 +279,9 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 
     df = read.csv(textConnection(paste(ln, collapse = "\n")), stringsAsFactors = FALSE)
     df$STAT = factor(df$STAT)
-    df$SUBMIT_TIME = as.POSIXct(df$SUBMIT_TIME, format = "%b %d %H:%M:%S %Y")
-    df$START_TIME = as.POSIXct(df$START_TIME, format = "%b %d %H:%M:%S %Y")
-    df$FINISH_TIME = as.POSIXct(df$FINISH_TIME, format = "%b %d %H:%M:%S %Y")
+    df$SUBMIT_TIME = convert_to_POSIXct(df$SUBMIT_TIME)
+    df$START_TIME = convert_to_POSIXct(df$START_TIME)
+    df$FINISH_TIME = convert_to_POSIXct(df$FINISH_TIME)
     # running/pending jobs
     df$TIME_PASSED = difftime(Sys.time(), df$START_TIME, units = "hours")
     l = !(df$STAT %in% c("RUN", "PEND"))
