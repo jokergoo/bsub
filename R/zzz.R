@@ -83,8 +83,8 @@ config_sanger = function(user = NULL, group = NULL) {
 	# echo $LSF_SERVERDIR
 	# echo $LSF_ENVDIR
 	bsub_opt$ssh_envir = c("source /etc/profile",
-                           "export LSF_ENVDIR=/opt/lsf/conf",
-                           "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
+                           "export LSF_ENVDIR=/usr/local/lsf/conf",
+                           "export LSF_SERVERDIR=/usr/local/lsf/9.1/linux2.6-glibc2.3-x86_64/etc")
 	if(!is.null(user)) bsub_opt$user = user
 	if(is.null(group) && is.null(bsub_opt$group)) {
 		bsub_opt$bsub_template = function(name, hour, memory, core, output, ...) {
