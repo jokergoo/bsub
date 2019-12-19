@@ -19,9 +19,19 @@
 	    msg = TRUE
 	}
 
-	all_f = list.files("~/.bsub_temp/")
+	all_f = list.files("~/.bsub_temp/", full.names = TRUE)
 	if(length(all_f)) {
-		packageStartupMessage(paste0("There are ", length(all_f), " temporary files in ~/.bsub_temp\n"))
+		file_size = sum(file.info(all_f)[, "size"])
+		if(file_size < 1024) {
+			fs = paste0(file_size, "Byte")
+		} else if(file_size < 1024^2) {
+			fs = paste0(round(file_size/1024, 1), "KB")
+		} else if(file_size < 1024^3) {
+			fs = paste0(round(file_size/1024^2, 1), "MB")
+		} else {
+			fs = paste0(round(file_size/1024^3, 1), "GB")
+		}
+		packageStartupMessage(qq("There are @{length(all_f)} temporary files (@{fs}) in ~/.bsub_temp"))
 		msg = TRUE
 	}
 

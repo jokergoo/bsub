@@ -85,7 +85,7 @@ bsub_opt = set_opt(
 
             }
             if(any(!l)) {
-                stop(qq("Some of the image files do not exist.\n"))
+                stop(qq("Some of the image files do not exist."))
             }
             normalizePath(x)
         }
@@ -97,9 +97,20 @@ bsub_opt = set_opt(
                 qqcat("create temp_dir: @{x}\n")
                 dir.create(x, recursive = TRUE, showWarnings = FALSE)
             }
-            all_f = list.files(x)
+            all_f = list.files(x, full.names = TRUE)
+
             if(length(all_f)) {
-                message(qq("There are @{length(all_f)} temporary files in @{x}."))
+                file_size = sum(file.info(all_f)[, "size"])
+                if(file_size < 1024) {
+                    fs = paste0(file_size, "Byte")
+                } else if(file_size < 1024^2) {
+                    fs = paste0(round(file_size/1024, 1), "KB")
+                } else if(file_size < 1024^3) {
+                    fs = paste0(round(file_size/1024^2, 1), "MB")
+                } else {
+                    fs = paste0(round(file_size/1024^3, 1), "GB")
+                }
+                message(qq("There are @{length(all_f)} temporary files (@{fs}) in @{x}"))
             }
             TRUE
         },

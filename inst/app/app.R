@@ -49,10 +49,12 @@ server <- function(input, output, session) {
 	    
 		df = job_summary_df()
 		nr = nrow(df)
+
+        job_dep = get_dependency(df)
         
 		showNotification("Formatting job summary table...", duration = 5, type = "message")
 		df2 = df[, c("JOBID", "STAT", "JOB_NAME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
-        
+
 		df2$STAT = factor(df2$STAT)
         df2$TIME_PASSED = bsub:::format_difftime(df2$TIME_PASSED)
         df2$TIME_LEFT = bsub:::format_difftime(df2$TIME_LEFT)
@@ -69,6 +71,14 @@ server <- function(input, output, session) {
         for(i in 1:nr) {
             df2$JOB_NAME[i] = as.character(actionLink(paste0("job_name_id_", df2$JOBID[i]), df2$JOB_NAME[i], 
                 onclick = "Shiny.onInputChange('select_link', 0);Shiny.onInputChange('select_link', this.id); var class_attr=this.parentElement.parentElement.getAttribute('class'); class_attr = /selected/.test(class_attr) ? class_attr.replace(/ selected/, '') : class_attr + ' selected'; this.parentElement.parentElement.setAttribute('class', class_attr)"))
+        }
+
+        ## add the dependency table
+        if(any(df2$JOBID %in% names(job_dep$id2name))) {
+            for(i in which(df2$JOBID %in% names(job_dep$id2name))) {
+                df2$JOBID[i] = as.character(actionLink(paste0("job_dep_id_", df2$JOBID[i]), df2$JOBID[i], 
+                    onclick = "Shiny.onInputChange('select_dep', 0);Shiny.onInputChange('select_dep', this.id); var class_attr=this.parentElement.parentElement.getAttribute('class'); class_attr = /selected/.test(class_attr) ? class_attr.replace(/ selected/, '') : class_attr + ' selected'; this.parentElement.parentElement.setAttribute('class', class_attr)"))
+            }
         }
         
 		colnames(df2) = c("Job ID", "Status", "Job name", "Time passed", "Time left", "Cores", "Memory", "Max memory")
@@ -107,6 +117,12 @@ server <- function(input, output, session) {
 	        log = job_log(job_name_selected, print = FALSE)
 	        paste(log, collapse = "\n")
 	    })
+
+        output$dependency_plot = renderPlot({
+            showNotification("Generating job dependency tree...", duration = 5)
+            message(qq("[@{Sys.time()}] Generating job dependency tree @{job_name_selected} <@{job_name}> @{job_status}"))
+            plot_dependency(job_name_selected)
+        })
 	    
 	    showModal(modalDialog(
 	        title = qq("Job log (@{job_name_selected} <@{job_name}>)"),
@@ -117,7 +133,35 @@ server <- function(input, output, session) {
 	    ))
 	})
 
+    observeEvent(input$select_dep, {
+
+        df = job_summary_df()
+
+        job_name_selected = gsub("job_dep_id_", "", input$select_dep)
+        job_name = df$JOB_NAME[df$JOBID == job_name_selected]
+        job_status = df$STAT[df$JOBID == job_name_selected]
+        message(qq("[@{Sys.time()}] clicked dependency for @{input$select_dep}"))
+
+        output$dependency_plot = renderPlot({
+            showNotification("Generating job dependency tree...", duration = 5)
+            message(qq("[@{Sys.time()}] Generating job dependency tree @{job_name_selected} <@{job_name}> @{job_status}"))
+            plot_dependency(job_name_selected)
+        })
+        
+        showModal(modalDialog(
+            title = qq("Job dependency (@{job_name_selected} <@{job_name}>)"),
+            plotOutput("dependency_plot", width = "auto", height = "600px"),
+            footer = actionButton("close_job_dep", "Close"),
+            easyClose = TRUE,
+            size = "l"
+        ))
+    })
+
     observeEvent(input$close_job_log, {
+        removeModal()
+    })
+
+    observeEvent(input$close_job_dep, {
         removeModal()
     })
 

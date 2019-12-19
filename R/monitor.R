@@ -696,13 +696,29 @@ check_dump_files = function(print = TRUE) {
     return(invisible(dump_files))
 }
 
-# get the dependency data frame p->c for all jobs
-get_dependency = function() {
-    job_tb = bjobs(status = "all", print = FALSE)
+
+# == title
+# Get the dependency of current jobs
+#
+# == param
+# -job_tb A table from `bjobs`. Optional.
+#
+# == value
+# If there is no dependency of all jobs, it returns ``NULl``. If there are dependencies,
+# it returns a list of three elements:
+#
+# -``dep_mat``: a two column matrix containing dependencies from parents to children.
+# -``id2name``: a named vector containing mapping from job IDs to job names.
+# -``id2stat``: a named vector containing mapping from job IDs to job status.
+#
+get_dependency = function(job_tb = NULL) {
+
+    if(is.null(job_tb)) job_tb = bjobs(status = "all", print = FALSE)
+    
     job_tb = job_tb[, c("JOBID", "STAT", "JOB_NAME", "DEPENDENCY"), drop = FALSE]
 
     id2name = structure(job_tb$JOB_NAME, names = job_tb$JOBID)
-    id2stat = structure(job_tb$STAT, names = job_tb$JOBID)
+    id2stat = structure(as.character(job_tb$STAT), names = job_tb$JOBID)
 
     job_tb2 = job_tb[job_tb$DEPENDENCY != "-", , drop = FALSE]
     
@@ -715,9 +731,8 @@ get_dependency = function() {
     })
 
     n = sapply(dep, length)
-    dep_mat = cbind(parent = unlist(dep),
-        child = rep(job_tb2$JOBID, times = n))
-    dep_mat = as.character(dep_mat[, 1])
+    dep_mat = cbind(parent = as.character(unlist(dep)),
+                    child = as.character(rep(job_tb2$JOBID, times = n)))
 
     all_nodes = unique(dep_mat)
     id2name = id2name[all_nodes]; names(id2name) = all_nodes
@@ -726,38 +741,85 @@ get_dependency = function() {
     return(list(dep_mat = dep_mat, id2name = id2name, id2stat = id2stat))
 }
 
-plot_dependency = function(job_id) {
+# == title
+# Plot the job dependency tree
+#
+# == param
+# -job_id A job ID.
+# -job_tb A table from `bjobs`. Optional.
+#
+plot_dependency = function(job_id, job_tb = NULL) {
+
+    job_id = as.character(job_id, job_tb = NULL)
+
     job_dep = get_dependency()
 
     if(is.null(job_dep)) {
         # no dependency
+        plot(NULL, xlim = c(0, 1), ylim = c(0, 1), type = "n")
+        text(0.5, 0.5, qq("no dependency for job @{job_id}"))
+        return(invisible(NULL))
     }
 
     if(!job_id %in% names(job_dep$id2name)) {
         # no dependency
+        plot(NULL, xlim = c(0, 1), ylim = c(0, 1), type = "n")
+        text(0.5, 0.5, qq("no dependency for job @{job_id}"))
+        return(invisible(NULL))
     }
 
-    g = graph.edgelist(job_dep$dep_mat)
-    g2 = graph.edgelist(job_dep$dep_mat, directed = FALSE)
+    g = igraph::graph.edgelist(job_dep$dep_mat)
+    g2 = igraph::graph.edgelist(job_dep$dep_mat, directed = FALSE)
 
-    dist = distances(g2, v = job_id)
+    dist = igraph::distances(g2, v = job_id)
 
     # node in the connected sub-graph
     nodes = names(which(apply(dist, 2, function(x) any(is.finite(x)))))
 
-    g = induced_subgraph(g, nodes)
+    g = igraph::induced_subgraph(g, nodes)
 
-    node_label = job_dep$id2name[V(g)$name]
+    node_label = job_dep$id2name[igraph::V(g)$name]
     node_label[is.na(node_label)] = "unknown"
-    node_label = paste0(V(g)$name, "\n", "<", node_label, ">")
-    node_stat = job_dep$id2stat[V(g)$name]
+
+    l = nchar(node_label) > 50
+    if(any(l)) {
+        foo = substr(node_label[l], 1, 48)
+        foo = paste(foo, "..", sep = "")
+        node_label[l] = foo
+    }
+
+    label_width = pmax(nchar(igraph::V(g)$name), nchar(node_label)+2)
+    node_label = paste0(igraph::V(g)$name, "\n", "<", node_label, ">")
+    node_stat = job_dep$id2stat[igraph::V(g)$name]
     node_stat[is.na(node_stat)] = "unknown"
 
-    V(g)$label = node_label
+    igraph::V(g)$label = node_label
     stat_col = c("blue", "purple", "black", "red", "grey")
     names(stat_col) = c("RUN", "PEND", "DONE", "EXIT", "unknown") 
-    V(g)$color = stat_col[node_stat]
-    V(g)$shape = "crectangle"
+    igraph::V(g)$frame.color = stat_col[node_stat]
+    igraph::V(g)$shape = "rectangle"
+    igraph::V(g)$color = "white"
 
-    plot(g, layout = layout_as_tree)
+    igraph::V(g)$size = 5*label_width - 5
+    igraph::V(g)$size2 = 20
+    igraph::V(g)$label.family = "sans"
+    igraph::V(g)$label.color = "black"
+    igraph::V(g)$label.color = "black"
+    igraph::V(g)$label.font = ifelse(igraph::V(g)$name == job_id, 4, 1)
+
+    igraph::E(g)$color = "black"
+    
+    layout = igraph::layout_as_tree(g)
+    omar = par("mar")
+    on.exit(par(mar = omar))
+
+    par(mar = c(3, 0, 0, 0))
+    if(all(layout[, 1] == 0)) {
+        igraph::plot.igraph(g, layout = layout, xlim = c(-2, 0))
+    } else {
+        igraph::plot.igraph(g, layout = layout)
+    }
+
+    legend("bottom", pch = 0, col = stat_col, legend = names(stat_col), 
+        pt.cex = 2, bty = "n", ncol = length(stat_col))
 }
