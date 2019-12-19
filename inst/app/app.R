@@ -4,6 +4,11 @@ suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(GetoptLong))
 
 ui = fluidPage(
+    tags$script(HTML("
+        $(document).ready(function() {
+          $('[data-toggle=\"tooltip\"]').tooltip();   
+        });"
+    )),
     tags$style("body {
         font-size:1.2em;
         width:1000px;
@@ -70,6 +75,7 @@ server <- function(input, output, session) {
         
         for(i in 1:nr) {
             df2$JOB_NAME[i] = as.character(actionLink(paste0("job_name_id_", df2$JOBID[i]), df2$JOB_NAME[i], 
+                title = "Click to see the job log", "data-toggle" = "tooltip",
                 onclick = "Shiny.onInputChange('select_link', 0);Shiny.onInputChange('select_link', this.id); var class_attr=this.parentElement.parentElement.getAttribute('class'); class_attr = /selected/.test(class_attr) ? class_attr.replace(/ selected/, '') : class_attr + ' selected'; this.parentElement.parentElement.setAttribute('class', class_attr)"))
         }
 
@@ -77,6 +83,7 @@ server <- function(input, output, session) {
         if(any(df2$JOBID %in% names(job_dep$id2name))) {
             for(i in which(df2$JOBID %in% names(job_dep$id2name))) {
                 df2$JOBID[i] = as.character(actionLink(paste0("job_dep_id_", df2$JOBID[i]), df2$JOBID[i], 
+                    title = "Click to see the dependency tree", "data-toggle" = "tooltip",
                     onclick = "Shiny.onInputChange('select_dep', 0);Shiny.onInputChange('select_dep', this.id); var class_attr=this.parentElement.parentElement.getAttribute('class'); class_attr = /selected/.test(class_attr) ? class_attr.replace(/ selected/, '') : class_attr + ' selected'; this.parentElement.parentElement.setAttribute('class', class_attr)"))
             }
         }
