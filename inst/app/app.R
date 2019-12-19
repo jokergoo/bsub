@@ -101,7 +101,9 @@ server <- function(input, output, session) {
                             } );")
         )
 
-        dt %>% formatStyle("Status", color = styleEqual(c("RUN", "PEND", "DONE", "EXIT"), c("blue", "purple", "black", "red")))
+        dt %>% 
+            formatStyle(columns = "Status", color = styleEqual(c("RUN", "PEND", "DONE", "EXIT"), c("blue", "purple", "black", "red"))) %>%
+            formatDate(columns = "Submit time", method = "toLocaleString")
 
 	})
 	
