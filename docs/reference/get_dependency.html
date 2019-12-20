@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Recent jobs — brecent • bsub</title>
+<title>Get the dependency of current jobs — get_dependency • bsub</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Recent jobs — brecent" />
-<meta property="og:description" content="Recent jobs" />
+<meta property="og:title" content="Get the dependency of current jobs — get_dependency" />
+<meta property="og:description" content="Get the dependency of current jobs" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,33 +123,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Recent jobs</h1>
+    <h1>Get the dependency of current jobs</h1>
     
-    <div class="hidden name"><code>brecent.Rd</code></div>
+    <div class="hidden name"><code>get_dependency.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Recent jobs</p>
+    <p>Get the dependency of current jobs</p>
     </div>
 
-    <pre class="usage"><span class='fu'>brecent</span>(<span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>get_dependency</span>(<span class='kw'>job_tb</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>max</th>
-      <td><p>Maximal number of recent jobs</p></td>
-    </tr>
-    <tr>
-      <th>filter</th>
-      <td><p>Regular expression to filter on job names</p></td>
+      <th>job_tb</th>
+      <td><p>A table from <code><a href='bjobs.html'>bjobs</a></code>. Optional.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>You can directly type <code>brecent</code> without parentheses which runs <code>brecent</code> with defaults.</p>
+    <p>If there is no dependency of all jobs, it returns <code>NULl</code>. If there are dependencies,
+it returns a list of three elements:</p>
+<dl class='dl-horizontal'>
+  <dt><code>dep_mat</code>:</dt><dd><p>a two column matrix containing dependencies from parents to children.</p></dd>
+  <dt><code>id2name</code>:</dt><dd><p>a named vector containing mapping from job IDs to job names.</p></dd>
+  <dt><code>id2stat</code>:</dt><dd><p>a named vector containing mapping from job IDs to job status.</p></dd>
+
+</dl>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># There is no example</span>
@@ -160,7 +164,7 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

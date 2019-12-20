@@ -92,10 +92,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/bsub_intro.html">UNKNOWN TITLE</a>
+      <a href="../articles/bsub_intro.html">Send R code/R scripts/shell commands to LSF cluster</a>
     </li>
     <li>
-      <a href="../articles/how_to.html">UNKNOWN TITLE</a>
+      <a href="../articles/dkfz_odcf.html">Use bsub package on the DKFZ ODCF cluster</a>
+    </li>
+    <li>
+      <a href="../articles/other_insititute.html">Configure bsub package for other LSF institutes</a>
     </li>
   </ul>
 </li>
@@ -176,14 +179,34 @@
   <dt><code>group</code></dt><dd><p>The user group</p></dd>
   <dt><code>ssh_envir</code></dt><dd><p>The commands for setting bash environment for successfully running bjobs, bsub, ...</p></dd>
   <dt><code>bsub_template</code></dt><dd><p>Template for constructing <code>bsub</code> command.</p></dd>
+  <dt><code>parse_time</code></dt><dd><p>A function that parses time string from the LSF <code>bjobs</code> command to a <code><a href='https://rdrr.io/r/base/DateTimeClasses.html'>POSIXct</a></code> object.</p></dd>
 
 </dl>
 
-<p>For <code>ssh_envir</code> option, an example is as follows. The <code>LSF_ENVDIR</code> and <code>LSF_SERVERDIR</code> should be defined and exported.</p>
+<p><code>ssh_envir</code> should be properly set so that LSF binaries such as <code>bsub</code> or <code>bjobs</code> can be properly found.
+There are some environment variables initialized when logging in the bash terminal while they are not initialized with the
+ssh connection. Thus, some environment variables should be manually set.</p>
+<p>An example for <code>ssh_envir</code> is as follows. The <code>LSF_ENVDIR</code> and <code>LSF_SERVERDIR</code> should be defined and exported.</p>
 <p></p><pre>
     c("source /etc/profile",
       "export LSF_ENVDIR=/opt/lsf/conf",
       "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")  </pre>
+
+<p>The values of these two variables can be obtained by entering following commands in your bash terminal (on the submission node):</p>
+<p></p><pre>
+    echo $LSF_ENVDIR
+    echo $LSF_SERVERDIR  </pre>
+
+<p>The time strings by LSF <code>bjobs</code> command might be different for different configurations. The **bsub**
+package needs to convert the time strings to <code><a href='https://rdrr.io/r/base/DateTimeClasses.html'>POSIXlt</a></code> objects for calculating the time difference. Thus, if
+the default time string parsing fails, users need to provide a user-defined function and set with <code>parse_time</code>
+option in <code>bsub_opt</code>. The function accepts a vector of time strings and returns a <code><a href='https://rdrr.io/r/base/DateTimeClasses.html'>POSIXlt</a></code> object. For example,
+if the time string returned from <code>bjobs</code> command is in a form of <code>Dec 1 18:00:00 2019</code>, the parsing function
+can be defined as:</p>
+<p></p><pre>
+    bsub_opt$parse_time = function(x) {
+        as.POSIXlt(x, format = "<!-- %b %d %H:%M:%S %Y") -->
+    }  </pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -202,9 +225,10 @@
 #&gt;  submission_node odcf-worker01, odcf-cn34u03s10, odcf....
 #&gt;          sh_head                                       ""
 #&gt;             user                                      guz
-#&gt;            group                                       ""
+#&gt;            group                                     NULL
 #&gt;        ssh_envir source /etc/profile, export LSF_ENVD....
-#&gt;    bsub_template                  a user-defined function</div></pre>
+#&gt;    bsub_template                  a user-defined function
+#&gt;       parse_time                                     NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -54,10 +54,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/bsub_intro.html">UNKNOWN TITLE</a>
+      <a href="articles/bsub_intro.html">Send R code/R scripts/shell commands to LSF cluster</a>
     </li>
     <li>
-      <a href="articles/how_to.html">UNKNOWN TITLE</a>
+      <a href="articles/dkfz_odcf.html">Use bsub package on the DKFZ ODCF cluster</a>
+    </li>
+    <li>
+      <a href="articles/other_insititute.html">Configure bsub package for other LSF institutes</a>
     </li>
   </ul>
 </li>
@@ -81,80 +84,82 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
-<p>This package sends R code/scripts or normal shell commands to LSF clusters.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(bsub)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co"># R code</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">memory =</span> <span class="dv">10</span>, <span class="dt">hour =</span> <span class="dv">10</span>, <span class="dt">core =</span> <span class="dv">4</span>, </a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">{</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">    NMF<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/NMF/man/nmf.html">nmf</a></span>(...)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">})</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co"># R script</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw"><a href="reference/bsub_script.html">bsub_script</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">    <span class="dt">script =</span> <span class="st">"/path/foo.R"</span>, ...)</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co"># shell commands</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="kw"><a href="reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">    <span class="dt">cmd =</span> <span class="st">"samtools view ..."</span>, ...)</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="co"># show job summaries</span></a>
-<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="kw"><a href="reference/bjobs.html">bjobs</a></span>(...)</a>
-<a class="sourceLine" id="cb1-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="co"># show job log</span></a>
-<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="kw"><a href="reference/job_log.html">job_log</a></span>(job_id)</a>
-<a class="sourceLine" id="cb1-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co"># kill jobs</span></a>
-<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="kw"><a href="reference/bkill.html">bkill</a></span>(job_id)</a>
-<a class="sourceLine" id="cb1-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb1-26" data-line-number="26"><span class="co"># interactive job monitor</span></a>
-<a class="sourceLine" id="cb1-27" data-line-number="27"><span class="kw"><a href="reference/monitor.html">monitor</a></span>()</a></code></pre></div>
-<p>The <strong>bsub</strong> package is only tested on DKFZ ODCF cluster. It is also possible for other clusters that use LSF system to use <strong>bsub</strong> package. Following global options should be properly configured:</p>
+<div id="submitter-and-monitor-of-lsf-cluster" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#submitter-and-monitor-of-lsf-cluster" class="anchor"></a>Submitter and monitor of LSF cluster</h1></div>
+<p>It Sends R code/R scripts/shell commands to LSF cluster without leaving R.</p>
+<div id="install" class="section level3">
+<h3 class="hasAnchor">
+<a href="#install" class="anchor"></a>Install</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/bsub"</span>, <span class="dt">ref =</span> <span class="st">"dev-zuguang"</span>)</a></code></pre></div>
+</div>
+<div id="documentation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h3>
+<p>The online documentation is available at <a href="https://jokergoo.github.io/bsub/" class="uri">https://jokergoo.github.io/bsub/</a>.</p>
+<p>There are three vignettes:</p>
 <ul>
-<li>How to call the <code>Rscript</code> binary, especially when you have different versions of R installed. Following is how we call <code>Rscript</code> on our cluster (we use <code>module</code> to manage the bash environment).</li>
+<li><a href="https://jokergoo.github.io/bsub/docs/articles/bsub_intro.html">Send R code/R scripts/shell commands to LSF cluster</a></li>
+<li><a href="https://jokergoo.github.io/bsub/docs/articles/dkfz_odcf.html">Use bsub package on the DKFZ ODCF cluster</a></li>
+<li><a href="https://jokergoo.github.io/bsub/docs/articles/other_institute.html">Configure bsub package for other LSF institutes</a></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) {</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">    <span class="kw">qq</span>(<span class="st">"module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript"</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">}</a></code></pre></div>
-<ul>
-<li>Your username on the submission node.</li>
-</ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">bsub_opt<span class="op">$</span>user =<span class="st"> </span>...</a></code></pre></div>
-<ul>
-<li>The names of the nodes where the jobs are submitted.</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">bsub_opt<span class="op">$</span>submission_node =<span class="st"> </span>...</a></code></pre></div>
-<ul>
-<li>Bash environment. It is basically for properly finding <code>bsub</code>/<code>bjobs</code>/… Following is how we set up on our cluster.</li>
-</ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">bsub_opt<span class="op">$</span>ssh_envir =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"source /etc/profile"</span>,</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">                       <span class="st">"export LSF_ENVDIR=/opt/lsf/conf"</span>,</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                       <span class="st">"export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc"</span>)</a></code></pre></div>
-<ul>
-<li>
-<p>The template of <code>bsub</code> command. The self-defined function should accepts following arguments:</p>
-<ul>
-<li>
-<code>name</code> job name.</li>
-<li>
-<code>hour</code> running time.</li>
-<li>
-<code>memory</code> memory, in GB.</li>
-<li>
-<code>core</code> number of cores to use.</li>
-<li>
-<code>output</code> path of output file</li>
-<li>
-<code>...</code> should be added as the last argument of the function. Following is a simple example for calling <code>bsub</code>.</li>
-</ul>
-</li>
-</ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">bsub_opt<span class="op">$</span>bsub_template =<span class="st"> </span><span class="cf">function</span>(name, hour, memory, core, output, ...) {</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">    glue<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/glue/man/glue.html">glue</a></span>(<span class="st">"bsub -J '{name}' -W '{hour}:00' -n {core} -R 'rusage[mem={memory}GB]' -o '{output}'"</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">}</a></code></pre></div>
-<p>More information can be found in <a href="https://jokergoo.github.io/bsub/articles/bsub_intro.html">the package vignette</a>.</p>
-
+</div>
+<div id="submit-jobs" class="section level3">
+<h3 class="hasAnchor">
+<a href="#submit-jobs" class="anchor"></a>Submit jobs</h3>
+<p>Directly submit R chunk:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(bsub)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co"># R code</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">memory =</span> <span class="dv">10</span>, <span class="dt">hour =</span> <span class="dv">10</span>, <span class="dt">core =</span> <span class="dv">4</span>, </a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">{</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">    fit =<span class="st"> </span>NMF<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/NMF/man/nmf.html">nmf</a></span>(...)</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">    <span class="co"># you better save `fit` into a permanent file</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">    <span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(fit, <span class="dt">file =</span> <span class="st">"fit.rds"</span>)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">})</a></code></pre></div>
+<p>Submit an R script:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># R script</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/bsub_script.html">bsub_script</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="dt">script =</span> <span class="st">"/path/foo.R"</span>, ...)</a></code></pre></div>
+<p>Submit shell commands:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># shell commands</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="dt">cmd =</span> <span class="st">"samtools view ..."</span>, ...)</a></code></pre></div>
+<p>Kill jobs:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/bkill.html">bkill</a></span>(job_id)</a></code></pre></div>
+</div>
+<div id="view-job-info" class="section level3">
+<h3 class="hasAnchor">
+<a href="#view-job-info" class="anchor"></a>View job info</h3>
+<p>View job summaries:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">bjobs</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">brecent</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">bjobs_running</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">bjobs_pending</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">bjobs_done</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">bjobs_exit</a></code></pre></div>
+<p>An example of the job queries is as follows:</p>
+<p><img src="https://user-images.githubusercontent.com/449218/71292253-2577ad00-2374-11ea-9402-855e7f01652c.png" alt="image"></p>
+<p>View job log:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="reference/job_log.html">job_log</a></span>(job_id)</a></code></pre></div>
+</div>
+<div id="interactive-job-monitor" class="section level3">
+<h3 class="hasAnchor">
+<a href="#interactive-job-monitor" class="anchor"></a>Interactive job monitor</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="reference/monitor.html">monitor</a></span>()</a></code></pre></div>
+<p>The job summary table:</p>
+<p><img width="907" alt="monitor" src="https://user-images.githubusercontent.com/449218/71278574-40d4bf00-2358-11ea-9849-339aeb324601.png"></p>
+<p>Job log:</p>
+<p><img width="905" alt="job_log" src="https://user-images.githubusercontent.com/449218/71278573-403c2880-2358-11ea-8c82-c99677c0ebb0.png"></p>
+<p>Job dependency tree:</p>
+<p><img width="895" alt="dependency_tree" src="https://user-images.githubusercontent.com/449218/71278571-403c2880-2358-11ea-8e05-69c064148b2d.png"></p>
+</div>
+<div id="license" class="section level3">
+<h3 class="hasAnchor">
+<a href="#license" class="anchor"></a>License</h3>
+<p>MIT @ Zuguang Gu</p>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
