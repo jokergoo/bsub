@@ -70,6 +70,10 @@ bjobs_done
 bjobs_exit
 ```
 
+An example of the job queries is as follows:
+
+![image](https://user-images.githubusercontent.com/449218/71292253-2577ad00-2374-11ea-9402-855e7f01652c.png)
+
 View job log: 
 
 ```r
