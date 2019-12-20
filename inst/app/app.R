@@ -118,6 +118,8 @@ server <- function(input, output, session) {
         job_status = df$STAT[df$JOBID == job_name_selected]
 	    message(qq("[@{Sys.time()}] clicked job name @{input$select_link}"))
 
+        removeUI("#job_log")
+
 	    output$job_log = renderText({
 	        showNotification("Fetching job log...", duration = 5)
 	        message(qq("[@{Sys.time()}] Fetching job log for @{job_name_selected} <@{job_name}> @{job_status}"))
