@@ -198,14 +198,14 @@ ssh connection. Thus, some environment variables should be manually set.</p>
     echo $LSF_SERVERDIR  </pre>
 
 <p>The time strings by LSF <code>bjobs</code> command might be different for different configurations. The **bsub**
-package needs to convert the time strings to <code><a href='https://rdrr.io/r/base/DateTimeClasses.html'>POSIXct</a></code> objects for calculating the time difference. Thus, if
+package needs to convert the time strings to <code><a href='https://rdrr.io/r/base/DateTimeClasses.html'>POSIXlt</a></code> objects for calculating the time difference. Thus, if
 the default time string parsing fails, users need to provide a user-defined function and set with <code>parse_time</code>
-option in <code>bsub_opt</code>. The function accepts a vector of time strings and returns a <code><a href='https://rdrr.io/r/base/DateTimeClasses.html'>POSIXct</a></code> object. For example,
+option in <code>bsub_opt</code>. The function accepts a vector of time strings and returns a <code><a href='https://rdrr.io/r/base/DateTimeClasses.html'>POSIXlt</a></code> object. For example,
 if the time string returned from <code>bjobs</code> command is in a form of <code>Dec 1 18:00:00 2019</code>, the parsing function
 can be defined as:</p>
 <p></p><pre>
     bsub_opt$parse_time = function(x) {
-        as.POSIXct(x, format = "<!-- %b %d %H:%M:%S %Y") -->
+        as.POSIXlt(x, format = "<!-- %b %d %H:%M:%S %Y") -->
     }  </pre>
 
 

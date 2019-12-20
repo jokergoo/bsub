@@ -18,6 +18,7 @@ Load the library:
 
 ```{r, message = FALSE}
 library(bsub)
+library(GetoptLong)
 ```
 
 **For DFKZ ODCF users: The _bsub_ package works on the submission nodes, the computing nodes and the Rstudio node.**
@@ -461,7 +462,7 @@ Filtering on the job name is controlled by `filter` argument.
 
 ```{r}
 for(i in 1:4) {
-    bsub_chunk(name = qq("example_@{i}"),
+    bsub_chunk(name = paste0("example_", i),
     { 
         Sys.sleep(5)
     })
