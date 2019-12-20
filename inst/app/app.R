@@ -5,7 +5,6 @@ suppressPackageStartupMessages(library(GetoptLong))
 
 ui = fluidPage(
     tags$style("body {
-        font-size:1.2em;
         width:1200px;
         margin: auto;
     }"),
@@ -60,8 +59,8 @@ server <- function(input, output, session) {
 		df2 = df[, c("JOBID", "STAT", "JOB_NAME", "SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
 
 		df2$STAT = factor(df2$STAT)
-        units(df2$TIME_PASSED) = "secs"; df2$TIME_PASSED = as.numeric(df2$TIME_PASSED)
-        units(df2$TIME_LEFT) = "secs"; df2$TIME_LEFT = as.numeric(df2$TIME_LEFT)
+        units(df2$TIME_PASSED) = "secs"; df2$TIME_PASSED = as.integer(as.numeric(df2$TIME_PASSED))
+        units(df2$TIME_LEFT) = "secs"; df2$TIME_LEFT = as.integer(as.numeric(df2$TIME_LEFT))
         df2$MAX_MEM = bsub:::convert_to_byte(df2$MAX_MEM)
         df2$MEM = bsub:::convert_to_byte(df2$MEM)
 

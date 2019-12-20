@@ -466,14 +466,35 @@ There are some helper functions which only list running/pending/done/failed jobs
   of jobs can also be sent at the same time that last 10 lines of each job are printed.
 - `check_dump_files()` searches the dump files (`core.xxx` by LSF cluster or `.RDataTmpxxx` by R).
 - `ssh_connect()` establishes the SSH connection to the submission node if it is lost.
-- `monitor()` opens a browser-based interactive job monitor.
-
 
 ## Global Parameters
 
 ```{r}
 bsub_opt
 ```
+
+## Interactive job monitor
+
+Simply running `monitor()` opens a shiny app where you can query and manage jobs. 
+
+```r
+monitor()
+```
+
+Following are examples of the job monitor.
+
+The job summary table:
+
+<p><img width="907" alt="monitor" src="https://user-images.githubusercontent.com/449218/71278574-40d4bf00-2358-11ea-9849-339aeb324601.png"></p>
+
+Job log:
+
+<p><img width="905" alt="job_log" src="https://user-images.githubusercontent.com/449218/71278573-403c2880-2358-11ea-8c82-c99677c0ebb0.png"></p>
+
+Job dependency tree:
+
+<p><img width="895" alt="dependency_tree" src="https://user-images.githubusercontent.com/449218/71278571-403c2880-2358-11ea-8e05-69c064148b2d.png"></p>
+
 
 ## Session Info
 
