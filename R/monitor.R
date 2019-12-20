@@ -17,7 +17,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
         tb = bjobs(print = FALSE)
     
         if(is.null(tb)) {
-            txt = ("No running job\n")
+            txt = ("No running job")
             if(print) cat(txt, sep = "\n")
             return(invisible(txt))
         }
@@ -48,6 +48,14 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
     # if the job with job_id is not the newest one with the same job name
     job_name = tb$JOB_NAME[tb$JOBID == job_id]
     job_wd = tb$EXEC_CWD[tb$JOBID == job_id]  
+    job_queue = tb$QUEUE[tb$JOBID == job_id]  
+
+    if(job_queue == "interactive") {
+        txt = qq("Job @{job_id} is an interactive job and has no log.")
+        if(print) cat(txt, sep = "\n")
+        return(invisible(txt))
+    }
+
     tb_subset = tb[tb$JOB_NAME == job_name & tb$EXEC_CWD == job_wd, , drop = FALSE]
     nrr = nrow(tb_subset)
     if(nrr > 1) {
@@ -71,7 +79,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
     output_file = gsub("^\\S+\\s+", "", ln)
 
     if(status == "MISSING") {
-        txt = qq("Cannot find output file for job (@{job_id}.")
+        txt = qq("Cannot find output file for job @{job_id}.")
         if(print) cat(txt, sep = "\n")
         return(invisible(txt))
     } else if(status == "PEND") {
@@ -226,7 +234,7 @@ convert_to_POSIXlt = function(x) {
 bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE) {
 
 
-    cmd = "bjobs -a -o 'jobid stat job_name submit_time start_time finish_time slots mem max_mem dependency exec_cwd delimiter=\",\"' 2>&1"
+    cmd = "bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time slots mem max_mem dependency exec_cwd delimiter=\",\"' 2>&1"
     ln = run_cmd(cmd, print = FALSE)
     
     # job done or exit
@@ -305,6 +313,12 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 }
 
 class(bjobs) = "bjobs"
+
+convert_to_byte = function(x) {
+    num = as.numeric(gsub("\\D", "", x))
+    v = ifelse(grepl("K", x), num*1024, ifelse(grepl("M", x), num*1024^2, ifelse(grepl("G", x), num*1024^3, x)))
+    suppressWarnings(as.numeric(v))
+}
 
 format_summary_table = function(df) {
     df2 = df[, c("JOBID", "STAT", "JOB_NAME", "RECENT","SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
@@ -750,20 +764,20 @@ get_dependency = function(job_tb = NULL) {
 #
 plot_dependency = function(job_id, job_tb = NULL) {
 
-    job_id = as.character(job_id, job_tb = NULL)
+    job_id = as.character(job_id)
 
-    job_dep = get_dependency()
+    job_dep = get_dependency(job_tb = NULL)
 
     if(is.null(job_dep)) {
         # no dependency
-        plot(NULL, xlim = c(0, 1), ylim = c(0, 1), type = "n")
+        plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE, ann = FALSE)
         text(0.5, 0.5, qq("no dependency for job @{job_id}"))
         return(invisible(NULL))
     }
 
     if(!job_id %in% names(job_dep$id2name)) {
         # no dependency
-        plot(NULL, xlim = c(0, 1), ylim = c(0, 1), type = "n")
+        plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE, ann = FALSE)
         text(0.5, 0.5, qq("no dependency for job @{job_id}"))
         return(invisible(NULL))
     }
@@ -778,7 +792,9 @@ plot_dependency = function(job_id, job_tb = NULL) {
 
     g = igraph::induced_subgraph(g, nodes)
 
-    node_label = job_dep$id2name[igraph::V(g)$name]
+    node_id = igraph::V(g)$name
+    n_node = length(node_id)
+    node_label = job_dep$id2name[node_id]
     node_label[is.na(node_label)] = "unknown"
 
     l = nchar(node_label) > 50
@@ -793,33 +809,41 @@ plot_dependency = function(job_id, job_tb = NULL) {
     node_stat = job_dep$id2stat[igraph::V(g)$name]
     node_stat[is.na(node_stat)] = "unknown"
 
-    igraph::V(g)$label = node_label
     stat_col = c("blue", "purple", "black", "red", "grey")
     names(stat_col) = c("RUN", "PEND", "DONE", "EXIT", "unknown") 
-    igraph::V(g)$frame.color = stat_col[node_stat]
-    igraph::V(g)$shape = "rectangle"
-    igraph::V(g)$color = "white"
+    node_color = stat_col[node_stat]
+    names(node_color) = node_id
+    node_fill = rgb(t(col2rgb(node_color)/255), alpha = 0.2)
+    names(node_fill) = node_id
 
-    igraph::V(g)$size = 5*label_width - 5
-    igraph::V(g)$size2 = 20
-    igraph::V(g)$label.family = "sans"
-    igraph::V(g)$label.color = "black"
-    igraph::V(g)$label.color = "black"
-    igraph::V(g)$label.font = ifelse(igraph::V(g)$name == job_id, 4, 1)
+    node_width = (5*label_width - 5)/5/5
+    node_height = rep(1, n_node)
 
-    igraph::E(g)$color = "black"
+    node_shape = rep("rectangle", n_node)
+
+    node_lwd = ifelse(node_id == job_id, 4, 1)
+
+    requireNamespace("graph")
+    g2 = new("graphAM", as.matrix(igraph::get.adjacency(g)), edgemode = "directed")
+
+    names(node_width) = node_id
+    names(node_height) = node_id
+    names(node_label) = node_id
+    names(node_shape) = node_id
+    names(node_lwd) = node_id
+    nAttr = list(width = node_width, height = node_height, label = node_label, shape = node_shape)
+    x = Rgraphviz::layoutGraph(g2, nodeAttrs = nAttr)
+    graph::nodeRenderInfo(x) = list(color = node_color, fill = node_fill, cex = 1, lwd = node_lwd)
     
-    layout = igraph::layout_as_tree(g, flip.y=FALSE)
     omar = par("mar")
     on.exit(par(mar = omar))
 
-    par(mar = c(3, 0, 0, 0))
-    if(all(layout[, 1] == 0)) {
-        igraph::plot.igraph(g, layout = layout, xlim = c(-2, 0))
-    } else {
-        igraph::plot.igraph(g, layout = layout)
-    }
+    par(mar = c(6, 0, 0, 0), xpd = NA)
+    Rgraphviz::renderGraph(x)
 
-    legend("bottom", pch = 0, col = stat_col, legend = names(stat_col), 
+    usr = par("usr")
+    legend(x = mean(usr[c(1, 2)]), y = usr[3] - (usr[4] - usr[3])* 0.1, xjust = 0.5, yjust = 1,
+        pch = 0, col = stat_col, legend = names(stat_col), 
         pt.cex = 2, bty = "n", ncol = length(stat_col))
 }
+

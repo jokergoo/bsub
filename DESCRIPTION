@@ -6,8 +6,22 @@ Date: 2019-12-16
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.0.0)
-Imports: GlobalOptions (>= 0.1.1), GetoptLong, digest, utils, stats, clisymbols
-Suggests: knitr, ssh, DT, shiny (>= 1.0.0), igraph
+Imports: GlobalOptions (>= 0.1.1), 
+         GetoptLong, 
+         digest, 
+         utils, 
+         stats, 
+         clisymbols, 
+         methods, 
+         grDevices, 
+         graphics
+Suggests: knitr, 
+          ssh, 
+          DT, 
+          shiny (>= 1.0.0), 
+          igraph, 
+          graph, 
+          Rgraphviz
 Description: Send R code/R scripts/shell commands to LSF cluster without leaving R.
 VignetteBuilder: knitr
 URL: https://github.com/jokergoo/bsub

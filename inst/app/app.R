@@ -9,11 +9,14 @@ ui = fluidPage(
         width:1200px;
         margin: auto;
     }"),
+    tags$script(HTML(
+        paste(readLines("format.js"), collapse = "\n")
+    )),
     titlePanel("LSF Job Monitor"),
     div(textOutput("info"), style = "background-color:#EEFFEE; padding:5px 5px; margin: 15px 0px 15px 0px; border: 1px solid green;"),
     p(actionButton("reload", "Manually reload"), "The monitor automatically reloads every 5 minutes."),
     hr(style = "border-top: 1px solid black;"),
-    div(id = "table_loading", p("Table is loading...", style = "font-size:20px")),
+    div(id = "table_loading", p("Sumamry table is loading...", style = "font-size:20px")),
     DT::dataTableOutput("mytable"),
     actionButton("kill", "Kill selected jobs"),
     # actionButton("unselect", "Unselect all jobs", onclick="$('tr.selected').removeClass('selected')"),
@@ -57,10 +60,10 @@ server <- function(input, output, session) {
 		df2 = df[, c("JOBID", "STAT", "JOB_NAME", "SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
 
 		df2$STAT = factor(df2$STAT)
-        df2$TIME_PASSED = bsub:::format_difftime(df2$TIME_PASSED)
-        df2$TIME_LEFT = bsub:::format_difftime(df2$TIME_LEFT)
-        df2$MAX_MEM = bsub:::format_mem(df2$MAX_MEM)
-        df2$MEM = bsub:::format_mem(df2$MEM)
+        units(df2$TIME_PASSED) = "secs"; df2$TIME_PASSED = as.numeric(df2$TIME_PASSED)
+        units(df2$TIME_LEFT) = "secs"; df2$TIME_LEFT = as.numeric(df2$TIME_LEFT)
+        df2$MAX_MEM = bsub:::convert_to_byte(df2$MAX_MEM)
+        df2$MEM = bsub:::convert_to_byte(df2$MEM)
 
         l = nchar(df2$JOB_NAME) > 50
         if(any(l)) {
@@ -75,35 +78,43 @@ server <- function(input, output, session) {
                 onclick = "Shiny.onInputChange('select_link', 0);Shiny.onInputChange('select_link', this.id); var class_attr=this.parentElement.parentElement.getAttribute('class'); class_attr = /selected/.test(class_attr) ? class_attr.replace(/ selected/, '') : class_attr + ' selected'; this.parentElement.parentElement.setAttribute('class', class_attr)"))
         }
 
+        df2$dep = ""
+
         ## add the dependency table
         if(any(df2$JOBID %in% names(job_dep$id2name))) {
             for(i in which(df2$JOBID %in% names(job_dep$id2name))) {
-                df2$JOB_NAME[i] = paste0(df2$JOB_NAME[i], " ",
-                    as.character(actionLink(paste0("job_dep_id_", df2$JOBID[i]), "Tree", 
-                        style = "border: 1px solid #009900; background-color:#009900; color: white; padding: 0px 4px;",
+                df2$dep[i] = (as.character(actionLink(paste0("job_dep_id_", df2$JOBID[i]), "Tree", 
+                        style = "border: 1px solid #009900; background-color:#009900; color: white;",
                         title = "Click to see the dependency tree", "data-toggle" = "tooltip",
                         onclick = "Shiny.onInputChange('select_dep', 0);Shiny.onInputChange('select_dep', this.id); var class_attr=this.parentElement.parentElement.getAttribute('class'); class_attr = /selected/.test(class_attr) ? class_attr.replace(/ selected/, '') : class_attr + ' selected'; this.parentElement.parentElement.setAttribute('class', class_attr)"))
                 )
             }
         }
-        
-		colnames(df2) = c("Job ID", "Status", "Job name", "Submit time", "Time passed", "Time left", "Cores", "Memory", "Max memory")
-		
-        dt = datatable(df2, escape = FALSE, rownames = FALSE, filter = 'top', 
+
+        col_index_add = 0
+        if(all(df2$dep == "")) {
+            df2 = cbind(df2[, c(1, length(df2)), drop = FALSE], df2[, -c(1, length(df2)), drop = FALSE])
+            colnames(df2) = c("Job ID", "Status", "Job name", "Submit time", "Time passed", "Time left", "Cores", "Memory", "Max memory")
+        } else {
+            col_index_add = 1
+            df2 = cbind(df2[, c(1, length(df2)), drop = FALSE], df2[, -c(1, length(df2)), drop = FALSE])
+            colnames(df2) = c("Job ID", "", "Status", "Job name", "Submit time", "Time passed", "Time left", "Cores", "Memory", "Max memory")
+		}
+        dt = datatable(df2, escape = FALSE, rownames = FALSE, filter = "top",
             options = list(
-                pageLength = 10, 
-                columnDefs = list(
-                    list(width = '500x', targets = 3)
-                )
-            ), callback = JS("table.on( 'draw', function () {
+                pageLength = 10
+            ), callback = JS(qq("table.on( 'draw', function () {
                                 $('#table_loading').hide();
                                 $('[data-toggle=\"tooltip\"]').tooltip(); 
-                            } );")
+                                $('#mytable th').eq(@{2+col_index_add}).css('width', '300px');
+                            } );"))
         )
 
         dt %>% 
             formatStyle(columns = "Status", color = styleEqual(c("RUN", "PEND", "DONE", "EXIT"), c("blue", "purple", "black", "red"))) %>%
-            formatDate(columns = "Submit time", method = "toLocaleString")
+            formatDate(columns = "Submit time", method = "toLocaleString") %>%
+            bsub:::formatTimeDiff(columns = c("Time passed", "Time left")) %>%
+            bsub:::formatFileSize(columns = c("Memory", "Max memory"))
 
 	})
 	
@@ -124,8 +135,6 @@ server <- function(input, output, session) {
         job_name = df$JOB_NAME[df$JOBID == job_name_selected]
         job_status = df$STAT[df$JOBID == job_name_selected]
 	    message(qq("[@{Sys.time()}] clicked job name @{input$select_link}"))
-
-        removeUI("#job_log")
 
 	    output$job_log = renderText({
 	        showNotification("Fetching job log...", duration = 5)
