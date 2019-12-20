@@ -20,7 +20,7 @@ Load the library:
 library(bsub)
 ```
 
-**The _bsub_ package works on the submission nodes, the computing nodes and the Rstudio node.**
+**For DFKZ ODCF users: The _bsub_ package works on the submission nodes, the computing nodes and the Rstudio node.**
 
 **If the current node is not the submission node, a connection via ssh is automatically established.
 You might be asked to enter password for the connection.**
@@ -43,7 +43,7 @@ In following examples, we use `Sys.sleep(5)` to simulate a chunk of code which r
 ```{r}
 bsub_chunk(
 {
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -56,7 +56,7 @@ Set job name, memory, running time and number of cores:
 ```{r}
 bsub_chunk(name = "example", memory = 10, hour = 10, core = 4, 
 {
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -70,7 +70,7 @@ The R version can be specified by `R_version` argument.
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", R_version = "3.6.0",
 {
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -80,7 +80,7 @@ bsub_chunk(name = "example", R_version = "3.6.0",
 bsub_opt$R_version = "3.6.0"
 bsub_chunk(name = "example", 
 {
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -90,7 +90,7 @@ variables there. The default is:
 
 ```{r, eval = FALSE}
 function(version) {
-	qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript")
+    qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript")
 }
 ```
 
@@ -110,7 +110,7 @@ in the bash script that is used for job submission. E.g. to load R 3.6.0, we can
 bsub_opt$call_Rscript = function(version) qq("module load R/@{version}; Rscript")
 bsub_chunk(name = "example", sh_head = c("module load gcc/7.2.0", "module load java/1.8.0_131"),
 {
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -121,7 +121,7 @@ bsub_opt$call_Rscript = function(version) qq("module load R/@{version}; Rscript"
 bsub_opt$sh_head = c("module load gcc/7.2.0", "module load java/1.8.0_131")
 bsub_chunk(name = "example",
 {
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -130,8 +130,8 @@ One usage of this functionality is to load `pandoc` module if the `rmarkdown` is
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", sh_head = "module load pandoc/2.2.1",
 {
-	library(rmarkdown)
-	render(...)
+    library(rmarkdown)
+    render(...)
 })
 ```
 
@@ -142,9 +142,9 @@ The packages that are needed can be directly added in the code chunk:
 ```{r, eval = FALSE}
 bsub_chunk(name = "example",
 {
-	library(package1)
-	library(package2)
-	Sys.sleep(5)
+    library(package1)
+    library(package2)
+    Sys.sleep(5)
 })
 ```
 
@@ -153,7 +153,7 @@ Or assign by `packages` argument:
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", packages = c("package1", "package2"),
 {
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -163,7 +163,7 @@ Or set it as a global parameter:
 bsub_opt$packages = c("package1", "package2")
 bsub_chunk(name = "example",
 {
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -176,8 +176,8 @@ inside the code chunk can by specified by `variables` argument:
 foo = 1
 bsub_chunk(name = "example", variables = "foo",
 { 
-	bar = foo
-	Sys.sleep(5)
+    bar = foo
+    Sys.sleep(5)
 })
 ```
 
@@ -193,8 +193,8 @@ save.image(file = "/path/foo.RData")
 # save(var1, var2, ..., file = "...")
 bsub_chunk(name = "example", image = "/path/foo.RData",
 { 
-	...
-	Sys.sleep(5)
+    ...
+    Sys.sleep(5)
 })
 ```
 
@@ -205,8 +205,8 @@ save.image(file = "/path/foo.RData")
 bsub_opt$image = "/path/foo.RData"
 bsub_chunk(name = "example",
 { 
-	...
-	Sys.sleep(5)
+    ...
+    Sys.sleep(5)
 })
 ```
 
@@ -223,7 +223,7 @@ If the code chunk replies on the working directory, it can be specified by `wd` 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", wd = "/path"
 { 
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -233,7 +233,7 @@ Or set it as a global parameter:
 bsub_opt$wd = "/path"
 bsub_chunk(name = "example",
 { 
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -250,8 +250,8 @@ there should be no job with the same name submitted before retrieving the variab
 ```{r}
 bsub_chunk(name = "example2", save_var = TRUE,
 {
-	Sys.sleep(10)
-	1+1
+    Sys.sleep(10)
+    1+1
 })
 retrieve_var("example2")
 ```
@@ -262,10 +262,10 @@ is to save the variable into permanent file in the code chunk, E.g.:
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", 
 {
-	...
-	save(...)
-	# or
-	saveRDS(...)
+    ...
+    save(...)
+    # or
+    saveRDS(...)
 })
 ```
 
@@ -284,7 +284,7 @@ Sys.sleep(10)
 ```{r}
 bsub_chunk(name = "example", enforce = FALSE,
 { 
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -294,7 +294,7 @@ bsub_chunk(name = "example", enforce = FALSE,
 bsub_opt$enforce = FALSE
 bsub_chunk(name = "example",
 { 
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -306,11 +306,11 @@ The value for `dependency` can be a vector of job IDs.
 ```{r, eval = FALSE}
 job1 = bsub_chunk(name = "example1",
 { 
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 bsub_chunk(name = "example2", dependency = job1,
 { 
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -322,7 +322,7 @@ and sh files. `output_dir` is used for the flag files and the output files from 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", temp_dir = ..., output_dir = ...,
 { 
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -333,7 +333,7 @@ bsub_opt$temp_dir = ...
 bsub_opt$output_dir = ...
 bsub_chunk(name = "example",
 { 
-	Sys.sleep(5)
+    Sys.sleep(5)
 })
 ```
 
@@ -348,8 +348,8 @@ and `end` arguments. (Note this functionality has not been tested yet.)
 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example",
-	script = "/path/foo.R",
-	start = 10, end = 20, ...)
+    script = "/path/foo.R",
+    start = 10, end = 20, ...)
 ```
 
 Assume you are editing `foo.R` very offen and the line numbers that you want
@@ -369,9 +369,9 @@ Then you can specify `start` and `end` by regular expressions to match them:
 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example",
-	script = "/path/foo.R",
-	start = "^# BSUB_START", 
-	end = "^# BSUB_END", ...)
+    script = "/path/foo.R",
+    start = "^# BSUB_START", 
+    end = "^# BSUB_END", ...)
 ```
 
 ### Run jobs locally
@@ -381,7 +381,7 @@ Setting `local = TRUE` directly runs the code chunk in the same R session.
 ```{r}
 bsub_chunk(name = "example", local = TRUE,
 { 
-	cat("blablabla...\n")
+    cat("blablabla...\n")
 })
 ```
 
@@ -399,11 +399,34 @@ If the R script needs command-line arguments, they can be specified by `argv`.
 bsub_script("/path/foo.R", argv = "--a 1 --b 3", ...)
 ```
 
+When you have a list of jobs with the same argument names but with different
+argument values, you can construct `argv` by `glue::glue()` or
+`GetoptLong::qq()` to construct the `argv` string:
+
+```{r, eval = FALSE}
+library(GetoptLong)
+for(a in 1:10) {
+    for(b in 11:20) {
+        bsub_script("/path/foo.R", argv = qq("-a @{a} --b @{b}"), ...)
+    }
+}
+```
+
 The command-line arguments can also specified as arguments of `bsub_script()`,
 but with `.` prefix.
 
 ```{r, eval = FALSE}
 bsub_script("/path/foo.R", .a = 1, .b = 3, ...)
+```
+
+Then for the same example previously for submitting a list of jobs, it can be written as:
+
+```{r, eval = FALSE}
+for(a in 1:10) {
+    for(b in 11:20) {
+        bsub_script("/path/foo.R", .a = a, .b = b, ...)
+    }
+}
 ```
 
 The R scripts should be used with the absolute paths.
@@ -419,7 +442,16 @@ bsub_cmd("samtools sort ...", name = ..., memory = ..., core = ..., ...)
 bsub_cmd(c("cmd1", "cmd2", ...), name = ..., memory = ..., core = ..., ...)
 ```
 
-The binary and the arguments should all be set in the first argument of `bsub_cmd()`.
+The binary and the arguments should all be set in the first argument of
+`bsub_cmd()`. Remember to use `glue::glue()` or `GetoptLong::qq()` to
+construct the commands if they contain variable arguments, e.g:
+
+```{r, eval = FALSE}
+for(bam in bam_file_list) {
+    bsub_cmd(qq("samtools sort @{bam} ... "), name = qq("sort_@{basename(bam)}"), 
+        memory = ..., core = ..., ...)
+}
+```
 
 ## Job Summary
 
@@ -428,12 +460,11 @@ and `PEND`) is controlled by `status` argument. Number of most recent jobs is co
 Filtering on the job name is controlled by `filter` argument.
 
 ```{r}
-library(GetoptLong)
 for(i in 1:4) {
-	bsub_chunk(name = qq("example_@{i}"),
-	{ 
-		Sys.sleep(5)
-	})
+    bsub_chunk(name = qq("example_@{i}"),
+    { 
+        Sys.sleep(5)
+    })
 }
 bjobs
 ```
