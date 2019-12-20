@@ -4,20 +4,16 @@ suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(GetoptLong))
 
 ui = fluidPage(
-    tags$script(HTML("
-        $(document).ready(function() {
-          $('[data-toggle=\"tooltip\"]').tooltip();   
-        });"
-    )),
     tags$style("body {
         font-size:1.2em;
-        width:1000px;
+        width:1200px;
         margin: auto;
     }"),
     titlePanel("LSF Job Monitor"),
     div(textOutput("info"), style = "background-color:#EEFFEE; padding:5px 5px; margin: 15px 0px 15px 0px; border: 1px solid green;"),
     p(actionButton("reload", "Manually reload"), "The monitor automatically reloads every 5 minutes."),
     hr(style = "border-top: 1px solid black;"),
+    div(id = "table_loading", p("Table is loading...", style = "font-size:20px")),
     DT::dataTableOutput("mytable"),
     actionButton("kill", "Kill selected jobs"),
     # actionButton("unselect", "Unselect all jobs", onclick="$('tr.selected').removeClass('selected')"),
@@ -47,7 +43,7 @@ server <- function(input, output, session) {
         message(qq("[@{Sys.time()}] Manually reloading the app."))
         session$reload()  
     })
-    
+
 	output$mytable = DT::renderDataTable({
 	    
 	    autoInvalidate()
@@ -58,7 +54,7 @@ server <- function(input, output, session) {
         job_dep = get_dependency(df)
         
 		showNotification("Formatting job summary table...", duration = 5, type = "message")
-		df2 = df[, c("JOBID", "STAT", "JOB_NAME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
+		df2 = df[, c("JOBID", "STAT", "JOB_NAME", "SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
 
 		df2$STAT = factor(df2$STAT)
         df2$TIME_PASSED = bsub:::format_difftime(df2$TIME_PASSED)
@@ -82,21 +78,32 @@ server <- function(input, output, session) {
         ## add the dependency table
         if(any(df2$JOBID %in% names(job_dep$id2name))) {
             for(i in which(df2$JOBID %in% names(job_dep$id2name))) {
-                df2$JOBID[i] = as.character(actionLink(paste0("job_dep_id_", df2$JOBID[i]), df2$JOBID[i], 
-                    title = "Click to see the dependency tree", "data-toggle" = "tooltip",
-                    onclick = "Shiny.onInputChange('select_dep', 0);Shiny.onInputChange('select_dep', this.id); var class_attr=this.parentElement.parentElement.getAttribute('class'); class_attr = /selected/.test(class_attr) ? class_attr.replace(/ selected/, '') : class_attr + ' selected'; this.parentElement.parentElement.setAttribute('class', class_attr)"))
+                df2$JOB_NAME[i] = paste0(df2$JOB_NAME[i], " ",
+                    as.character(actionLink(paste0("job_dep_id_", df2$JOBID[i]), "Tree", 
+                        style = "border: 1px solid #009900; background-color:#009900; color: white; padding: 0px 4px;",
+                        title = "Click to see the dependency tree", "data-toggle" = "tooltip",
+                        onclick = "Shiny.onInputChange('select_dep', 0);Shiny.onInputChange('select_dep', this.id); var class_attr=this.parentElement.parentElement.getAttribute('class'); class_attr = /selected/.test(class_attr) ? class_attr.replace(/ selected/, '') : class_attr + ' selected'; this.parentElement.parentElement.setAttribute('class', class_attr)"))
+                )
             }
         }
         
-		colnames(df2) = c("Job ID", "Status", "Job name", "Time passed", "Time left", "Cores", "Memory", "Max memory")
+		colnames(df2) = c("Job ID", "Status", "Job name", "Submit time", "Time passed", "Time left", "Cores", "Memory", "Max memory")
 		
         dt = datatable(df2, escape = FALSE, rownames = FALSE, filter = 'top', 
             options = list(
-                pageLength = 10, autoWidth = TRUE
-            )
+                pageLength = 10, 
+                columnDefs = list(
+                    list(width = '500x', targets = 3)
+                )
+            ), callback = JS("table.on( 'draw', function () {
+                                $('#table_loading').hide();
+                                $('[data-toggle=\"tooltip\"]').tooltip(); 
+                            } );")
         )
 
-        formatStyle(dt, "Status", color = styleEqual(c("RUN", "PEND", "DONE", "EXIT"), c("blue", "purple", "black", "red")))
+        dt %>% 
+            formatStyle(columns = "Status", color = styleEqual(c("RUN", "PEND", "DONE", "EXIT"), c("blue", "purple", "black", "red"))) %>%
+            formatDate(columns = "Submit time", method = "toLocaleString")
 
 	})
 	
@@ -127,12 +134,6 @@ server <- function(input, output, session) {
 	        paste(log, collapse = "\n")
 	    })
 
-        output$dependency_plot = renderPlot({
-            showNotification("Generating job dependency tree...", duration = 5)
-            message(qq("[@{Sys.time()}] Generating job dependency tree @{job_name_selected} <@{job_name}> @{job_status}"))
-            plot_dependency(job_name_selected)
-        })
-	    
 	    showModal(modalDialog(
 	        title = qq("Job log (@{job_name_selected} <@{job_name}>)"),
 	        verbatimTextOutput("job_log"),
@@ -167,10 +168,12 @@ server <- function(input, output, session) {
     })
 
     observeEvent(input$close_job_log, {
+        output$job_log = NULL
         removeModal()
     })
 
     observeEvent(input$close_job_dep, {
+        output$dependency_plot = NULL
         removeModal()
     })
 

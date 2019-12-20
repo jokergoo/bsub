@@ -6,6 +6,8 @@ config_odcf = function(user = NULL) {
                            "export LSF_ENVDIR=/opt/lsf/conf",
                            "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
 	if(!is.null(user)) bsub_opt$user = user
+
+	qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}.\n")
 	invisible(NULL)
 }
 
@@ -31,6 +33,7 @@ config_sanger = function(user = NULL, group = NULL) {
 			qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -G @{group} -o '@{output}'")
 		}
 	}
+	qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}.\n")
 	invisible(NULL)
 }
 

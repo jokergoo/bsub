@@ -809,7 +809,7 @@ plot_dependency = function(job_id, job_tb = NULL) {
 
     igraph::E(g)$color = "black"
     
-    layout = igraph::layout_as_tree(g)
+    layout = igraph::layout_as_tree(g, flip.y=FALSE)
     omar = par("mar")
     on.exit(par(mar = omar))
 
