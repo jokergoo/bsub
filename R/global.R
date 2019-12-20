@@ -145,7 +145,7 @@ bsub_opt = set_opt(
         .value = Sys.info()['user']
     ),
     group = list(
-        .value = ""
+        .value = NULL
     ),
     ssh_envir = list(
     	.value = c("source /etc/profile")
