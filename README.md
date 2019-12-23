@@ -16,12 +16,8 @@ There are three vignettes:
 
 - [Send R code/R scripts/shell commands to LSF cluster](https://jokergoo.github.io/bsub/articles/bsub_intro.html) 
 - [Use bsub package on the DKFZ ODCF cluster](https://jokergoo.github.io/bsub/articles/dkfz_odcf.html)
-<<<<<<< HEAD
-- [Configure bsub package for other LSF institutes](https://jokergoo.github.io/bsub/articles/other_institute.html)
-=======
 - [Configure bsub package for other LSF institutes](https://jokergoo.github.io/bsub/articles/other_insititute.html)
->>>>>>> dc805a5fead86c0ab3d4592a310bb2b3feefdda5
-
+- [What if you need to establish two ssh connections to reach the submission node](https://jokergoo.github.io/bsub/articles/two_ssh.html)
 
 ### Submit jobs
 
