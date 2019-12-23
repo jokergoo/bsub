@@ -26,12 +26,14 @@
 # -``local`` Run job locally (not submitting to the LSF cluster)?
 # -``call_Rscript`` How to call ``Rscript`` by specifying an R version number.
 # -``submission_node`` A list of node names for submitting jobs.
+# -``login_node`` This value basically is the same as ``submission_node`` unless the login nodes are different from submission nodes.
 # -``sh_head`` Commands that are written as head of the sh script.
 # -``user`` Username on the submission node.
 # -``group`` The user group
 # -``ssh_envir`` The commands for setting bash environment for successfully running bjobs, bsub, ...
 # -``bsub_template`` Template for constructing ``bsub`` command.
 # -``parse_time`` A function that parses time string from the LSF ``bjobs`` command to a `POSIXct` object.
+# -``verbose`` Whether to print more messages.
 #
 # ``ssh_envir`` should be properly set so that LSF binaries such as ``bsub`` or ``bjobs`` can be properly found.
 # There are some environment variables initialized when logging in the bash terminal while they are not initialized with the
@@ -156,8 +158,10 @@ bsub_opt = set_opt(
         .class = "function"
     ),
     submission_node = list(
-        .value = NULL,
-        .class = "character"
+        .value = NULL
+    ),
+    login_node = list(
+        .value = function() .v$submission_node
     ),
     ssh_session = list(
         .value = NULL,
@@ -195,6 +199,10 @@ bsub_opt = set_opt(
     parse_time = list(
         .value = NULL,
         .class = "function"
+    ),
+    verbose = list(
+        .value = FALSE,
+        .class = "logical"
     )
 )
 

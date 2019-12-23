@@ -8,10 +8,19 @@ ssh_connect = function() {
 
 	if(!is.null(bsub_opt$ssh_session)) {
 		message("ssh is already connected.")
+		return(invisible(NULL))
 	}
 
-	if(Sys.info()["nodename"] %in% bsub_opt$submission_node) {
-		message("already on submission node. No need to reconnect.")
+	submission_node = bsub_opt$submission_node
+	login_node = bsub_opt$login_node
+	if(length(login_node) == 0) login_node = submission_node
+
+	if(length(login_node) == 0) {
+		stop("bsub_opt$submission_node is not defined.")
+	}
+
+	if(Sys.info()["nodename"] %in% login_node) {
+		message("already on submission/login node. No need to reconnect.")
 	}
 
 	user = bsub_opt$user
@@ -20,29 +29,25 @@ ssh_connect = function() {
 		message("You need to install ssh package.")
 	}
 
-	if(length(bsub_opt$submission_node) == 0) {
-		stop("bsub_opt$submission_node is not defined.")
-	}
-
-	for(i in seq_along(bsub_opt$submission_node)) {
-		message(qq("establish ssh connection to @{user}@@{bsub_opt$submission_node[i]}"))
-		oe = try(session <- ssh::ssh_connect(paste0(user, "@", bsub_opt$submission_node[i])))
+	for(i in seq_along(login_node)) {
+		message(qq("establish ssh connection to @{user}@@{login_node[i]}"))
+		oe = try(session <- ssh::ssh_connect(paste0(user, "@", login_node[i])))
 
 		if(!inherits(oe, "try-error")) {
 			bsub_opt$ssh_session = session
 			break
 		}
 
-		message(qq("establish ssh connection to @{user}@@{bsub_opt$submission_node[i]}, 2nd try"))
-		oe = try(session <- ssh::ssh_connect(paste0(user, "@", bsub_opt$submission_node[i])))
+		message(qq("establish ssh connection to @{user}@@{login_node[i]}, 2nd try"))
+		oe = try(session <- ssh::ssh_connect(paste0(user, "@", login_node[i])))
 
 		if(!inherits(oe, "try-error")) {
 			bsub_opt$ssh_session = session
 			break
 		}
 
-		message(qq("establish ssh connection to @{user}@@{bsub_opt$submission_node[i]}, 3rd try"))
-		oe = try(session <- ssh::ssh_connect(paste0(user, "@", bsub_opt$submission_node[i])))
+		message(qq("establish ssh connection to @{user}@@{login_node[i]}, 3rd try"))
+		oe = try(session <- ssh::ssh_connect(paste0(user, "@", login_node[i])))
 
 		if(!inherits(oe, "try-error")) {
 			bsub_opt$ssh_session = session
@@ -69,6 +74,8 @@ ssh_disconnect = function() {
 ssh_exec = function(cmd) {
 
 	ssh_validate()
+
+	if(bsub_opt$verbose) cat("========== ssh commands =============", bsub_opt$ssh_envir, cmd, sep = "\n")
 
 	ln = ""
 	con = textConnection("ln", "w", local = TRUE)

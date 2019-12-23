@@ -672,6 +672,9 @@ monitor = function() {
     }
 }
 
+class(monitor) = "bjobs"
+
+
 # == title
 # Check whether there are dump files
 #

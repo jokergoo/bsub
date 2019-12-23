@@ -33,12 +33,14 @@ There are following parameters:
   \item{\code{local}}{Run job locally (not submitting to the LSF cluster)?}
   \item{\code{call_Rscript}}{How to call \code{Rscript} by specifying an R version number.}
   \item{\code{submission_node}}{A list of node names for submitting jobs.}
+  \item{\code{login_node}}{This value basically is the same as \code{submission_node} unless the login nodes are different from submission nodes.}
   \item{\code{sh_head}}{Commands that are written as head of the sh script.}
   \item{\code{user}}{Username on the submission node.}
   \item{\code{group}}{The user group}
   \item{\code{ssh_envir}}{The commands for setting bash environment for successfully running bjobs, bsub, ...}
   \item{\code{bsub_template}}{Template for constructing \code{bsub} command.}
   \item{\code{parse_time}}{A function that parses time string from the LSF \code{bjobs} command to a \code{\link{POSIXct}} object.}
+  \item{\code{verbose}}{Whether to print more messages.}
 }
 
 \code{ssh_envir} should be properly set so that LSF binaries such as \code{bsub} or \code{bjobs} can be properly found.
