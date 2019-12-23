@@ -40,7 +40,8 @@ config_sanger_farm3_head3 = function(user = NULL, group = NULL) {
 
 config_sanger = function(user = NULL, ssh_key = "~/.ssh/id_rsa") {
 	bsub_opt$call_Rscript = function(version) qq("Rscript")
-	bsub_opt$submission_node = "ssh.sanger.ac.uk"
+	bsub_opt$login_node = "ssh.sanger.ac.uk"
+	bsub_opt$submission_node = NULL
 	
 	# values for LSF_SERVERDIR and LSF_ENVDIR can be get by:
 	# echo $LSF_SERVERDIR
@@ -56,7 +57,7 @@ config_sanger = function(user = NULL, ssh_key = "~/.ssh/id_rsa") {
 		qq("alias bkill=\"ssh -i @{ssh_key} @{bsub_opt$user}@farm3-head3 '@{ssh_envir};bkill'\"")
 	)
 
-	qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}.\n")
+	qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$login_node, collapse = ', ')}.\n")
 	invisible(NULL)
 }
 
