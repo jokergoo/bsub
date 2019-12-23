@@ -100,6 +100,9 @@
     <li>
       <a href="../articles/other_insititute.html">Configure bsub package for other LSF institutes</a>
     </li>
+    <li>
+      <a href="../articles/two_ssh.html">What if you need to establish two ssh connections to reach the submission node</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -174,12 +177,14 @@
   <dt><code>local</code></dt><dd><p>Run job locally (not submitting to the LSF cluster)?</p></dd>
   <dt><code>call_Rscript</code></dt><dd><p>How to call <code>Rscript</code> by specifying an R version number.</p></dd>
   <dt><code>submission_node</code></dt><dd><p>A list of node names for submitting jobs.</p></dd>
+  <dt><code>login_node</code></dt><dd><p>This value basically is the same as <code>submission_node</code> unless the login nodes are different from submission nodes.</p></dd>
   <dt><code>sh_head</code></dt><dd><p>Commands that are written as head of the sh script.</p></dd>
   <dt><code>user</code></dt><dd><p>Username on the submission node.</p></dd>
   <dt><code>group</code></dt><dd><p>The user group</p></dd>
   <dt><code>ssh_envir</code></dt><dd><p>The commands for setting bash environment for successfully running bjobs, bsub, ...</p></dd>
   <dt><code>bsub_template</code></dt><dd><p>Template for constructing <code>bsub</code> command.</p></dd>
   <dt><code>parse_time</code></dt><dd><p>A function that parses time string from the LSF <code>bjobs</code> command to a <code><a href='https://rdrr.io/r/base/DateTimeClasses.html'>POSIXct</a></code> object.</p></dd>
+  <dt><code>verbose</code></dt><dd><p>Whether to print more messages.</p></dd>
 
 </dl>
 
@@ -223,12 +228,14 @@ can be defined as:</p>
 #&gt;            local                                    FALSE
 #&gt;     call_Rscript                  a user-defined function
 #&gt;  submission_node odcf-worker01, odcf-cn34u03s10, odcf....
+#&gt;       login_node odcf-worker01, odcf-cn34u03s10, odcf....
 #&gt;          sh_head                                       ""
 #&gt;             user                                      guz
 #&gt;            group                                     NULL
 #&gt;        ssh_envir source /etc/profile, export LSF_ENVD....
 #&gt;    bsub_template                  a user-defined function
-#&gt;       parse_time                                     NULL</div></pre>
+#&gt;       parse_time                                     NULL
+#&gt;          verbose                                    FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

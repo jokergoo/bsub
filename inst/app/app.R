@@ -5,6 +5,7 @@ suppressPackageStartupMessages(library(GetoptLong))
 
 ui = fluidPage(
     tags$style("body {
+        font-size: 1.4em;
         width:1200px;
         margin: auto;
     }"),
