@@ -1,8 +1,8 @@
 ---
-title: "Configure bsub package for other LSF institutes"
+title: "Configure bsub package for other institutes using LSF"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{3. Configure bsub package for other LSF institutes}
+  %\VignetteIndexEntry{3. Configure bsub package for other institutes using LSF}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -52,6 +52,6 @@ bsub:::config_odcf(your_user_name)
 
 After that you can use the interactive job monitor.
 
-### On Rstudio server
+### On Rstudio server/computing nodes
 
 You can submit jobs, and also monitor your jobs with the interactive job monitor.
