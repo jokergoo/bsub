@@ -7,7 +7,7 @@ Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.0.0)
 Imports: GlobalOptions (>= 0.1.1), 
-         GetoptLong, 
+         GetoptLong (>= 0.1.8), 
          digest, 
          utils, 
          stats, 

@@ -92,6 +92,8 @@ following arguments:
 - `...` should be added as the last argument of the function. Following is a
   simple example for calling `bsub`.
 
+The temporary bash script to submit is automatically appended as the last argument of `bsub`.
+
 E.g., the template on DKFZ ODCF is defined as:
 
 ```{r, eval = FALSE}
