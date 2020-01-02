@@ -93,7 +93,7 @@ server <- function(input, output, session) {
 
         col_index_add = 0
         if(all(df2$dep == "")) {
-            df2 = cbind(df2[, c(1, length(df2)), drop = FALSE], df2[, -c(1, length(df2)), drop = FALSE])
+            df2 = cbind(df2[, 1, drop = FALSE], df2[, -c(1, length(df2)), drop = FALSE])
             colnames(df2) = c("Job ID", "Status", "Job name", "Submit time", "Time passed", "Time left", "Cores", "Memory", "Max memory")
         } else {
             col_index_add = 1

@@ -44,7 +44,7 @@
 	if(msg) packageStartupMessage("")
 	packageStartupMessage("- submit R code: `bsub_chunk()`")
 	packageStartupMessage("- submit R script: `bsub_script()`")
-	packageStartupMessage("- submit shell commands: ``bsub_script()`")
+	packageStartupMessage("- submit shell commands: ``bsub_cmd()`")
 	packageStartupMessage("- kill jobs: `bkill()`")
 	packageStartupMessage("- view job summary: `bjobs`/`brecent`/`bjobs_running`/")
 	packageStartupMessage("                    `bjobs_pending`/`bjobs_done`/`bjobs_exit`")
@@ -53,7 +53,7 @@
 	packageStartupMessage("- interactive job monitor: `monitor()`")
 
 	packageStartupMessage("")
-	packageStartupMessage("`bsub_chunk()`/`bsub_script()`/`bsub_script()` should only be")
+	packageStartupMessage("`bsub_chunk()`/`bsub_script()`/`bsub_cmd()` should only be")
 	packageStartupMessage("applied on the node that has the same file system as the computing")
 	packageStartupMessage("nodes. Other functions for monitoring and cleaning jobs can be")
 	packageStartupMessage("applied on any computer.")
