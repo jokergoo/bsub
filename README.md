@@ -80,29 +80,6 @@ View job log:
 job_log(job_id)
 ```
 
-### Interactive job monitor
-
-```r
-monitor()
-```
-
-The job summary table:
-
-<p><img width="907" alt="monitor" src="https://user-images.githubusercontent.com/449218/71278574-40d4bf00-2358-11ea-9849-339aeb324601.png"></p>
-
-Job log:
-
-<p><img width="905" alt="job_log" src="https://user-images.githubusercontent.com/449218/71278573-403c2880-2358-11ea-8c82-c99677c0ebb0.png"></p>
-
-Job dependency tree:
-
-<p><img width="895" alt="dependency_tree" src="https://user-images.githubusercontent.com/449218/71278571-403c2880-2358-11ea-8e05-69c064148b2d.png"></p>
-
-Kill jobs:
-
-<p><img width="895" alt="Screenshot 2019-12-22 at 16 03 49" src="https://user-images.githubusercontent.com/449218/71323523-8ddda000-24d4-11ea-8fd3-350cbe93763c.png"></p>
-
-
 ### License
 
 MIT @ Zuguang Gu
