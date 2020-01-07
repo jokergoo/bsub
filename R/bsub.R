@@ -109,6 +109,12 @@ bsub_chunk = function(code,
 
     qqcat("- job: '@{name}' from a code chunk\n")
 
+    if(length(variables)) {
+        if(!inherits(variables, "character")) {
+            stop_wrap("`variables` must be a character vector (the names of the variables you want to import).")
+        }
+    }
+
     # if `image` is true, save all variables and all packages that are loaded
     if(identical(image, TRUE)) {
         variables = c(variables, ls(envir = .GlobalEnv, all.names = TRUE))
