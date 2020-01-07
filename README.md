@@ -5,7 +5,7 @@ It Sends R code/R scripts/shell commands to LSF cluster without leaving R.
 ### Install
 
 ```r
-devtools::install_github("jokergoo/bsub", ref = "dev-zuguang")
+devtools::install_github("jokergoo/bsub")
 ```
 
 ### Documentation
