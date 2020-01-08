@@ -125,8 +125,8 @@
 <pre><code>## - job: 'R_code_c3481a47' from a code chunk
 ## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/R_code_c3481a47.out' \
-##      '/home/guz/.bsub_temp/R_code_c3481a47_55a120eb95b9.sh'</code></pre>
-<pre><code>## [1] "2576063"</code></pre>
+##      '/home/guz/.bsub_temp/R_code_c3481a47_ade97b187f30.sh'</code></pre>
+<pre><code>## [1] "2588634"</code></pre>
 <p>The value returned by <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> is the job ID from LSF cluster.</p>
 <div id="job-settings" class="section level3">
 <h3 class="hasAnchor">
@@ -139,8 +139,8 @@
 <pre><code>## - job: 'example' from a code chunk
 ## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' \
 ##      -o '/home/guz/.bsub_temp/example.out' \
-##      '/home/guz/.bsub_temp/example_55a1bfc82d1.sh'</code></pre>
-<pre><code>## [1] "2576064"</code></pre>
+##      '/home/guz/.bsub_temp/example_ade96ccd6ce7.sh'</code></pre>
+<pre><code>## [1] "2588635"</code></pre>
 <p>If <code>name</code> is not specified, an internal name calculated by <code><a href="https://rdrr.io/pkg/digest/man/digest.html">digest::digest()</a></code> on the chunk is automatically assigned. The unit of <code>memory</code> is GB.</p>
 </div>
 <div id="r-version" class="section level3">
@@ -272,8 +272,8 @@
 <pre><code>## - job: 'example2' from a code chunk
 ## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example2.out' \
-##      '/home/guz/.bsub_temp/example2_55a150d404c1.sh'</code></pre>
-<pre><code>## [1] "2576065"</code></pre>
+##      '/home/guz/.bsub_temp/example2_ade94f51a47b.sh'</code></pre>
+<pre><code>## [1] "2588636"</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="../reference/retrieve_var.html">retrieve_var</a></span>(<span class="st">"example2"</span>)</a></code></pre></div>
 <pre><code>## job is running or pending, retry in 30 seconds.</code></pre>
 <pre><code>## [1] 2</code></pre>
@@ -361,7 +361,7 @@
 <a class="sourceLine" id="cb41-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"blablabla...</span><span class="ch">\n</span><span class="st">"</span>)</a>
 <a class="sourceLine" id="cb41-4" data-line-number="4">})</a></code></pre></div>
 <pre><code>## - job: 'example' from a code chunk
-## bash /home/guz/.bsub_temp/example_55a12108d6c4.sh</code></pre>
+## bash /home/guz/.bsub_temp/example_ade963f3f521.sh</code></pre>
 </div>
 </div>
 <div id="send-r-script" class="section level2">
@@ -414,72 +414,82 @@
 <pre><code>## - job: 'example_1' from a code chunk
 ## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_1.out' \
-##      '/home/guz/.bsub_temp/example_1_55a15dba1575.sh' 
+##      '/home/guz/.bsub_temp/example_1_ade92f7dcf21.sh' 
 ## - job: 'example_2' from a code chunk
 ## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_2.out' \
-##      '/home/guz/.bsub_temp/example_2_55a11f1f3806.sh' 
+##      '/home/guz/.bsub_temp/example_2_ade9679fc81c.sh' 
 ## - job: 'example_3' from a code chunk
 ## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_3.out' \
-##      '/home/guz/.bsub_temp/example_3_55a15e47799f.sh' 
+##      '/home/guz/.bsub_temp/example_3_ade96583d4a0.sh' 
 ## - job: 'example_4' from a code chunk
 ## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_4.out' \
-##      '/home/guz/.bsub_temp/example_4_55a14b81291a.sh'</code></pre>
+##      '/home/guz/.bsub_temp/example_4_ade91d206230.sh'</code></pre>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">bjobs</a></code></pre></div>
-<pre><code>## ─────────────────────────────────────────────────────────────────────────────────── 
-##  JOBID   STAT JOB_NAME  SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  2576067 PEND example_1 2020-01-08 09:23:37 -           -         -     -   -      
-##  2576068 PEND example_2 2020-01-08 09:23:38 -           -         -     -   -      
-##  2576069 PEND example_3 2020-01-08 09:23:38 -           -         -     -   -      
-##  2576071 PEND example_4 2020-01-08 09:23:38 -           -         -     -   -      
-## ─────────────────────────────────────────────────────────────────────────────────── 
-##  13 DONE jobs, 1 EXIT job, 4 PEND jobs within one week.
+<pre><code>## ──────────────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM   MAX_MEM
+##  2578605 RUN  bash      3      2020-01-08 10:40:45 4:44        -         1     2Gb   2.2Gb  
+##  2585405 RUN  bash      1      2020-01-08 13:39:10 1:45        -         1     261Mb 882Mb  
+##  2588650 PEND example_1 1      2020-01-08 15:24:52 -           -         -     -     -      
+##  2588651 PEND example_2 1      2020-01-08 15:24:52 -           -         -     -     -      
+##  2588652 PEND example_3 1      2020-01-08 15:24:52 -           -         -     -     -      
+##  2588653 PEND example_4 1      2020-01-08 15:24:52 -           -         -     -     -      
+## ──────────────────────────────────────────────────────────────────────────────────────────── 
+##  20 DONE jobs, 3 EXIT jobs, 4 PEND jobs, 2 RUN jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
 <p>There is one additional column <code>RECENT</code> in the summary table which shows the order of the jobs with the same job name. The most recent job has the value 1.</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw"><a href="../reference/bjobs.html">bjobs</a></span>(<span class="dt">status =</span> <span class="st">"all"</span>, <span class="dt">filter =</span> <span class="st">"example"</span>)</a></code></pre></div>
 <pre><code>## ────────────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  2563575 DONE example   2      2020-01-07 20:56:16 0:00        -         4     -   38Mb   
-##  2563577 DONE example2  2      2020-01-07 20:56:17 0:00        -         1     -   41Mb   
-##  2563591 DONE example_1 2      2020-01-07 20:57:28 0:00        -         1     -   41Mb   
-##  2563592 DONE example_2 2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
-##  2563593 DONE example_3 2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
-##  2563594 DONE example_4 2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
-##  2576064 DONE example   1      2020-01-08 09:22:56 0:00        -         4     -   8Mb    
-##  2576065 DONE example2  1      2020-01-08 09:22:56 0:00        -         1     -   41Mb   
-##  2576067 PEND example_1 1      2020-01-08 09:23:37 -           -         -     -   -      
-##  2576068 PEND example_2 1      2020-01-08 09:23:38 -           -         -     -   -      
-##  2576069 PEND example_3 1      2020-01-08 09:23:38 -           -         -     -   -      
-##  2576071 PEND example_4 1      2020-01-08 09:23:38 -           -         -     -   -      
+##  2563575 DONE example   3      2020-01-07 20:56:16 0:00        -         4     -   38Mb   
+##  2563577 DONE example2  3      2020-01-07 20:56:17 0:00        -         1     -   41Mb   
+##  2563591 DONE example_1 3      2020-01-07 20:57:28 0:00        -         1     -   41Mb   
+##  2563592 DONE example_2 3      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
+##  2563593 DONE example_3 3      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
+##  2563594 DONE example_4 3      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
+##  2576064 DONE example   2      2020-01-08 09:22:56 0:00        -         4     -   8Mb    
+##  2576065 DONE example2  2      2020-01-08 09:22:56 0:00        -         1     -   41Mb   
+##  2576067 DONE example_1 2      2020-01-08 09:23:37 0:00        -         1     -   41Mb   
+##  2576068 DONE example_2 2      2020-01-08 09:23:38 0:00        -         1     -   41Mb   
+##  2576069 DONE example_3 2      2020-01-08 09:23:38 0:00        -         1     -   41Mb   
+##  2576071 DONE example_4 2      2020-01-08 09:23:38 0:00        -         1     -   41Mb   
+##  2588635 DONE example   1      2020-01-08 15:24:10 0:00        -         4     -   41Mb   
+##  2588636 DONE example2  1      2020-01-08 15:24:10 0:00        -         1     -   37Mb   
+##  2588650 PEND example_1 1      2020-01-08 15:24:52 -           -         -     -   -      
+##  2588651 PEND example_2 1      2020-01-08 15:24:52 -           -         -     -   -      
+##  2588652 PEND example_3 1      2020-01-08 15:24:52 -           -         -     -   -      
+##  2588653 PEND example_4 1      2020-01-08 15:24:52 -           -         -     -   -      
 ## ────────────────────────────────────────────────────────────────────────────────────────── 
-##  13 DONE jobs, 1 EXIT job, 4 PEND jobs within one week.
+##  20 DONE jobs, 3 EXIT jobs, 4 PEND jobs, 2 RUN jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
 <p><code><a href="../reference/brecent.html">brecent()</a></code> returns 20 most recent jobs.</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">brecent</a></code></pre></div>
-<pre><code>## ───────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-##  JOBID   STAT JOB_NAME                     RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  2535142 DONE R_code_c3481a47              3      2020-01-02 10:11:53 0:00        -         1     -   7Mb    
-##  2535143 EXIT bash                         1      2020-01-02 10:39:37 142:42      -         1     -   15.4Gb 
-##  2535538 DONE cola_compare_best_k_GDS      1      2020-01-03 11:16:47 1:03        -         4     -   6.5Gb  
-##  2535539 DONE cola_compare_best_k_recount2 1      2020-01-03 11:16:47 2:20        -         4     -   9.5Gb  
-##  2563574 DONE R_code_c3481a47              2      2020-01-07 20:56:16 0:00        -         1     -   12Mb   
-##  2563575 DONE example                      2      2020-01-07 20:56:16 0:00        -         4     -   38Mb   
-##  2563577 DONE example2                     2      2020-01-07 20:56:17 0:00        -         1     -   41Mb   
-##  2563591 DONE example_1                    2      2020-01-07 20:57:28 0:00        -         1     -   41Mb   
-##  2563592 DONE example_2                    2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
-##  2563593 DONE example_3                    2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
-##  2563594 DONE example_4                    2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
-##  2576063 DONE R_code_c3481a47              1      2020-01-08 09:22:55 0:00        -         1     -   35Mb   
-##  2576064 DONE example                      1      2020-01-08 09:22:56 0:00        -         4     -   8Mb    
-##  2576065 DONE example2                     1      2020-01-08 09:22:56 0:00        -         1     -   41Mb   
-##  2576067 PEND example_1                    1      2020-01-08 09:23:37 -           -         -     -   -      
-##  2576068 PEND example_2                    1      2020-01-08 09:23:38 -           -         -     -   -      
-##  2576069 PEND example_3                    1      2020-01-08 09:23:38 -           -         -     -   -      
-##  2576071 PEND example_4                    1      2020-01-08 09:23:38 -           -         -     -   -      
-## ───────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-##  13 DONE jobs, 1 EXIT job, 4 PEND jobs within one week.
+<pre><code>## ────────────────────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME        RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM   MAX_MEM
+##  2563593 DONE example_3       3      2020-01-07 20:57:29 0:00        -         1     -     41Mb   
+##  2563594 DONE example_4       3      2020-01-07 20:57:29 0:00        -         1     -     41Mb   
+##  2576063 DONE R_code_c3481a47 2      2020-01-08 09:22:55 0:00        -         1     -     35Mb   
+##  2576064 DONE example         2      2020-01-08 09:22:56 0:00        -         4     -     8Mb    
+##  2576065 DONE example2        2      2020-01-08 09:22:56 0:00        -         1     -     41Mb   
+##  2576067 DONE example_1       2      2020-01-08 09:23:37 0:00        -         1     -     41Mb   
+##  2576068 DONE example_2       2      2020-01-08 09:23:38 0:00        -         1     -     41Mb   
+##  2576069 DONE example_3       2      2020-01-08 09:23:38 0:00        -         1     -     41Mb   
+##  2576071 DONE example_4       2      2020-01-08 09:23:38 0:00        -         1     -     41Mb   
+##  2578604 EXIT basg            1      2020-01-08 10:40:42 -           -         0     -     -      
+##  2578605 RUN  bash            3      2020-01-08 10:40:45 4:44        -         1     2Gb   2.2Gb  
+##  2585404 EXIT bash            2      2020-01-08 13:38:36 0:00        -         1     -     5Mb    
+##  2585405 RUN  bash            1      2020-01-08 13:39:10 1:45        -         1     261Mb 882Mb  
+##  2588634 DONE R_code_c3481a47 1      2020-01-08 15:24:10 0:00        -         1     -     41Mb   
+##  2588635 DONE example         1      2020-01-08 15:24:10 0:00        -         4     -     41Mb   
+##  2588636 DONE example2        1      2020-01-08 15:24:10 0:00        -         1     -     37Mb   
+##  2588650 PEND example_1       1      2020-01-08 15:24:52 -           -         -     -     -      
+##  2588651 PEND example_2       1      2020-01-08 15:24:52 -           -         -     -     -      
+##  2588652 PEND example_3       1      2020-01-08 15:24:52 -           -         -     -     -      
+##  2588653 PEND example_4       1      2020-01-08 15:24:52 -           -         -     -     -      
+## ────────────────────────────────────────────────────────────────────────────────────────────────── 
+##  20 DONE jobs, 3 EXIT jobs, 4 PEND jobs, 2 RUN jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
 <p>There are some helper functions which only list running/pending/done/failed jobs:</p>
 <ul>
@@ -560,12 +570,12 @@
 ## LAPACK: /usr/lib64/liblapack.so.3.4.2
 ## 
 ## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8    
+##  [5] LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
+##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## [11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     

@@ -94,7 +94,13 @@
 <div id="install" class="section level3">
 <h3 class="hasAnchor">
 <a href="#install" class="anchor"></a>Install</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/bsub"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"devtools"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">    <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/bsub"</span>)</a></code></pre></div>
+<p>If you want the full functionality of the package, you need to install a few more packages:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">    <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ssh"</span>, <span class="st">"DT"</span>, <span class="st">"shiny"</span>, <span class="st">"igraph"</span>, <span class="st">"graph"</span>, <span class="st">"Rgraphviz"</span>))</a></code></pre></div>
 </div>
 <div id="documentation" class="section level3">
 <h3 class="hasAnchor">
@@ -112,40 +118,53 @@
 <h3 class="hasAnchor">
 <a href="#submit-jobs" class="anchor"></a>Submit jobs</h3>
 <p>Directly submit R chunk:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(bsub)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co"># R code</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">memory =</span> <span class="dv">10</span>, <span class="dt">hour =</span> <span class="dv">10</span>, <span class="dt">core =</span> <span class="dv">4</span>, </a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">{</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">    fit =<span class="st"> </span>NMF<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/NMF/man/nmf.html">nmf</a></span>(...)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">    <span class="co"># you better save `fit` into a permanent file</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">    <span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(fit, <span class="dt">file =</span> <span class="st">"fit.rds"</span>)</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">})</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(bsub)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co"># R code</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw"><a href="reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">memory =</span> <span class="dv">10</span>, <span class="dt">hour =</span> <span class="dv">10</span>, <span class="dt">core =</span> <span class="dv">4</span>, </a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">{</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    fit =<span class="st"> </span>NMF<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/NMF/man/nmf.html">nmf</a></span>(...)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">    <span class="co"># you better save `fit` into a permanent file</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">    <span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(fit, <span class="dt">file =</span> <span class="st">"fit.rds"</span>)</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">})</a></code></pre></div>
 <p>Submit an R script:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># R script</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/bsub_script.html">bsub_script</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="dt">script =</span> <span class="st">"/path/foo.R"</span>, ...)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># R script</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="reference/bsub_script.html">bsub_script</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="dt">script =</span> <span class="st">"/path/foo.R"</span>, ...)</a></code></pre></div>
 <p>Submit shell commands:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># shell commands</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="dt">cmd =</span> <span class="st">"samtools view ..."</span>, ...)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># shell commands</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">    <span class="dt">cmd =</span> <span class="st">"samtools view ..."</span>, ...)</a></code></pre></div>
 <p>Kill jobs:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/bkill.html">bkill</a></span>(job_id)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="reference/bkill.html">bkill</a></span>(job_id)</a></code></pre></div>
 </div>
 <div id="view-job-info" class="section level3">
 <h3 class="hasAnchor">
 <a href="#view-job-info" class="anchor"></a>View job info</h3>
 <p>View job summaries:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">bjobs</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">brecent</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">bjobs_running</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">bjobs_pending</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">bjobs_done</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">bjobs_exit</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">bjobs</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">brecent</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">bjobs_running</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">bjobs_pending</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">bjobs_done</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">bjobs_exit</a></code></pre></div>
 <p>An example of the job queries is as follows:</p>
 <p><img src="https://user-images.githubusercontent.com/449218/71292253-2577ad00-2374-11ea-9402-855e7f01652c.png" alt="image"></p>
 <p>View job log:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="reference/job_log.html">job_log</a></span>(job_id)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="reference/job_log.html">job_log</a></span>(job_id)</a></code></pre></div>
+</div>
+<div id="interactive-job-monitor" class="section level3">
+<h3 class="hasAnchor">
+<a href="#interactive-job-monitor" class="anchor"></a>Interactive job monitor</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="reference/monitor.html">monitor</a></span>()</a></code></pre></div>
+<p>The job summary table:</p>
+<p><img width="907" alt="monitor" src="https://user-images.githubusercontent.com/449218/71278574-40d4bf00-2358-11ea-9849-339aeb324601.png"></p>
+<p>Job log:</p>
+<p><img width="905" alt="job_log" src="https://user-images.githubusercontent.com/449218/71278573-403c2880-2358-11ea-8c82-c99677c0ebb0.png"></p>
+<p>Job dependency tree:</p>
+<p><img width="895" alt="dependency_tree" src="https://user-images.githubusercontent.com/449218/71278571-403c2880-2358-11ea-8e05-69c064148b2d.png"></p>
+<p>Kill jobs:</p>
+<p><img width="895" alt="Screenshot 2019-12-22 at 16 03 49" src="https://user-images.githubusercontent.com/449218/71323523-8ddda000-24d4-11ea-8fd3-350cbe93763c.png"></p>
 </div>
 <div id="license" class="section level3">
 <h3 class="hasAnchor">
