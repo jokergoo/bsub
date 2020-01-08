@@ -60,7 +60,7 @@
       <a href="articles/dkfz_odcf.html">Use bsub package on the DKFZ ODCF cluster</a>
     </li>
     <li>
-      <a href="articles/other_insititute.html">Configure bsub package for other LSF institutes</a>
+      <a href="articles/other_insititute.html">Configure bsub package for other institutes using LSF</a>
     </li>
     <li>
       <a href="articles/two_ssh.html">What if you need to establish two ssh connections to reach the submission node</a>
@@ -94,13 +94,13 @@
 <div id="install" class="section level3">
 <h3 class="hasAnchor">
 <a href="#install" class="anchor"></a>Install</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/bsub"</span>, <span class="dt">ref =</span> <span class="st">"dev-zuguang"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/bsub"</span>)</a></code></pre></div>
 </div>
 <div id="documentation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h3>
 <p>The online documentation is available at <a href="https://jokergoo.github.io/bsub/" class="uri">https://jokergoo.github.io/bsub/</a>.</p>
-<p>There are three vignettes:</p>
+<p>There are four vignettes:</p>
 <ul>
 <li><a href="https://jokergoo.github.io/bsub/articles/bsub_intro.html">Send R code/R scripts/shell commands to LSF cluster</a></li>
 <li><a href="https://jokergoo.github.io/bsub/articles/dkfz_odcf.html">Use bsub package on the DKFZ ODCF cluster</a></li>
@@ -146,19 +146,6 @@
 <p><img src="https://user-images.githubusercontent.com/449218/71292253-2577ad00-2374-11ea-9402-855e7f01652c.png" alt="image"></p>
 <p>View job log:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="reference/job_log.html">job_log</a></span>(job_id)</a></code></pre></div>
-</div>
-<div id="interactive-job-monitor" class="section level3">
-<h3 class="hasAnchor">
-<a href="#interactive-job-monitor" class="anchor"></a>Interactive job monitor</h3>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="reference/monitor.html">monitor</a></span>()</a></code></pre></div>
-<p>The job summary table:</p>
-<p><img width="907" alt="monitor" src="https://user-images.githubusercontent.com/449218/71278574-40d4bf00-2358-11ea-9849-339aeb324601.png"></p>
-<p>Job log:</p>
-<p><img width="905" alt="job_log" src="https://user-images.githubusercontent.com/449218/71278573-403c2880-2358-11ea-8c82-c99677c0ebb0.png"></p>
-<p>Job dependency tree:</p>
-<p><img width="895" alt="dependency_tree" src="https://user-images.githubusercontent.com/449218/71278571-403c2880-2358-11ea-8e05-69c064148b2d.png"></p>
-<p>Kill jobs:</p>
-<p><img width="895" alt="Screenshot 2019-12-22 at 16 03 49" src="https://user-images.githubusercontent.com/449218/71323523-8ddda000-24d4-11ea-8fd3-350cbe93763c.png"></p>
 </div>
 <div id="license" class="section level3">
 <h3 class="hasAnchor">

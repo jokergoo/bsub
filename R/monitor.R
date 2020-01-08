@@ -139,7 +139,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
                 return(invisible(txt))
             } else {
                 txt = ln
-                txt = c(txt, paste0(symbol$warning, qq(" job (@{job_id}) is still running.")))
+                txt = c(txt, paste0(symbol$warning, qq("\n job (@{job_id}) is still running.")))
                 if(print) cat(txt, sep = "\n")
                 return(invisible(txt))
             }

@@ -60,7 +60,7 @@
       <a href="../articles/dkfz_odcf.html">Use bsub package on the DKFZ ODCF cluster</a>
     </li>
     <li>
-      <a href="../articles/other_insititute.html">Configure bsub package for other LSF institutes</a>
+      <a href="../articles/other_insititute.html">Configure bsub package for other institutes using LSF</a>
     </li>
     <li>
       <a href="../articles/two_ssh.html">What if you need to establish two ssh connections to reach the submission node</a>
@@ -99,7 +99,7 @@
     
     
 <p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2019-12-23</p>
+<p><strong>Date</strong>: 2020-01-08</p>
 <hr>
 <p>For us, if we are outside of DKFZ network, we first connect to DKFZ network by VPN, then we only need one ssh connection to reach the submission node. However, in other institutes, if you are outside of it, you might first need to connect to your institute’s server via ssh (server A), then on server A, you connect to the job submission server, again via ssh (server B), which results in two ssh connections (let’s assume you cannot use <code>bjobs</code> command on server A).</p>
 <p>Of course, you cannot establish two nested ssh connections, but we can do some tricks on server A to run a pseudo <code>bjobs</code> which actually runs the real <code>bjobs</code> on server B. Maybe you have already guessed, we need to, on server A, to run <code>bjobs</code> on server B via ssh without interactively entering the password.</p>

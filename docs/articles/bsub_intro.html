@@ -60,7 +60,7 @@
       <a href="../articles/dkfz_odcf.html">Use bsub package on the DKFZ ODCF cluster</a>
     </li>
     <li>
-      <a href="../articles/other_insititute.html">Configure bsub package for other LSF institutes</a>
+      <a href="../articles/other_insititute.html">Configure bsub package for other institutes using LSF</a>
     </li>
     <li>
       <a href="../articles/two_ssh.html">What if you need to establish two ssh connections to reach the submission node</a>
@@ -99,7 +99,7 @@
     
     
 <p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2019-12-23</p>
+<p><strong>Date</strong>: 2020-01-08</p>
 <hr>
 <p>Load the library:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(bsub)</a></code></pre></div>
@@ -123,8 +123,10 @@
 <a class="sourceLine" id="cb5-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">})</a></code></pre></div>
 <pre><code>## - job: 'R_code_c3481a47' from a code chunk
-## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/R_code_c3481a47.out' '/home/guz/.bsub_temp/R_code_c3481a47_80727360cbeb.sh'</code></pre>
-<pre><code>## [1] "2524408"</code></pre>
+## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/R_code_c3481a47.out' \
+##      '/home/guz/.bsub_temp/R_code_c3481a47_55a120eb95b9.sh'</code></pre>
+<pre><code>## [1] "2576063"</code></pre>
 <p>The value returned by <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> is the job ID from LSF cluster.</p>
 <div id="job-settings" class="section level3">
 <h3 class="hasAnchor">
@@ -135,8 +137,10 @@
 <a class="sourceLine" id="cb8-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)</a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">})</a></code></pre></div>
 <pre><code>## - job: 'example' from a code chunk
-## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' -o '/home/guz/.bsub_temp/example.out' '/home/guz/.bsub_temp/example_807265c04372.sh'</code></pre>
-<pre><code>## [1] "2524409"</code></pre>
+## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' \
+##      -o '/home/guz/.bsub_temp/example.out' \
+##      '/home/guz/.bsub_temp/example_55a1bfc82d1.sh'</code></pre>
+<pre><code>## [1] "2576064"</code></pre>
 <p>If <code>name</code> is not specified, an internal name calculated by <code><a href="https://rdrr.io/pkg/digest/man/digest.html">digest::digest()</a></code> on the chunk is automatically assigned. The unit of <code>memory</code> is GB.</p>
 </div>
 <div id="r-version" class="section level3">
@@ -266,8 +270,10 @@
 <a class="sourceLine" id="cb25-4" data-line-number="4">    <span class="dv">1</span><span class="op">+</span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb25-5" data-line-number="5">})</a></code></pre></div>
 <pre><code>## - job: 'example2' from a code chunk
-## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example2.out' '/home/guz/.bsub_temp/example2_80721e808b5e.sh'</code></pre>
-<pre><code>## [1] "2524410"</code></pre>
+## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example2.out' \
+##      '/home/guz/.bsub_temp/example2_55a150d404c1.sh'</code></pre>
+<pre><code>## [1] "2576065"</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="../reference/retrieve_var.html">retrieve_var</a></span>(<span class="st">"example2"</span>)</a></code></pre></div>
 <pre><code>## job is running or pending, retry in 30 seconds.</code></pre>
 <pre><code>## [1] 2</code></pre>
@@ -355,7 +361,7 @@
 <a class="sourceLine" id="cb41-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"blablabla...</span><span class="ch">\n</span><span class="st">"</span>)</a>
 <a class="sourceLine" id="cb41-4" data-line-number="4">})</a></code></pre></div>
 <pre><code>## - job: 'example' from a code chunk
-## bash /home/guz/.bsub_temp/example_8072613d329c.sh</code></pre>
+## bash /home/guz/.bsub_temp/example_55a12108d6c4.sh</code></pre>
 </div>
 </div>
 <div id="send-r-script" class="section level2">
@@ -406,143 +412,74 @@
 <a class="sourceLine" id="cb50-5" data-line-number="5">    })</a>
 <a class="sourceLine" id="cb50-6" data-line-number="6">}</a></code></pre></div>
 <pre><code>## - job: 'example_1' from a code chunk
-## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_1.out' '/home/guz/.bsub_temp/example_1_807221dc5184.sh' 
+## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example_1.out' \
+##      '/home/guz/.bsub_temp/example_1_55a15dba1575.sh' 
 ## - job: 'example_2' from a code chunk
-## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_2.out' '/home/guz/.bsub_temp/example_2_8072365fd8f7.sh' 
+## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example_2.out' \
+##      '/home/guz/.bsub_temp/example_2_55a11f1f3806.sh' 
 ## - job: 'example_3' from a code chunk
-## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_3.out' '/home/guz/.bsub_temp/example_3_8072ff5fd42.sh' 
+## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example_3.out' \
+##      '/home/guz/.bsub_temp/example_3_55a15e47799f.sh' 
 ## - job: 'example_4' from a code chunk
-## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' -o '/home/guz/.bsub_temp/example_4.out' '/home/guz/.bsub_temp/example_4_807255e39648.sh'</code></pre>
+## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example_4.out' \
+##      '/home/guz/.bsub_temp/example_4_55a14b81291a.sh'</code></pre>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">bjobs</a></code></pre></div>
 <pre><code>## ─────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  2524412 PEND example_1 2019-12-23 21:47:56 -           -         -     -   -      
-##  2524413 PEND example_2 2019-12-23 21:47:56 -           -         -     -   -      
-##  2524414 PEND example_3 2019-12-23 21:47:56 -           -         -     -   -      
-##  2524415 PEND example_4 2019-12-23 21:47:56 -           -         -     -   -      
+##  2576067 PEND example_1 2020-01-08 09:23:37 -           -         -     -   -      
+##  2576068 PEND example_2 2020-01-08 09:23:38 -           -         -     -   -      
+##  2576069 PEND example_3 2020-01-08 09:23:38 -           -         -     -   -      
+##  2576071 PEND example_4 2020-01-08 09:23:38 -           -         -     -   -      
 ## ─────────────────────────────────────────────────────────────────────────────────── 
-##  533 DONE jobs, 10 EXIT jobs, 4 PEND jobs within one week.
+##  13 DONE jobs, 1 EXIT job, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
 <p>There is one additional column <code>RECENT</code> in the summary table which shows the order of the jobs with the same job name. The most recent job has the value 1.</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw"><a href="../reference/bjobs.html">bjobs</a></span>(<span class="dt">status =</span> <span class="st">"all"</span>, <span class="dt">filter =</span> <span class="st">"example"</span>)</a></code></pre></div>
-<pre><code>## ─────────────────────────────────────────────────────────────────────────────────────────── 
-##  JOBID   STAT JOB_NAME   RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  2417719 DONE example    14     2019-12-16 23:06:01 0:00        -         4     -   12Mb   
-##  2417720 DONE example2   14     2019-12-16 23:06:01 0:00        -         1     -   41Mb   
-##  2417721 DONE example_1  13     2019-12-16 23:06:43 0:00        -         1     -   37Mb   
-##  2417722 DONE example_2  13     2019-12-16 23:06:43 0:00        -         1     -   18Mb   
-##  2417723 DONE example_3  13     2019-12-16 23:06:43 0:00        -         1     -   16Mb   
-##  2417724 DONE example_4  13     2019-12-16 23:06:43 0:00        -         1     -   17Mb   
-##  2419204 DONE example    13     2019-12-17 13:31:28 0:00        -         4     -   41Mb   
-##  2419205 DONE example2   13     2019-12-17 13:31:29 0:00        -         1     -   41Mb   
-##  2419209 DONE example_1  12     2019-12-17 13:32:10 0:00        -         1     -   37Mb   
-##  2419210 DONE example_2  12     2019-12-17 13:32:10 0:00        -         1     -   7Mb    
-##  2419211 DONE example_3  12     2019-12-17 13:32:10 0:00        -         1     -   8Mb    
-##  2419212 DONE example_4  12     2019-12-17 13:32:11 0:00        -         1     -   8Mb    
-##  2419214 DONE example    12     2019-12-17 13:36:33 0:00        -         4     -   8Mb    
-##  2419215 DONE example2   12     2019-12-17 13:36:34 0:00        -         1     -   37Mb   
-##  2419216 DONE example_1  11     2019-12-17 13:37:15 0:00        -         1     -   41Mb   
-##  2419217 DONE example_2  11     2019-12-17 13:37:15 0:00        -         1     -   41Mb   
-##  2419218 DONE example_3  11     2019-12-17 13:37:16 0:00        -         1     -   41Mb   
-##  2419219 DONE example_4  11     2019-12-17 13:37:16 0:00        -         1     -   41Mb   
-##  2419224 DONE example    11     2019-12-17 13:39:54 0:00        -         4     -   37Mb   
-##  2419225 DONE example2   11     2019-12-17 13:39:55 0:00        -         1     -   37Mb   
-##  2419227 DONE example_1  10     2019-12-17 13:40:36 0:00        -         1     -   37Mb   
-##  2419228 DONE example_2  10     2019-12-17 13:40:36 0:00        -         1     -   37Mb   
-##  2419229 DONE example_3  10     2019-12-17 13:40:36 0:00        -         1     -   37Mb   
-##  2419230 DONE example_4  10     2019-12-17 13:40:37 0:00        -         1     -   37Mb   
-##  2419232 DONE example    10     2019-12-17 13:41:29 0:00        -         4     -   37Mb   
-##  2419233 DONE example2   10     2019-12-17 13:41:29 0:00        -         1     -   39Mb   
-##  2419234 DONE example_1   9     2019-12-17 13:42:11 0:00        -         1     -   33Mb   
-##  2419235 DONE example_2   9     2019-12-17 13:42:11 0:00        -         1     -   33Mb   
-##  2419236 DONE example_3   9     2019-12-17 13:42:11 0:00        -         1     -   33Mb   
-##  2419237 DONE example_4   9     2019-12-17 13:42:12 0:00        -         1     -   33Mb   
-##  2419239 DONE example     9     2019-12-17 13:44:10 0:00        -         4     -   41Mb   
-##  2419240 DONE example2    9     2019-12-17 13:44:11 0:00        -         1     -   41Mb   
-##  2419241 DONE example_1   8     2019-12-17 13:44:52 0:00        -         1     -   41Mb   
-##  2419242 DONE example_2   8     2019-12-17 13:44:52 0:00        -         1     -   41Mb   
-##  2419243 DONE example_3   8     2019-12-17 13:44:52 0:00        -         1     -   41Mb   
-##  2419244 DONE example_4   8     2019-12-17 13:44:53 0:00        -         1     -   41Mb   
-##  2438764 EXIT example     8     2019-12-18 19:18:06 -           -         0     -   -      
-##  2438765 DONE example2    8     2019-12-18 19:18:07 0:00        -         1     -   37Mb   
-##  2438766 DONE example_1   7     2019-12-18 19:18:48 0:00        -         1     -   37Mb   
-##  2438767 DONE example_2   7     2019-12-18 19:18:49 0:00        -         1     -   37Mb   
-##  2438768 DONE example_3   7     2019-12-18 19:18:49 0:00        -         1     -   37Mb   
-##  2438769 DONE example_4   7     2019-12-18 19:18:49 0:00        -         1     -   15Mb   
-##  2438784 DONE example     7     2019-12-18 19:43:34 0:00        -         4     -   8Mb    
-##  2438785 DONE example2    7     2019-12-18 19:43:34 0:00        -         1     -   41Mb   
-##  2438786 DONE example_1   6     2019-12-18 19:44:16 0:00        -         1     -   37Mb   
-##  2438787 DONE example_2   6     2019-12-18 19:44:16 0:00        -         1     -   37Mb   
-##  2438788 DONE example_3   6     2019-12-18 19:44:16 0:00        -         1     -   12Mb   
-##  2438789 DONE example_4   6     2019-12-18 19:44:17 0:00        -         1     -   12Mb   
-##  2438791 DONE example     6     2019-12-18 19:47:24 0:00        -         4     -   28Mb   
-##  2438792 DONE example2    6     2019-12-18 19:47:24 0:00        -         1     -   41Mb   
-##  2438793 DONE example_1   5     2019-12-18 19:48:06 0:00        -         1     -   41Mb   
-##  2438794 DONE example_2   5     2019-12-18 19:48:06 0:00        -         1     -   41Mb   
-##  2438795 DONE example_3   5     2019-12-18 19:48:07 0:00        -         1     -   41Mb   
-##  2438796 DONE example_4   5     2019-12-18 19:48:07 0:00        -         1     -   41Mb   
-##  2439787 DONE example_01  2     2019-12-18 22:01:11 0:00        -         1     -   41Mb   
-##  2439788 DONE example_02  3     2019-12-18 22:01:11 0:00        -         1     -   41Mb   
-##  2439789 DONE example_02  2     2019-12-18 22:01:12 0:00        -         1     -   41Mb   
-##  2439790 DONE example_01  1     2019-12-18 22:03:24 0:00        -         1     -   41Mb   
-##  2439791 DONE example_02  1     2019-12-18 22:03:24 0:00        -         1     -   41Mb   
-##  2439792 DONE example_03  1     2019-12-18 22:03:25 0:00        -         1     -   41Mb   
-##  2499413 DONE example     5     2019-12-20 22:02:50 0:00        -         4     -   7Mb    
-##  2499414 DONE example2    5     2019-12-20 22:02:50 0:00        -         1     -   41Mb   
-##  2499419 DONE example_1   4     2019-12-20 22:03:32 0:00        -         1     -   37Mb   
-##  2499420 DONE example_2   4     2019-12-20 22:03:32 0:00        -         1     -   37Mb   
-##  2499421 DONE example_3   4     2019-12-20 22:03:32 0:00        -         1     -   10Mb   
-##  2499422 DONE example_4   4     2019-12-20 22:03:32 0:00        -         1     -   10Mb   
-##  2499572 DONE example     4     2019-12-20 22:25:21 0:00        -         4     -   12Mb   
-##  2499573 DONE example2    4     2019-12-20 22:25:21 0:00        -         1     -   41Mb   
-##  2499647 DONE example     3     2019-12-20 22:31:39 0:00        -         4     -   7Mb    
-##  2499648 DONE example2    3     2019-12-20 22:31:39 0:00        -         1     -   41Mb   
-##  2499659 DONE example_1   3     2019-12-20 22:32:20 0:00        -         1     -   37Mb   
-##  2499660 DONE example_2   3     2019-12-20 22:32:21 0:00        -         1     -   6Mb    
-##  2499661 DONE example_3   3     2019-12-20 22:32:21 0:00        -         1     -   4Mb    
-##  2499662 DONE example_4   3     2019-12-20 22:32:21 0:00        -         1     -   12Mb   
-##  2524401 DONE example     2     2019-12-23 21:39:27 0:00        -         4     -   6Mb    
-##  2524402 DONE example2    2     2019-12-23 21:39:27 0:00        -         1     -   41Mb   
-##  2524403 DONE example_1   2     2019-12-23 21:40:09 0:00        -         1     -   41Mb   
-##  2524404 DONE example_2   2     2019-12-23 21:40:09 0:00        -         1     -   41Mb   
-##  2524405 DONE example_3   2     2019-12-23 21:40:09 0:00        -         1     -   41Mb   
-##  2524406 DONE example_4   2     2019-12-23 21:40:10 0:00        -         1     -   41Mb   
-##  2524409 DONE example     1     2019-12-23 21:47:13 0:00        -         4     -   28Mb   
-##  2524410 DONE example2    1     2019-12-23 21:47:14 0:00        -         1     -   41Mb   
-##  2524412 PEND example_1   1     2019-12-23 21:47:56 -           -         -     -   -      
-##  2524413 PEND example_2   1     2019-12-23 21:47:56 -           -         -     -   -      
-##  2524414 PEND example_3   1     2019-12-23 21:47:56 -           -         -     -   -      
-##  2524415 PEND example_4   1     2019-12-23 21:47:56 -           -         -     -   -      
-##  JOBID   STAT JOB_NAME   RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-## ─────────────────────────────────────────────────────────────────────────────────────────── 
-##  533 DONE jobs, 10 EXIT jobs, 4 PEND jobs within one week.
+<pre><code>## ────────────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  2563575 DONE example   2      2020-01-07 20:56:16 0:00        -         4     -   38Mb   
+##  2563577 DONE example2  2      2020-01-07 20:56:17 0:00        -         1     -   41Mb   
+##  2563591 DONE example_1 2      2020-01-07 20:57:28 0:00        -         1     -   41Mb   
+##  2563592 DONE example_2 2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
+##  2563593 DONE example_3 2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
+##  2563594 DONE example_4 2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
+##  2576064 DONE example   1      2020-01-08 09:22:56 0:00        -         4     -   8Mb    
+##  2576065 DONE example2  1      2020-01-08 09:22:56 0:00        -         1     -   41Mb   
+##  2576067 PEND example_1 1      2020-01-08 09:23:37 -           -         -     -   -      
+##  2576068 PEND example_2 1      2020-01-08 09:23:38 -           -         -     -   -      
+##  2576069 PEND example_3 1      2020-01-08 09:23:38 -           -         -     -   -      
+##  2576071 PEND example_4 1      2020-01-08 09:23:38 -           -         -     -   -      
+## ────────────────────────────────────────────────────────────────────────────────────────── 
+##  13 DONE jobs, 1 EXIT job, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
 <p><code><a href="../reference/brecent.html">brecent()</a></code> returns 20 most recent jobs.</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">brecent</a></code></pre></div>
-<pre><code>## ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-##  JOBID   STAT JOB_NAME                             RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  2518598 DONE recount_TCGA_soft_tissue_sig_gene_GO 1      2019-12-22 15:57:17 7:30        -         1     -   4.3Gb  
-##  2518599 DONE recount_TCGA_stomach_sig_gene_GO     1      2019-12-22 15:57:18 4:42        -         1     -   5Gb    
-##  2518600 DONE recount_TCGA_testis_sig_gene_GO      1      2019-12-22 15:57:18 7:27        -         1     -   3.7Gb  
-##  2518601 DONE recount_TCGA_thymus_sig_gene_GO      1      2019-12-22 15:57:18 4:23        -         1     -   3.4Gb  
-##  2518602 DONE recount_TCGA_thyroid_sig_gene_GO     1      2019-12-22 15:57:18 6:56        -         1     -   5.4Gb  
-##  2518603 DONE recount_TCGA_uterus_sig_gene_GO      1      2019-12-22 15:57:18 5:50        -         1     -   5.4Gb  
-##  2524400 DONE R_code_c3481a47                      2      2019-12-23 21:39:27 0:00        -         1     -   6Mb    
-##  2524401 DONE example                              2      2019-12-23 21:39:27 0:00        -         4     -   6Mb    
-##  2524402 DONE example2                             2      2019-12-23 21:39:27 0:00        -         1     -   41Mb   
-##  2524403 DONE example_1                            2      2019-12-23 21:40:09 0:00        -         1     -   41Mb   
-##  2524404 DONE example_2                            2      2019-12-23 21:40:09 0:00        -         1     -   41Mb   
-##  2524405 DONE example_3                            2      2019-12-23 21:40:09 0:00        -         1     -   41Mb   
-##  2524406 DONE example_4                            2      2019-12-23 21:40:10 0:00        -         1     -   41Mb   
-##  2524408 DONE R_code_c3481a47                      1      2019-12-23 21:47:13 0:00        -         1     -   6Mb    
-##  2524409 DONE example                              1      2019-12-23 21:47:13 0:00        -         4     -   28Mb   
-##  2524410 DONE example2                             1      2019-12-23 21:47:14 0:00        -         1     -   41Mb   
-##  2524412 PEND example_1                            1      2019-12-23 21:47:56 -           -         -     -   -      
-##  2524413 PEND example_2                            1      2019-12-23 21:47:56 -           -         -     -   -      
-##  2524414 PEND example_3                            1      2019-12-23 21:47:56 -           -         -     -   -      
-##  2524415 PEND example_4                            1      2019-12-23 21:47:56 -           -         -     -   -      
-## ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-##  533 DONE jobs, 10 EXIT jobs, 4 PEND jobs within one week.
+<pre><code>## ───────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME                     RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  2535142 DONE R_code_c3481a47              3      2020-01-02 10:11:53 0:00        -         1     -   7Mb    
+##  2535143 EXIT bash                         1      2020-01-02 10:39:37 142:42      -         1     -   15.4Gb 
+##  2535538 DONE cola_compare_best_k_GDS      1      2020-01-03 11:16:47 1:03        -         4     -   6.5Gb  
+##  2535539 DONE cola_compare_best_k_recount2 1      2020-01-03 11:16:47 2:20        -         4     -   9.5Gb  
+##  2563574 DONE R_code_c3481a47              2      2020-01-07 20:56:16 0:00        -         1     -   12Mb   
+##  2563575 DONE example                      2      2020-01-07 20:56:16 0:00        -         4     -   38Mb   
+##  2563577 DONE example2                     2      2020-01-07 20:56:17 0:00        -         1     -   41Mb   
+##  2563591 DONE example_1                    2      2020-01-07 20:57:28 0:00        -         1     -   41Mb   
+##  2563592 DONE example_2                    2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
+##  2563593 DONE example_3                    2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
+##  2563594 DONE example_4                    2      2020-01-07 20:57:29 0:00        -         1     -   41Mb   
+##  2576063 DONE R_code_c3481a47              1      2020-01-08 09:22:55 0:00        -         1     -   35Mb   
+##  2576064 DONE example                      1      2020-01-08 09:22:56 0:00        -         4     -   8Mb    
+##  2576065 DONE example2                     1      2020-01-08 09:22:56 0:00        -         1     -   41Mb   
+##  2576067 PEND example_1                    1      2020-01-08 09:23:37 -           -         -     -   -      
+##  2576068 PEND example_2                    1      2020-01-08 09:23:38 -           -         -     -   -      
+##  2576069 PEND example_3                    1      2020-01-08 09:23:38 -           -         -     -   -      
+##  2576071 PEND example_4                    1      2020-01-08 09:23:38 -           -         -     -   -      
+## ───────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+##  13 DONE jobs, 1 EXIT job, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
 <p>There are some helper functions which only list running/pending/done/failed jobs:</p>
 <ul>
@@ -599,16 +536,16 @@
 <p>Following are examples of the job monitor.</p>
 <p>The job summary table:</p>
 <p>
-<img width="907" alt="monitor" src="https://user-images.githubusercontent.com/449218/71278574-40d4bf00-2358-11ea-9849-339aeb324601.png"></p>
+<img width="907" alt="monitor" src="monitor.png"></p>
 <p>Job log:</p>
 <p>
-<img width="905" alt="job_log" src="https://user-images.githubusercontent.com/449218/71278573-403c2880-2358-11ea-8c82-c99677c0ebb0.png"></p>
+<img width="905" alt="job_log" src="job_log.png"></p>
 <p>Job dependency tree:</p>
 <p>
-<img width="895" alt="dependency_tree" src="https://user-images.githubusercontent.com/449218/71278571-403c2880-2358-11ea-8e05-69c064148b2d.png"></p>
+<img width="895" alt="dependency_tree" src="dependency_tree.png"></p>
 <p>Kill jobs:</p>
 <p>
-<img width="895" alt="kill_jobs" src="https://user-images.githubusercontent.com/449218/71323523-8ddda000-24d4-11ea-8fd3-350cbe93763c.png"></p>
+<img width="895" alt="kill_jobs" src="kill_jobs.png"></p>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
@@ -623,18 +560,18 @@
 ## LAPACK: /usr/lib64/liblapack.so.3.4.2
 ## 
 ## locale:
-##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8    
-##  [5] LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
-##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                 
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] GetoptLong_0.1.7 bsub_0.99.0     
+## [1] GetoptLong_0.1.8 bsub_0.99.0     
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.3          knitr_1.26          magrittr_1.5       
