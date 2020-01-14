@@ -22,6 +22,7 @@ Suggests: knitr,
           igraph, 
           graph, 
           Rgraphviz
+biocViews: Software, Infrastructure
 Description: Send R code/R scripts/shell commands to LSF cluster without leaving R.
 VignetteBuilder: knitr
 URL: https://github.com/jokergoo/bsub
