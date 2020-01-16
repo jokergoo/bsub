@@ -13,9 +13,7 @@ devtools::install_github("jokergoo/bsub")
 If you want the full functionality of the package, you need to install a few more packages:
 
 ```r
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install(c("ssh", "DT", "shiny", "igraph", "graph", "Rgraphviz"))
+devtools::install_github('jokergoo/bsub', dependencies = 'Suggests')
 ```
 
 ### Documentation
