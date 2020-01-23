@@ -118,7 +118,7 @@ bsub_chunk = function(code,
     # if `image` is true, save all variables and all packages that are loaded
     if(identical(image, TRUE)) {
         variables = c(variables, ls(envir = .GlobalEnv, all.names = TRUE))
-        packages = c(packages, names(sessionInfo()$otherPkgs))
+        packages = c(rev(names(sessionInfo()$otherPkgs)), packages)
         image = NULL
     }
 

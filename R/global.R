@@ -190,11 +190,11 @@ bsub_opt = set_opt(
             if(identical(group, "") || identical(group, NULL)) {
                 cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'rusage[mem=@{round(memory*1024)}]'", 
                          "     -o '@{output}'", 
-                         "    ", sep = " \\\n")
+                         "   ", sep = " \\\n")
             } else {
                 cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'rusage[mem=@{round(memory*1024)}]'",
                          "     -G @{bsub_opt$group} -o '@{output}'",
-                         "    ", sep = " \\\n")
+                         "   ", sep = " \\\n")
             }
             return(cmd)
         },
