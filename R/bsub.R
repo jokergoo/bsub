@@ -122,7 +122,7 @@ bsub_chunk = function(code,
         image = NULL
     }
 
-    head = ""
+    head = "############## temporary R script ##############"
     tail = ""
     for(p in packages) {
         head = qq("@{head}\nlibrary(@{p})\n")
@@ -450,6 +450,8 @@ bsub_submit = function(command,
     
     sh_file = tempfile(paste0(name, "_"), tmpdir = temp_dir, fileext = ".sh")
     con = file(sh_file, "w")
+
+    writeLines("########## temporary bash script ###############", con)
     
     writeLines(qq("rm '@{pend}'\n"), con)  # remove the pend flag file
     writeLines(qq("touch '@{run}'\n"), con)  # add the running flag
