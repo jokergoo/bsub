@@ -111,7 +111,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
                 no_file_flag = TRUE
             } else {
                 txt = readLines(file, warn = FALSE)
-                txt = c(txt, paste0(symbol$warning, qq(" job (@{job_id}) is still running.")))
+                txt = c(txt, paste0("\n", symbol$warning, qq(" job (@{job_id}) is still running.")))
                 if(print) cat(txt, sep = "\n")
                 return(invisible(txt))
             }
