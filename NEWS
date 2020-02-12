@@ -1,0 +1,5 @@
+Changes in version 0.99.1
+
++ `bsub_chunk()`: add "_all_functions_" tag for `variables` and `_in_session_`
+  tag for `packages` arguments.
+

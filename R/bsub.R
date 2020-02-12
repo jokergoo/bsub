@@ -5,12 +5,14 @@
 # == param
 # -code The code chunk, should be embrached by ``\{`` ``\}``.
 # -name If name is not specified, an internal name calculated by `digest::digest` on the chunk is automatically assigned. 
-# -packages A character vector with package names that will be loaded before running the script.
+# -packages A character vector with package names that will be loaded before running the script. There is a special name ``_in_session_``
+#     that loads all the packages loaded in current R session.
 # -image A character vector of RData/rda files that will be loaded before running the script.
 #       When ``image`` is set to ``TRUE``, all variables in ``.GlobalEnv`` will be saved
 #       into a temporary file and all attached packages will be recorded. The temporary files
 #       will be removed after the job is finished.
-# -variables A character vector of variable names that will be loaded before running the script.
+# -variables A character vector of variable names that will be loaded before running the script. There is a special name ``_all_functions_``
+#       that saves all functions defined in the global environment.
 # -wd The working directory.
 # -hour Running time of the job.
 # -memory Memory usage of the job. It is measured in GB.
@@ -122,9 +124,26 @@ bsub_chunk = function(code,
         image = NULL
     }
 
+    ## a special tag for variables
+    if(length(variables)) {
+        if(any(grepl("^_all_functions", variables))) {
+            var_name = ls(envir = .GlobalEnv, all.names = TRUE)
+            l = sapply(var_name, function(x) inherits(get(x, envir = .GlobalEnv), "function"))
+            var_name = var_name[l]
+            variables = c(variables, var_name)
+        }
+    }
+
+    ## a special tag for package: _in_session_
+    if(length(packages)) {
+        if(any(grepl("^_in_session", packages))) {
+            packages = c(packages, rev(names(sessionInfo()$otherPkgs)))
+        }
+    }
+
     head = "############## temporary R script ##############"
     tail = ""
-    for(p in packages) {
+    for(p in unique(packages)) {
         head = qq("@{head}\nlibrary(@{p})\n")
     }
 
@@ -149,7 +168,7 @@ bsub_chunk = function(code,
     }
 
     if(length(variables)) {
-        save(list = variables, envir = parent.frame(), file = qq("@{temp_dir}/@{name}_var.RData"))
+        save(list = unique(variables), envir = parent.frame(), file = qq("@{temp_dir}/@{name}_var.RData"))
         head = qq("@{head}\nload(\"@{temp_dir}/@{name}_var.RData\")\ninvisible(file.remove(\"@{temp_dir}/@{name}_var.RData\"))\n")
     }
 

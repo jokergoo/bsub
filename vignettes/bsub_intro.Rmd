@@ -168,6 +168,17 @@ bsub_chunk(name = "example",
 })
 ```
 
+There is a special value `_in_session_` for `packages` argument that loads all packages in the current R session.
+
+```{r, eval = FALSE}
+library(foo)
+library(bar)
+bsub_chunk(name = "example", packages = "_in_session_",
+{   
+    Sys.sleep(5)
+})
+```
+
 ### Other R variables
 
 The R variables that are defined outside the code chunk and need to be used
@@ -178,6 +189,19 @@ foo = 1
 bsub_chunk(name = "example", variables = "foo",
 { 
     bar = foo
+    Sys.sleep(5)
+})
+```
+
+`variables` argument has a special value `_all_functions_` that loads all functions defined in the global environment.
+
+```{r, eval = FALSE}
+f1 = function() 1
+f2 = function() 2
+bsub_chunk(name = "example", variables = "_all_functions_",
+{ 
+    f1()
+    f2()
     Sys.sleep(5)
 })
 ```
@@ -213,7 +237,8 @@ bsub_chunk(name = "example",
 
 When `image` is set to `TRUE`, all variables in `.GlobalEnv` will be saved
 into a temporary file and all attached packages will be recorded. The temporary files
-will be removed after the job is finished.
+will be removed after the job is finished, but note if you have multiple jobs, each job
+will save the image in a different file.
 
 Absolute paths should be used instead of relative paths.
 
