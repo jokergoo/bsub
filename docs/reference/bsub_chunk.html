@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
       </span>
     </div>
 
@@ -169,7 +169,7 @@
     </tr>
     <tr>
       <th>packages</th>
-      <td><p>A character vector with package names that will be loaded before running the script.</p></td>
+      <td><p>A character vector with package names that will be loaded before running the script. There is a special name <code>_in_session_</code> that loads all the packages loaded in current R session.</p></td>
     </tr>
     <tr>
       <th>image</th>
@@ -177,7 +177,7 @@
     </tr>
     <tr>
       <th>variables</th>
-      <td><p>A character vector of variable names that will be loaded before running the script.</p></td>
+      <td><p>A character vector of variable names that will be loaded before running the script. There is a special name <code>_all_functions_</code> that saves all functions defined in the global environment.</p></td>
     </tr>
     <tr>
       <th>wd</th>

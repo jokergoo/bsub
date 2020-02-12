@@ -21,10 +21,11 @@ library(bsub)
 library(GetoptLong)
 ```
 
-**For DFKZ ODCF users: The _bsub_ package works on the submission nodes, the computing nodes and the Rstudio node.**
+**For DFKZ ODCF users: The _bsub_ package works on the submission nodes, the
+computing nodes and the Rstudio node.If the current node is not the submission
+node, a connection via ssh is automatically established. You might be asked to
+enter password for the connection.**
 
-**If the current node is not the submission node, a connection via ssh is automatically established.
-You might be asked to enter password for the connection.**
 
 ## Send R code
 
@@ -133,6 +134,22 @@ bsub_chunk(name = "example", sh_head = "module load pandoc/2.2.1",
 {
     library(rmarkdown)
     render(...)
+})
+```
+
+Another example is you can specify your conda environment via `sh_head`:
+
+```{r, eval = FALSE}
+bsub_chunk(name = "example", sh_head = "conda activate ...",
+{
+    ...
+})
+
+# or set it globally
+bsub_opt$sh_head = "conda activate ..."
+bsub_chunk(name = "example",
+{
+    ...
 })
 ```
 
