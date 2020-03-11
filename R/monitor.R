@@ -186,9 +186,9 @@ convert_to_POSIXlt = function(x) {
 
     if(is.null(bsub_opt$parse_time)) {
 
-        if(all(grepl("^\\w+ \\d+ \\d+:\\d+$", x[1]))) { # Dec 1 18:00
+        if(all(grepl("^\\w+\\s+\\d+\\s+\\d+:\\d+$", x[1]))) { # Dec 1 18:00
             t = as.POSIXlt(x, format = "%b %d %H:%M")
-        } else if(all(grepl("^\\w+ \\d+ \\d+:\\d+:\\d+$", x[1]))) { # Dec 1 18:00:00
+        } else if(all(grepl("^\\w+\\s+\\d+\\s+\\d+:\\d+:\\d+$", x[1]))) { # Dec 1 18:00:00
             t = as.POSIXlt(x, format = "%b %d %H:%M:%S")
         } else {                                        # Dec 1 18:00:00 2019
             t = as.POSIXlt(x, format = "%b %d %H:%M:%S %Y")
