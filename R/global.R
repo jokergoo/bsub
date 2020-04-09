@@ -154,7 +154,7 @@ bsub_opt = set_opt(
         .class = "logical"
     ),
     call_Rscript = list(
-        .value = NULL,
+        .value = function() "Rscript",
         .class = "function"
     ),
     submission_node = list(
