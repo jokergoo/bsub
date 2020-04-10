@@ -7,9 +7,14 @@ library(bsub)
 library(GetoptLong)
 ```
 
-**Note: you need to properly configure to use bsub package. Using bsub package on
-DKFZ ODCF cluster has already configured and automatically loaded. For other institutes,
-please refer to [other_insititute.html](other_insititute.html).**
+**Note: you need to properly configure to use bsub package. Using bsub package
+on DKFZ ODCF cluster has already configured and is automatically loaded. For
+other institutes, please refer to
+[other_insititute.html](other_insititute.html).**
+
+We suggest to use **bsub** directly on the submission node, i.e. the node that
+has the same file system as the computing nodes. Nevertheless, it can still be
+used on any computer for managing jobs.
 
 ## Send R code
 
@@ -24,7 +29,8 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
 })
 ```
 
-In following examples, we use `Sys.sleep(5)` to simulate a chunk of code which runs for a short time.
+In following examples, we use `Sys.sleep(5)` to simulate a chunk of code which
+runs for a short time.
 
 ```{r}
 bsub_chunk(
@@ -46,8 +52,8 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
 })
 ```
 
-If `name` is not specified, an internal name calculated by `digest::digest()` on the chunk
-is automatically assigned. The unit of `memory` is GB. 
+If `name` is not specified, an internal name calculated by `digest::digest()`
+on the chunk is automatically assigned. The unit of `memory` is GB.
 
 ### R version
 
@@ -70,9 +76,21 @@ bsub_chunk(name = "example",
 })
 ```
 
-The R version is used for finding proper `Rscript` binary. More generally, `bsub_opt$call_Rscript` is
-set as a function which returns the calling of `Rscript`. Also you can initialize other bash environment
-variables there. The default is:
+The R version is used for finding proper `Rscript` binary. To achieve this, users
+need to configure `bsub_opt$call_Rscript` option as a function taking R version as 
+argument. The default value of `bsub_opt$call_Rscript` is set as:
+
+```{r, eval = FALSE}
+function(version) "Rscript"
+```
+
+which uses the default `Rscript` without considering the R version. In real cases, 
+there might be several R with different versions installed on the cluster. Setting
+`bsub_opt$call_Rscript` ensure running the analysis with the specific R version you want.
+
+On DKFZ ODCF cluster, software with different versions are managed by
+[Environment Modules](http://modules.sourceforge.net/). E.g.
+`bsub_opt$call_Rscript` was set as follows:
 
 ```{r, eval = FALSE}
 function(version) {
@@ -80,17 +98,30 @@ function(version) {
 }
 ```
 
-where `version` is the value set in `bsub_opt$R_version`. `qq()` is from _GetoptLong_ package which does
-[variable interpolation](https://en.wikipedia.org/wiki/String_interpolation).
+where `qq()` is from _GetoptLong_ package which does [variable
+interpolation](https://en.wikipedia.org/wiki/String_interpolation). The module
+loading for `gcc/7.2.0` and `java/1.8.0_131` ensures that R packages depending
+on specific C/Java libraries can be successfully loaded.
 
-The module loading for `gcc/7.2.0` and `java/1.8.0_131` ensures that R packages depending on specific C/Java 
-libraries can be successfully loaded.
+Similarlly, if you use [conda](https://docs.conda.io/en/latest/) for managing
+different versions of software, you can also choose R with different versions
+by setting a proper `bsub_opt$call_Rscript`. Let assume you have conda
+environments for different R versions with the name schema `R_$version` (e.g.
+R_3.6.0), then you can set `bsub_opt$call_Rscript` as:
+
+```{r, eval = FALSE}
+bsub_opt$call_Rscript = function(version) {
+    qq("conda activate R_@{version}; Rscript")
+}
+```
 
 ### Bash environment
 
-In previous example, we load the `gcc/7.2.0` and `java/1.8.0_131` modules when loading R. These
-bash-level module initialization can also be set by `sh_head` which adds shell commands as header
-in the bash script that is used for job submission. E.g. to load R 3.6.0, we can do the other way:
+In previous example, we load the `gcc/7.2.0` and `java/1.8.0_131` modules, or
+activate the conda environment before loading R. These bash-level
+initialization can also be set by `sh_head` which adds shell commands as
+header in the bash script that is used for job submission. E.g. to load R
+3.6.0, we can do the other way:
 
 ```{r, eval = FALSE}
 bsub_opt$call_Rscript = function(version) qq("module load R/@{version}; Rscript")
@@ -237,11 +268,14 @@ bsub_chunk(name = "example",
 ```
 
 When `image` is set to `TRUE`, all variables in `.GlobalEnv` will be saved
-into a temporary file and all attached packages will be recorded. The temporary files
-will be removed after the job is finished, but note if you have multiple jobs, each job
-will save the image in a different file.
+into a temporary file and all attached packages will be recorded. The
+temporary files will be removed after the job is finished, but note if you
+have multiple jobs, each job will save the image in a different file.
 
 Absolute paths should be used instead of relative paths.
+
+Image files can be shared between different jobs. `variables` are saved into
+separated files for different jobs even if the variable names are the same.
 
 ### The working directory
 
@@ -264,13 +298,18 @@ bsub_chunk(name = "example",
 })
 ```
 
-Absolute path should be used.
+
+Note it is not recommended to let all file pathes in the jobs be relative or
+be affected by the working directory. It is recommended to use absolute path
+everywhere in the job.
+
 
 ### Retrieve the last variable
 
-The last variable in the code chunk can be saved by setting `save_var = TRUE` and retrieved back
-by `retrieve_var()` by specifying the job name. Since the variable is looked up by the job name,
-there should be no job with the same name submitted before retrieving the variable.
+The last variable in the code chunk can be saved by setting `save_var = TRUE`
+and retrieved back by `retrieve_var()` by specifying the job name. Since the
+variable is looked up by the job name, there should be no job with the same
+name submitted before retrieving the variable.
 
 `retrieve_var()` waits until the job is finished.
 
@@ -283,8 +322,10 @@ bsub_chunk(name = "example2", save_var = TRUE,
 retrieve_var("example2")
 ```
 
-However, it is not suggested to directly retrieve the returned value from the code chunk. Better choice
-is to save the variable into permanent file in the code chunk, E.g.:
+However, it is not recommended to directly retrieve the returned value from
+the code chunk. Better choice is to save the variable into permanent file in
+the code chunk so you don't need to rerun the code which normally has very long
+runing time, E.g.:
 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", 

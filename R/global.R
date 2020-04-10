@@ -230,7 +230,7 @@ class(bconf) = "bconf"
 #
 print.bconf = function(x, ...) {
     x = bsub_opt()
-    cat("Configuations for bsub:\n")
+    cat("Configurations for bsub:\n")
     if(is.null(x$user)) {
         cat("  * user is not defined\n")
     } else {
