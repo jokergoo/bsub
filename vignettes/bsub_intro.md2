@@ -1,0 +1,805 @@
+
+
+Load the library:
+
+
+```r
+library(bsub)
+```
+
+```
+## configure for user 'guz' on node odcf-worker01, odcf-cn34u03s10, odcf-cn34u03s12.
+```
+
+```r
+library(GetoptLong)
+```
+
+**For DFKZ ODCF users: The _bsub_ package works on the submission nodes, the
+computing nodes and the Rstudio node.If the current node is not the submission
+node, a connection via ssh is automatically established. You might be asked to
+enter password for the connection.**
+
+
+## Send R code
+
+The code chunk should be embraced by `{...}`.
+
+
+```r
+bsub_chunk(name = "example", memory = 10, hour = 10, core = 4, 
+{
+    fit = NMF::nmf(...)
+    # you better save `fit` into a permanent file
+    saveRDS(fit, file = "fit.rds")
+})
+```
+
+In following examples, we use `Sys.sleep(5)` to simulate a chunk of code which runs for a short time.
+
+
+```r
+bsub_chunk(
+{
+    Sys.sleep(5)
+})
+```
+
+```
+## - job: 'R_code_c3481a47' from a code chunk
+## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/R_code_c3481a47.out' \
+##       '/home/guz/.bsub_temp/R_code_c3481a47_aa8c1aaf4f4e.sh'
+```
+
+```
+## [1] "3139452"
+```
+
+The value returned by `bsub_chunk()` is the job ID from LSF cluster.
+
+### Job settings
+
+Set job name, memory, running time and number of cores:
+
+
+```r
+bsub_chunk(name = "example", memory = 10, hour = 10, core = 4, 
+{
+    Sys.sleep(5)
+})
+```
+
+```
+## - job: 'example' from a code chunk
+## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' \
+##      -o '/home/guz/.bsub_temp/example.out' \
+##       '/home/guz/.bsub_temp/example_aa8c57a93b43.sh'
+```
+
+```
+## [1] "3139453"
+```
+
+If `name` is not specified, an internal name calculated by `digest::digest()` on the chunk
+is automatically assigned. The unit of `memory` is GB. 
+
+### R version
+
+The R version can be specified by `R_version` argument.
+
+
+```r
+bsub_chunk(name = "example", R_version = "3.6.0",
+{
+    Sys.sleep(5)
+})
+```
+
+`R_version` can be set as a global parameter:
+
+
+```r
+bsub_opt$R_version = "3.6.0"
+bsub_chunk(name = "example", 
+{
+    Sys.sleep(5)
+})
+```
+
+The R version is used for finding proper `Rscript` binary. More generally, `bsub_opt$call_Rscript` is
+set as a function which returns the calling of `Rscript`. Also you can initialize other bash environment
+variables there. The default is:
+
+
+```r
+function(version) {
+    qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript")
+}
+```
+
+where `version` is the value set in `bsub_opt$R_version`. `qq()` is from _GetoptLong_ package which does
+[variable interpolation](https://en.wikipedia.org/wiki/String_interpolation).
+
+The module loading for `gcc/7.2.0` and `java/1.8.0_131` ensures that R packages depending on specific C/Java 
+libraries can be successfully loaded.
+
+### Bash environment
+
+In previous example, we load the `gcc/7.2.0` and `java/1.8.0_131` modules when loading R. These
+bash-level module initialization can also be set by `sh_head` which adds shell commands as header
+in the bash script that is used for job submission. E.g. to load R 3.6.0, we can do the other way:
+
+
+```r
+bsub_opt$call_Rscript = function(version) qq("module load R/@{version}; Rscript")
+bsub_chunk(name = "example", sh_head = c("module load gcc/7.2.0", "module load java/1.8.0_131"),
+{
+    Sys.sleep(5)
+})
+```
+
+Or set `sh_head` as a global option:
+
+
+```r
+bsub_opt$call_Rscript = function(version) qq("module load R/@{version}; Rscript")
+bsub_opt$sh_head = c("module load gcc/7.2.0", "module load java/1.8.0_131")
+bsub_chunk(name = "example",
+{
+    Sys.sleep(5)
+})
+```
+
+One usage of this functionality is to load `pandoc` module if the `rmarkdown` is used in the code chunk:
+
+
+```r
+bsub_chunk(name = "example", sh_head = "module load pandoc/2.2.1",
+{
+    library(rmarkdown)
+    render(...)
+})
+```
+
+Another example is you can specify your conda environment via `sh_head`:
+
+
+```r
+bsub_chunk(name = "example", sh_head = "conda activate ...",
+{
+    ...
+})
+
+# or set it globally
+bsub_opt$sh_head = "conda activate ..."
+bsub_chunk(name = "example",
+{
+    ...
+})
+```
+
+### Load other packages
+
+The packages that are needed can be directly added in the code chunk:
+
+
+```r
+bsub_chunk(name = "example",
+{
+    library(package1)
+    library(package2)
+    Sys.sleep(5)
+})
+```
+
+Or assign by `packages` argument:
+
+
+```r
+bsub_chunk(name = "example", packages = c("package1", "package2"),
+{
+    Sys.sleep(5)
+})
+```
+
+Or set it as a global parameter:
+
+
+```r
+bsub_opt$packages = c("package1", "package2")
+bsub_chunk(name = "example",
+{
+    Sys.sleep(5)
+})
+```
+
+There is a special value `_in_session_` for `packages` argument that loads all packages in the current R session.
+
+
+```r
+library(foo)
+library(bar)
+bsub_chunk(name = "example", packages = "_in_session_",
+{   
+    Sys.sleep(5)
+})
+```
+
+### Other R variables
+
+The R variables that are defined outside the code chunk and need to be used
+inside the code chunk can by specified by `variables` argument:
+
+
+```r
+foo = 1
+bsub_chunk(name = "example", variables = "foo",
+{ 
+    bar = foo
+    Sys.sleep(5)
+})
+```
+
+`variables` argument has a special value `_all_functions_` that loads all functions defined in the global environment.
+
+
+```r
+f1 = function() 1
+f2 = function() 2
+bsub_chunk(name = "example", variables = "_all_functions_",
+{ 
+    f1()
+    f2()
+    Sys.sleep(5)
+})
+```
+
+### The workspace image
+
+If you have too many external variables that are used in the code chunk or
+they are used in multiple jobs, you can directly save the workspace or the objects as an
+image and specify the `image` argument:
+
+
+```r
+save.image(file = "/path/foo.RData")
+# or 
+# save(var1, var2, ..., file = "...")
+bsub_chunk(name = "example", image = "/path/foo.RData",
+{ 
+    ...
+    Sys.sleep(5)
+})
+```
+
+Or set the image file as a global parameter:
+
+
+```r
+save.image(file = "/path/foo.RData")
+bsub_opt$image = "/path/foo.RData"
+bsub_chunk(name = "example",
+{ 
+    ...
+    Sys.sleep(5)
+})
+```
+
+When `image` is set to `TRUE`, all variables in `.GlobalEnv` will be saved
+into a temporary file and all attached packages will be recorded. The temporary files
+will be removed after the job is finished, but note if you have multiple jobs, each job
+will save the image in a different file.
+
+Absolute paths should be used instead of relative paths.
+
+### The working directory
+
+If the code chunk replies on the working directory, it can be specified by `wd` argument:
+
+
+```r
+bsub_chunk(name = "example", wd = "/path"
+{ 
+    Sys.sleep(5)
+})
+```
+
+Or set it as a global parameter:
+
+
+```r
+bsub_opt$wd = "/path"
+bsub_chunk(name = "example",
+{ 
+    Sys.sleep(5)
+})
+```
+
+Absolute path should be used.
+
+### Retrieve the last variable
+
+The last variable in the code chunk can be saved by setting `save_var = TRUE` and retrieved back
+by `retrieve_var()` by specifying the job name. Since the variable is looked up by the job name,
+there should be no job with the same name submitted before retrieving the variable.
+
+`retrieve_var()` waits until the job is finished.
+
+
+```r
+bsub_chunk(name = "example2", save_var = TRUE,
+{
+    Sys.sleep(10)
+    1+1
+})
+```
+
+```
+## - job: 'example2' from a code chunk
+## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example2.out' \
+##       '/home/guz/.bsub_temp/example2_aa8c40b86e9d.sh'
+```
+
+```
+## [1] "3139454"
+```
+
+```r
+retrieve_var("example2")
+```
+
+```
+## job is running or pending, retry in 30 seconds.
+```
+
+```
+## [1] 2
+```
+
+However, it is not suggested to directly retrieve the returned value from the code chunk. Better choice
+is to save the variable into permanent file in the code chunk, E.g.:
+
+
+```r
+bsub_chunk(name = "example", 
+{
+    ...
+    save(...)
+    # or
+    saveRDS(...)
+})
+```
+
+### Rerun the job
+
+There is a flag file to mark whether the job was successfully finished or not.
+If the job has been successfully done, the job with the same name will be
+skipped. `enforce` argument controls how to rerun the jobs with the same
+names. If it is set to `TRUE`, jobs will be rerun no matter they are done or not.
+
+
+
+
+
+```r
+bsub_chunk(name = "example", enforce = FALSE,
+{ 
+    Sys.sleep(5)
+})
+```
+
+```
+## - job: 'example' from a code chunk
+## Job 'example' is already done, skip.
+```
+
+`enforce` can be set as a global parameter:
+
+
+```r
+bsub_opt$enforce = FALSE
+bsub_chunk(name = "example",
+{ 
+    Sys.sleep(5)
+})
+```
+
+### Job dependency
+
+Since `bsub_chunk()` returns the job ID, it is can be used to specify the dependency in other jobs.
+The value for `dependency` can be a vector of job IDs.
+
+
+```r
+job1 = bsub_chunk(name = "example1",
+{ 
+    Sys.sleep(5)
+})
+bsub_chunk(name = "example2", dependency = job1,
+{ 
+    Sys.sleep(5)
+})
+```
+
+### Temporary and output directory
+
+`bsub_chunk()` has two arguments `temp_dir` and `output_dir`. `temp_dir` is used for the temporary R script
+and sh files. `output_dir` is used for the flag files and the output files from LSF cluster.
+
+
+```r
+bsub_chunk(name = "example", temp_dir = ..., output_dir = ...,
+{ 
+    Sys.sleep(5)
+})
+```
+
+They can be set as global parameters. The value of `output_dir` is by default set as the same as `temp_dir`.
+
+
+```r
+bsub_opt$temp_dir = ...
+bsub_opt$output_dir = ...
+bsub_chunk(name = "example",
+{ 
+    Sys.sleep(5)
+})
+```
+
+To remove temporary files in `temp_dir`, run `clear_temp_dir()` function.
+
+### Run code chunk from a script
+
+You can run code chunk from a script by specifying the starting line number
+and the ending line number. The R script is specified by `script` argument,
+the starting line number and the ending line number are specified by `start`
+and `end` arguments. (Note this functionality has not been tested yet.)
+
+
+```r
+bsub_chunk(name = "example",
+    script = "/path/foo.R",
+    start = 10, end = 20, ...)
+```
+
+Assume you are editing `foo.R` very offen and the line numbers that you want
+to run change from time to time. You can add tags in the R script and
+specifying `start` and `end` by those tags. In following example which is the
+source code of `foo.R`, we add tags for the code chunk we want to run:
+
+
+```r
+...
+# BSUB_START
+you code chunk here
+# BSUB_END
+...
+```
+
+Then you can specify `start` and `end` by regular expressions to match them:
+
+
+```r
+bsub_chunk(name = "example",
+    script = "/path/foo.R",
+    start = "^# BSUB_START", 
+    end = "^# BSUB_END", ...)
+```
+
+### Run jobs locally
+
+Setting `local = TRUE` directly runs the code chunk in the same R session.
+
+
+```r
+bsub_chunk(name = "example", local = TRUE,
+{ 
+    cat("blablabla...\n")
+})
+```
+
+```
+## - job: 'example' from a code chunk
+## bash /home/guz/.bsub_temp/example_aa8cfe1d47.sh
+```
+
+## Send R script
+
+`bsub_script()` submits the job from R scripts. The major arguments are the same as in `bsub_chunk()`.
+
+
+```r
+bsub_script("/path/foo.R", name = ..., memory = ..., core = ..., ...)
+```
+
+If the R script needs command-line arguments, they can be specified by `argv`.
+
+
+```r
+bsub_script("/path/foo.R", argv = "--a 1 --b 3", ...)
+```
+
+When you have a list of jobs with the same argument names but with different
+argument values, you can construct `argv` by `glue::glue()` or
+`GetoptLong::qq()` to construct the `argv` string:
+
+
+```r
+library(GetoptLong)
+for(a in 1:10) {
+    for(b in 11:20) {
+        bsub_script("/path/foo.R", argv = qq("-a @{a} --b @{b}"), ...)
+    }
+}
+```
+
+The command-line arguments can also specified as arguments of `bsub_script()`,
+but with `.` prefix.
+
+
+```r
+bsub_script("/path/foo.R", .a = 1, .b = 3, ...)
+```
+
+Then for the same example previously for submitting a list of jobs, it can be written as:
+
+
+```r
+for(a in 1:10) {
+    for(b in 11:20) {
+        bsub_script("/path/foo.R", .a = a, .b = b, ...)
+    }
+}
+```
+
+The R scripts should be used with the absolute paths.
+
+Note the bash environment can be initialized by setting a `sh_head`.
+
+## Send other shell commands
+
+`bsub_cmd()`submits shell commands. Basically it is similar as `bsub_script()`:
+
+
+```r
+bsub_cmd("samtools sort ...", name = ..., memory = ..., core = ..., ...)
+bsub_cmd(c("cmd1", "cmd2", ...), name = ..., memory = ..., core = ..., ...)
+```
+
+The binary and the arguments should all be set in the first argument of
+`bsub_cmd()`. Remember to use `glue::glue()` or `GetoptLong::qq()` to
+construct the commands if they contain variable arguments, e.g:
+
+
+```r
+for(bam in bam_file_list) {
+    bsub_cmd(qq("samtools sort @{bam} ... "), name = qq("sort_@{basename(bam)}"), 
+        memory = ..., core = ..., ...)
+}
+```
+
+## Job Summary
+
+`bjobs()` or just entering `bjobs` gives a summary of running jobs. Job status (by default is `RUN`
+and `PEND`) is controlled by `status` argument. Number of most recent jobs is controlled by `max` argument.
+Filtering on the job name is controlled by `filter` argument.
+
+
+```r
+for(i in 1:4) {
+    bsub_chunk(name = paste0("example_", i),
+    { 
+        Sys.sleep(5)
+    })
+}
+```
+
+```
+## - job: 'example_1' from a code chunk
+## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example_1.out' \
+##       '/home/guz/.bsub_temp/example_1_aa8c2901e56a.sh' 
+## - job: 'example_2' from a code chunk
+## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example_2.out' \
+##       '/home/guz/.bsub_temp/example_2_aa8c3e1dd8a.sh' 
+## - job: 'example_3' from a code chunk
+## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example_3.out' \
+##       '/home/guz/.bsub_temp/example_3_aa8c3934aea0.sh' 
+## - job: 'example_4' from a code chunk
+## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example_4.out' \
+##       '/home/guz/.bsub_temp/example_4_aa8c535f19ce.sh'
+```
+
+```r
+bjobs
+```
+
+```
+## ─────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME  SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  3139455 PEND example_1 2020-04-10 09:16:42 -           -         -     -   -      
+##  3139456 PEND example_2 2020-04-10 09:16:43 -           -         -     -   -      
+##  3139457 PEND example_3 2020-04-10 09:16:43 -           -         -     -   -      
+##  3139458 PEND example_4 2020-04-10 09:16:43 -           -         -     -   -      
+## ─────────────────────────────────────────────────────────────────────────────────── 
+##  15 DONE jobs, 4 PEND jobs within one week.
+##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
+```
+
+There is one additional column `RECENT` in the summary table which shows the order
+of the jobs with the same job name. The most recent job has the value 1.
+
+
+```r
+bjobs(status = "all", filter = "example")
+```
+
+```
+## ────────────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  3139446 DONE example   2      2020-04-10 09:14:24 0:00        -         4     -   12Mb   
+##  3139447 DONE example2  2      2020-04-10 09:14:24 0:00        -         1     -   41Mb   
+##  3139448 DONE example_1 2      2020-04-10 09:15:05 0:00        -         1     -   41Mb   
+##  3139449 DONE example_2 2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139450 DONE example_3 2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139451 DONE example_4 2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139453 DONE example   1      2020-04-10 09:16:00 0:00        -         4     -   37Mb   
+##  3139454 DONE example2  1      2020-04-10 09:16:01 0:00        -         1     -   41Mb   
+##  3139455 PEND example_1 1      2020-04-10 09:16:42 -           -         -     -   -      
+##  3139456 PEND example_2 1      2020-04-10 09:16:43 -           -         -     -   -      
+##  3139457 PEND example_3 1      2020-04-10 09:16:43 -           -         -     -   -      
+##  3139458 PEND example_4 1      2020-04-10 09:16:43 -           -         -     -   -      
+## ────────────────────────────────────────────────────────────────────────────────────────── 
+##  15 DONE jobs, 4 PEND jobs within one week.
+##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
+```
+
+`brecent()` returns 20 most recent jobs.
+
+
+```r
+brecent
+```
+
+```
+## ───────────────────────────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME                 RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  3122601 DONE cola_hc_Golub            1      2020-04-03 11:15:29 0:24        -         4     -   3.6Gb  
+##  3122602 DONE cola_hc_tcga_gbm         1      2020-04-03 11:15:30 2:45        -         4     -   6.4Gb  
+##  3122603 DONE cola_hc_Ritz_ALL         1      2020-04-03 11:15:30 1:56        -         4     -   5.6Gb  
+##  3122604 DONE cola_hc_HSMM_single_cell 1      2020-04-03 11:15:30 1:45        -         4     -   8Gb    
+##  3122605 DONE cola_hc_MCF10CA_scRNAseq 1      2020-04-03 11:15:30 0:43        -         4     -   4.2Gb  
+##  3139445 DONE R_code_c3481a47          2      2020-04-10 09:14:23 0:00        -         1     -   12Mb   
+##  3139446 DONE example                  2      2020-04-10 09:14:24 0:00        -         4     -   12Mb   
+##  3139447 DONE example2                 2      2020-04-10 09:14:24 0:00        -         1     -   41Mb   
+##  3139448 DONE example_1                2      2020-04-10 09:15:05 0:00        -         1     -   41Mb   
+##  3139449 DONE example_2                2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139450 DONE example_3                2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139451 DONE example_4                2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139452 DONE R_code_c3481a47          1      2020-04-10 09:16:00 0:00        -         1     -   41Mb   
+##  3139453 DONE example                  1      2020-04-10 09:16:00 0:00        -         4     -   37Mb   
+##  3139454 DONE example2                 1      2020-04-10 09:16:01 0:00        -         1     -   41Mb   
+##  3139455 PEND example_1                1      2020-04-10 09:16:42 -           -         -     -   -      
+##  3139456 PEND example_2                1      2020-04-10 09:16:43 -           -         -     -   -      
+##  3139457 PEND example_3                1      2020-04-10 09:16:43 -           -         -     -   -      
+##  3139458 PEND example_4                1      2020-04-10 09:16:43 -           -         -     -   -      
+## ───────────────────────────────────────────────────────────────────────────────────────────────────────── 
+##  15 DONE jobs, 4 PEND jobs within one week.
+##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
+```
+
+There are some helper functions which only list running/pending/done/failed jobs:
+
+- `bjobs_running`
+- `bjobs_pending`
+- `bjobs_done`
+- `bjobs_exit`
+
+
+## Other functions
+
+- `bkill(job_id)` kills a job or a list jobs.
+- `job_log(job_id)` prints the log of a specified running/finished/failed job. A vector
+  of jobs can also be sent at the same time that last 10 lines of each job are printed.
+- `check_dump_files()` searches the dump files (`core.xxx` by LSF cluster or `.RDataTmpxxx` by R).
+- `ssh_connect()` establishes the SSH connection to the submission node if it is lost.
+
+## Global Parameters
+
+
+```r
+bsub_opt
+```
+
+```
+##           Option                                    Value
+##         packages                                     NULL
+##            image                                     NULL
+##         temp_dir                     /home/guz/.bsub_temp
+##       output_dir                     /home/guz/.bsub_temp
+##          enforce                                     TRUE
+##        R_version                                    3.6.0
+##               wd                                       ""
+##           ignore                                    FALSE
+##            local                                    FALSE
+##     call_Rscript                  a user-defined function
+##  submission_node odcf-worker01, odcf-cn34u03s10, odcf....
+##       login_node odcf-worker01, odcf-cn34u03s10, odcf....
+##          sh_head                                       ""
+##             user                                      guz
+##            group                                     NULL
+##        ssh_envir source /etc/profile, export LSF_ENVD....
+##    bsub_template                  a user-defined function
+##       parse_time                                     NULL
+##          verbose                                    FALSE
+```
+
+## Interactive job monitor
+
+Simply running `monitor()` opens a shiny app where you can query and manage jobs. 
+
+```r
+monitor()
+```
+
+Following are examples of the job monitor.
+
+The job summary table:
+
+<p><img width="907" alt="monitor" src="monitor.png"></p>
+
+Job log:
+
+<p><img width="905" alt="job_log" src="job_log.png"></p>
+
+Job dependency tree:
+
+<p><img width="895" alt="dependency_tree" src="dependency_tree.png"></p>
+
+Kill jobs:
+
+<p><img width="895" alt="kill_jobs" src="kill_jobs.png"></p>
+
+## Session Info
+
+
+```r
+sessionInfo()
+```
+
+```
+## R version 3.6.0 (2019-04-26)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: CentOS Linux 7 (Core)
+## 
+## Matrix products: default
+## BLAS:   /usr/lib64/libblas.so.3.4.2
+## LAPACK: /usr/lib64/liblapack.so.3.4.2
+## 
+## locale:
+##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8    
+##  [5] LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
+##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] GetoptLong_0.1.8 bsub_0.99.0      knitr_1.28       colorout_1.2-1  
+## 
+## loaded via a namespace (and not attached):
+##  [1] compiler_3.6.0      rjson_0.2.20        magrittr_1.5       
+##  [4] clisymbols_1.2.0    tools_3.6.0         GlobalOptions_0.1.1
+##  [7] stringi_1.4.6       digest_0.6.25       stringr_1.4.0      
+## [10] xfun_0.12           evaluate_0.14
+```
+
+
