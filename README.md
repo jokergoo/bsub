@@ -1,6 +1,6 @@
-# Submitter and monitor of LSF cluster
+# Submitter and Monitor of the LSF Cluster
 
-It Sends R code/R scripts/shell commands to LSF cluster without leaving R.
+It sends R code/R scripts/shell commands to LSF cluster without leaving R.
 
 ### Install
 

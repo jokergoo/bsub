@@ -36,7 +36,6 @@
 	}
 
 	if(grepl("odcf|w610", Sys.info()["nodename"])) {
-		packageStartupMessage("On ODCF cluster, set global environment.")
 		msg = TRUE
 		config_odcf()
 	}
@@ -59,6 +58,8 @@
 	packageStartupMessage("applied on any computer.")
 
 	packageStartupMessage("==================================================================")
+
+	print(bconf)
 }
 
 
@@ -68,7 +69,6 @@
 
 if(identical(environment(), .GlobalEnv)) {
 	if(grepl("odcf|w610", Sys.info()["nodename"])) {
-		message("On ODCF cluster, set global environment.")
-		config_odcf()
+		config_odcf(verbose = FALSE)
 	}
 }

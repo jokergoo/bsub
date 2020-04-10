@@ -1,5 +1,8 @@
+S3method("print", "bconf")
+export("print.bconf")
 S3method("print", "bjobs")
 export("print.bjobs")
+export("bconf")
 export("bjobs")
 export("bjobs_done")
 export("bjobs_exit")

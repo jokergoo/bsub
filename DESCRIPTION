@@ -1,8 +1,8 @@
 Package: bsub
 Type: Package
-Title: Send R code/R scripts/Shell commands to LSF cluster
-Version: 0.99.1
-Date: 2020-02-05
+Title: Submitter and Monitor of the LSF Cluster
+Version: 1.0.0
+Date: 2020-04-10
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.0.0)
@@ -23,7 +23,8 @@ Suggests: knitr,
           graph, 
           Rgraphviz
 biocViews: Software, Infrastructure
-Description: Send R code/R scripts/shell commands to LSF cluster without leaving R.
+Description: It submits R code/R scripts/shell commands to LSF cluster (the bsub system) without leaving R.
+    There is also an interactive web app for monitoring the job status.
 VignetteBuilder: knitr
 URL: https://github.com/jokergoo/bsub
 License: MIT + file LICENSE
