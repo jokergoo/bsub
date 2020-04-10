@@ -14,12 +14,12 @@ vignette: >
 -------------------------------------------------------------
 
 
-```{r, echo = FALSE, results = "asis"}
+```{r, echo = FALSE}
 if(grepl("odcf", Sys.info()["nodename"])) {
     library(knitr)
     knit("bsub_intro.Rmd2", "bsub_intro.md2")
 }
 ln = readLines("bsub_intro.md2")
-cat(ln)
+paste(ln, collapse = "\n")
 ```
 
