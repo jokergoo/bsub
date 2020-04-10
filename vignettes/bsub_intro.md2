@@ -8,18 +8,29 @@ library(bsub)
 ```
 
 ```
-## configure for user 'guz' on node odcf-worker01, odcf-cn34u03s10, odcf-cn34u03s12.
+## Configurations for bsub:
+##   * user for connecting submission node: guz
+##   * submission node: odcf-worker01,odcf-cn34u03s10,odcf-cn34u03s12
+##   * global R version: 3.6.0
+##   * command to call `Rscript`:
+##       qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript") 
+##   * temporary directory: /home/guz/.bsub_temp
+## 
+## Configuations can be modified by `bsub_opt()` function
 ```
 
 ```r
 library(GetoptLong)
 ```
 
-**For DFKZ ODCF users: The _bsub_ package works on the submission nodes, the
-computing nodes and the Rstudio node.If the current node is not the submission
-node, a connection via ssh is automatically established. You might be asked to
-enter password for the connection.**
+**Note: you need to properly configure to use bsub package. Using bsub package
+on DKFZ ODCF cluster has already configured and is automatically loaded. For
+other institutes, please refer to
+[other_insititute.html](other_insititute.html).**
 
+We suggest to use **bsub** directly on the submission node, i.e. the node that
+has the same file system as the computing nodes. Nevertheless, it can still be
+used on any computer for managing jobs.
 
 ## Send R code
 
@@ -35,7 +46,8 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
 })
 ```
 
-In following examples, we use `Sys.sleep(5)` to simulate a chunk of code which runs for a short time.
+In following examples, we use `Sys.sleep(5)` to simulate a chunk of code which
+runs for a short time.
 
 
 ```r
@@ -49,11 +61,11 @@ bsub_chunk(
 ## - job: 'R_code_c3481a47' from a code chunk
 ## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/R_code_c3481a47.out' \
-##       '/home/guz/.bsub_temp/R_code_c3481a47_aa8c1aaf4f4e.sh'
+##     '/home/guz/.bsub_temp/R_code_c3481a47_754e4678507a.sh'
 ```
 
 ```
-## [1] "3139452"
+## [1] "3139713"
 ```
 
 The value returned by `bsub_chunk()` is the job ID from LSF cluster.
@@ -74,15 +86,15 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
 ## - job: 'example' from a code chunk
 ## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' \
 ##      -o '/home/guz/.bsub_temp/example.out' \
-##       '/home/guz/.bsub_temp/example_aa8c57a93b43.sh'
+##     '/home/guz/.bsub_temp/example_754e5e60410b.sh'
 ```
 
 ```
-## [1] "3139453"
+## [1] "3139714"
 ```
 
-If `name` is not specified, an internal name calculated by `digest::digest()` on the chunk
-is automatically assigned. The unit of `memory` is GB. 
+If `name` is not specified, an internal name calculated by `digest::digest()`
+on the chunk is automatically assigned. The unit of `memory` is GB.
 
 ### R version
 
@@ -107,9 +119,22 @@ bsub_chunk(name = "example",
 })
 ```
 
-The R version is used for finding proper `Rscript` binary. More generally, `bsub_opt$call_Rscript` is
-set as a function which returns the calling of `Rscript`. Also you can initialize other bash environment
-variables there. The default is:
+The R version is used for finding proper `Rscript` binary. To achieve this, users
+need to configure `bsub_opt$call_Rscript` option as a function taking R version as 
+argument. The default value of `bsub_opt$call_Rscript` is set as:
+
+
+```r
+function(version) "Rscript"
+```
+
+which uses the default `Rscript` without considering the R version. In real cases, 
+there might be several R with different versions installed on the cluster. Setting
+`bsub_opt$call_Rscript` ensure running the analysis with the specific R version you want.
+
+On DKFZ ODCF cluster, software with different versions are managed by
+[Environment Modules](http://modules.sourceforge.net/). E.g.
+`bsub_opt$call_Rscript` was set as follows:
 
 
 ```r
@@ -118,17 +143,31 @@ function(version) {
 }
 ```
 
-where `version` is the value set in `bsub_opt$R_version`. `qq()` is from _GetoptLong_ package which does
-[variable interpolation](https://en.wikipedia.org/wiki/String_interpolation).
+where `qq()` is from _GetoptLong_ package which does [variable
+interpolation](https://en.wikipedia.org/wiki/String_interpolation). The module
+loading for `gcc/7.2.0` and `java/1.8.0_131` ensures that R packages depending
+on specific C/Java libraries can be successfully loaded.
 
-The module loading for `gcc/7.2.0` and `java/1.8.0_131` ensures that R packages depending on specific C/Java 
-libraries can be successfully loaded.
+Similarlly, if you use [conda](https://docs.conda.io/en/latest/) for managing
+different versions of software, you can also choose R with different versions
+by setting a proper `bsub_opt$call_Rscript`. Let assume you have conda
+environments for different R versions with the name schema `R_$version` (e.g.
+R_3.6.0), then you can set `bsub_opt$call_Rscript` as:
+
+
+```r
+bsub_opt$call_Rscript = function(version) {
+    qq("conda activate R_@{version}; Rscript")
+}
+```
 
 ### Bash environment
 
-In previous example, we load the `gcc/7.2.0` and `java/1.8.0_131` modules when loading R. These
-bash-level module initialization can also be set by `sh_head` which adds shell commands as header
-in the bash script that is used for job submission. E.g. to load R 3.6.0, we can do the other way:
+In previous example, we load the `gcc/7.2.0` and `java/1.8.0_131` modules, or
+activate the conda environment before loading R. These bash-level
+initialization can also be set by `sh_head` which adds shell commands as
+header in the bash script that is used for job submission. E.g. to load R
+3.6.0, we can do the other way:
 
 
 ```r
@@ -287,11 +326,14 @@ bsub_chunk(name = "example",
 ```
 
 When `image` is set to `TRUE`, all variables in `.GlobalEnv` will be saved
-into a temporary file and all attached packages will be recorded. The temporary files
-will be removed after the job is finished, but note if you have multiple jobs, each job
-will save the image in a different file.
+into a temporary file and all attached packages will be recorded. The
+temporary files will be removed after the job is finished, but note if you
+have multiple jobs, each job will save the image in a different file.
 
 Absolute paths should be used instead of relative paths.
+
+Image files can be shared between different jobs. `variables` are saved into
+separated files for different jobs even if the variable names are the same.
 
 ### The working directory
 
@@ -316,13 +358,18 @@ bsub_chunk(name = "example",
 })
 ```
 
-Absolute path should be used.
+
+Note it is not recommended to let all file pathes in the jobs be relative or
+be affected by the working directory. It is recommended to use absolute path
+everywhere in the job.
+
 
 ### Retrieve the last variable
 
-The last variable in the code chunk can be saved by setting `save_var = TRUE` and retrieved back
-by `retrieve_var()` by specifying the job name. Since the variable is looked up by the job name,
-there should be no job with the same name submitted before retrieving the variable.
+The last variable in the code chunk can be saved by setting `save_var = TRUE`
+and retrieved back by `retrieve_var()` by specifying the job name. Since the
+variable is looked up by the job name, there should be no job with the same
+name submitted before retrieving the variable.
 
 `retrieve_var()` waits until the job is finished.
 
@@ -339,11 +386,11 @@ bsub_chunk(name = "example2", save_var = TRUE,
 ## - job: 'example2' from a code chunk
 ## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example2.out' \
-##       '/home/guz/.bsub_temp/example2_aa8c40b86e9d.sh'
+##     '/home/guz/.bsub_temp/example2_754e1d40d339.sh'
 ```
 
 ```
-## [1] "3139454"
+## [1] "3139715"
 ```
 
 ```r
@@ -358,8 +405,10 @@ retrieve_var("example2")
 ## [1] 2
 ```
 
-However, it is not suggested to directly retrieve the returned value from the code chunk. Better choice
-is to save the variable into permanent file in the code chunk, E.g.:
+However, it is not recommended to directly retrieve the returned value from
+the code chunk. Better choice is to save the variable into permanent file in
+the code chunk so you don't need to rerun the code which normally has very long
+runing time, E.g.:
 
 
 ```r
@@ -502,7 +551,7 @@ bsub_chunk(name = "example", local = TRUE,
 
 ```
 ## - job: 'example' from a code chunk
-## bash /home/guz/.bsub_temp/example_aa8cfe1d47.sh
+## bash /home/guz/.bsub_temp/example_754e580c3a1b.sh
 ```
 
 ## Send R script
@@ -600,19 +649,19 @@ for(i in 1:4) {
 ## - job: 'example_1' from a code chunk
 ## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_1.out' \
-##       '/home/guz/.bsub_temp/example_1_aa8c2901e56a.sh' 
+##     '/home/guz/.bsub_temp/example_1_754e640357f2.sh' 
 ## - job: 'example_2' from a code chunk
 ## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_2.out' \
-##       '/home/guz/.bsub_temp/example_2_aa8c3e1dd8a.sh' 
+##     '/home/guz/.bsub_temp/example_2_754e7085cc76.sh' 
 ## - job: 'example_3' from a code chunk
 ## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_3.out' \
-##       '/home/guz/.bsub_temp/example_3_aa8c3934aea0.sh' 
+##     '/home/guz/.bsub_temp/example_3_754e612c0310.sh' 
 ## - job: 'example_4' from a code chunk
 ## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_4.out' \
-##       '/home/guz/.bsub_temp/example_4_aa8c535f19ce.sh'
+##     '/home/guz/.bsub_temp/example_4_754e6bf701cf.sh'
 ```
 
 ```r
@@ -622,12 +671,12 @@ bjobs
 ```
 ## ─────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3139455 PEND example_1 2020-04-10 09:16:42 -           -         -     -   -      
-##  3139456 PEND example_2 2020-04-10 09:16:43 -           -         -     -   -      
-##  3139457 PEND example_3 2020-04-10 09:16:43 -           -         -     -   -      
-##  3139458 PEND example_4 2020-04-10 09:16:43 -           -         -     -   -      
+##  3139716 PEND example_1 2020-04-10 14:35:04 -           -         -     -   -      
+##  3139717 PEND example_2 2020-04-10 14:35:04 -           -         -     -   -      
+##  3139718 PEND example_3 2020-04-10 14:35:04 -           -         -     -   -      
+##  3139719 PEND example_4 2020-04-10 14:35:04 -           -         -     -   -      
 ## ─────────────────────────────────────────────────────────────────────────────────── 
-##  15 DONE jobs, 4 PEND jobs within one week.
+##  38 DONE jobs, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
 ```
 
@@ -642,20 +691,45 @@ bjobs(status = "all", filter = "example")
 ```
 ## ────────────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3139446 DONE example   2      2020-04-10 09:14:24 0:00        -         4     -   12Mb   
-##  3139447 DONE example2  2      2020-04-10 09:14:24 0:00        -         1     -   41Mb   
-##  3139448 DONE example_1 2      2020-04-10 09:15:05 0:00        -         1     -   41Mb   
-##  3139449 DONE example_2 2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139450 DONE example_3 2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139451 DONE example_4 2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139453 DONE example   1      2020-04-10 09:16:00 0:00        -         4     -   37Mb   
-##  3139454 DONE example2  1      2020-04-10 09:16:01 0:00        -         1     -   41Mb   
-##  3139455 PEND example_1 1      2020-04-10 09:16:42 -           -         -     -   -      
-##  3139456 PEND example_2 1      2020-04-10 09:16:43 -           -         -     -   -      
-##  3139457 PEND example_3 1      2020-04-10 09:16:43 -           -         -     -   -      
-##  3139458 PEND example_4 1      2020-04-10 09:16:43 -           -         -     -   -      
+##  3139446 DONE example   6      2020-04-10 09:14:24 0:00        -         4     -   12Mb   
+##  3139447 DONE example2  6      2020-04-10 09:14:24 0:00        -         1     -   41Mb   
+##  3139448 DONE example_1 6      2020-04-10 09:15:05 0:00        -         1     -   41Mb   
+##  3139449 DONE example_2 6      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139450 DONE example_3 6      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139451 DONE example_4 6      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139453 DONE example   5      2020-04-10 09:16:00 0:00        -         4     -   37Mb   
+##  3139454 DONE example2  5      2020-04-10 09:16:01 0:00        -         1     -   41Mb   
+##  3139455 DONE example_1 5      2020-04-10 09:16:42 0:00        -         1     -   41Mb   
+##  3139456 DONE example_2 5      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
+##  3139457 DONE example_3 5      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
+##  3139458 DONE example_4 5      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
+##  3139641 DONE example   4      2020-04-10 11:55:54 0:00        -         4     -   6Mb    
+##  3139642 DONE example2  4      2020-04-10 11:55:54 0:00        -         1     -   41Mb   
+##  3139643 DONE example_1 4      2020-04-10 11:56:36 0:00        -         1     -   37Mb   
+##  3139644 DONE example_2 4      2020-04-10 11:56:36 0:00        -         1     -   37Mb   
+##  3139645 DONE example_3 4      2020-04-10 11:56:36 0:00        -         1     -   41Mb   
+##  3139646 DONE example_4 4      2020-04-10 11:56:36 0:00        -         1     -   41Mb   
+##  3139698 DONE example   3      2020-04-10 14:22:53 0:00        -         4     -   15Mb   
+##  3139699 DONE example2  3      2020-04-10 14:22:53 0:00        -         1     -   41Mb   
+##  3139700 DONE example_1 3      2020-04-10 14:23:34 0:00        -         1     -   42Mb   
+##  3139701 DONE example_2 3      2020-04-10 14:23:35 0:00        -         1     -   41Mb   
+##  3139702 DONE example_3 3      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
+##  3139703 DONE example_4 3      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
+##  3139706 DONE example   2      2020-04-10 14:27:26 0:00        -         4     -   37Mb   
+##  3139707 DONE example2  2      2020-04-10 14:27:26 0:00        -         1     -   41Mb   
+##  3139708 DONE example_1 2      2020-04-10 14:28:08 0:00        -         1     -   40Mb   
+##  3139709 DONE example_2 2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
+##  3139710 DONE example_3 2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
+##  3139711 DONE example_4 2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
+##  3139714 DONE example   1      2020-04-10 14:34:22 0:00        -         4     -   41Mb   
+##  3139715 DONE example2  1      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
+##  3139716 PEND example_1 1      2020-04-10 14:35:04 -           -         -     -   -      
+##  3139717 PEND example_2 1      2020-04-10 14:35:04 -           -         -     -   -      
+##  3139718 PEND example_3 1      2020-04-10 14:35:04 -           -         -     -   -      
+##  3139719 PEND example_4 1      2020-04-10 14:35:04 -           -         -     -   -      
+##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
 ## ────────────────────────────────────────────────────────────────────────────────────────── 
-##  15 DONE jobs, 4 PEND jobs within one week.
+##  38 DONE jobs, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
 ```
 
@@ -667,29 +741,30 @@ brecent
 ```
 
 ```
-## ───────────────────────────────────────────────────────────────────────────────────────────────────────── 
-##  JOBID   STAT JOB_NAME                 RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3122601 DONE cola_hc_Golub            1      2020-04-03 11:15:29 0:24        -         4     -   3.6Gb  
-##  3122602 DONE cola_hc_tcga_gbm         1      2020-04-03 11:15:30 2:45        -         4     -   6.4Gb  
-##  3122603 DONE cola_hc_Ritz_ALL         1      2020-04-03 11:15:30 1:56        -         4     -   5.6Gb  
-##  3122604 DONE cola_hc_HSMM_single_cell 1      2020-04-03 11:15:30 1:45        -         4     -   8Gb    
-##  3122605 DONE cola_hc_MCF10CA_scRNAseq 1      2020-04-03 11:15:30 0:43        -         4     -   4.2Gb  
-##  3139445 DONE R_code_c3481a47          2      2020-04-10 09:14:23 0:00        -         1     -   12Mb   
-##  3139446 DONE example                  2      2020-04-10 09:14:24 0:00        -         4     -   12Mb   
-##  3139447 DONE example2                 2      2020-04-10 09:14:24 0:00        -         1     -   41Mb   
-##  3139448 DONE example_1                2      2020-04-10 09:15:05 0:00        -         1     -   41Mb   
-##  3139449 DONE example_2                2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139450 DONE example_3                2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139451 DONE example_4                2      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139452 DONE R_code_c3481a47          1      2020-04-10 09:16:00 0:00        -         1     -   41Mb   
-##  3139453 DONE example                  1      2020-04-10 09:16:00 0:00        -         4     -   37Mb   
-##  3139454 DONE example2                 1      2020-04-10 09:16:01 0:00        -         1     -   41Mb   
-##  3139455 PEND example_1                1      2020-04-10 09:16:42 -           -         -     -   -      
-##  3139456 PEND example_2                1      2020-04-10 09:16:43 -           -         -     -   -      
-##  3139457 PEND example_3                1      2020-04-10 09:16:43 -           -         -     -   -      
-##  3139458 PEND example_4                1      2020-04-10 09:16:43 -           -         -     -   -      
-## ───────────────────────────────────────────────────────────────────────────────────────────────────────── 
-##  15 DONE jobs, 4 PEND jobs within one week.
+## ──────────────────────────────────────────────────────────────────────────────────────────────── 
+##  JOBID   STAT JOB_NAME        RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  3139698 DONE example         3      2020-04-10 14:22:53 0:00        -         4     -   15Mb   
+##  3139699 DONE example2        3      2020-04-10 14:22:53 0:00        -         1     -   41Mb   
+##  3139700 DONE example_1       3      2020-04-10 14:23:34 0:00        -         1     -   42Mb   
+##  3139701 DONE example_2       3      2020-04-10 14:23:35 0:00        -         1     -   41Mb   
+##  3139702 DONE example_3       3      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
+##  3139703 DONE example_4       3      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
+##  3139705 DONE R_code_c3481a47 2      2020-04-10 14:27:25 0:00        -         1     -   37Mb   
+##  3139706 DONE example         2      2020-04-10 14:27:26 0:00        -         4     -   37Mb   
+##  3139707 DONE example2        2      2020-04-10 14:27:26 0:00        -         1     -   41Mb   
+##  3139708 DONE example_1       2      2020-04-10 14:28:08 0:00        -         1     -   40Mb   
+##  3139709 DONE example_2       2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
+##  3139710 DONE example_3       2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
+##  3139711 DONE example_4       2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
+##  3139713 DONE R_code_c3481a47 1      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
+##  3139714 DONE example         1      2020-04-10 14:34:22 0:00        -         4     -   41Mb   
+##  3139715 DONE example2        1      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
+##  3139716 PEND example_1       1      2020-04-10 14:35:04 -           -         -     -   -      
+##  3139717 PEND example_2       1      2020-04-10 14:35:04 -           -         -     -   -      
+##  3139718 PEND example_3       1      2020-04-10 14:35:04 -           -         -     -   -      
+##  3139719 PEND example_4       1      2020-04-10 14:35:04 -           -         -     -   -      
+## ──────────────────────────────────────────────────────────────────────────────────────────────── 
+##  38 DONE jobs, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
 ```
 
@@ -739,6 +814,25 @@ bsub_opt
 ##          verbose                                    FALSE
 ```
 
+Or a more readable text:
+
+
+```r
+bconf
+```
+
+```
+## Configurations for bsub:
+##   * user for connecting submission node: guz
+##   * submission node: odcf-worker01,odcf-cn34u03s10,odcf-cn34u03s12
+##   * global R version: 3.6.0
+##   * command to call `Rscript`:
+##       qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript") 
+##   * temporary directory: /home/guz/.bsub_temp
+## 
+## Configuations can be modified by `bsub_opt()` function
+```
+
 ## Interactive job monitor
 
 Simply running `monitor()` opens a shiny app where you can query and manage jobs. 
@@ -783,7 +877,7 @@ sessionInfo()
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8    
+##  [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=C              
 ##  [5] LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
 ##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
@@ -793,13 +887,15 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] GetoptLong_0.1.8 bsub_0.99.0      knitr_1.28       colorout_1.2-1  
+## [1] GetoptLong_0.1.8 bsub_1.0.0       knitr_1.28      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] compiler_3.6.0      rjson_0.2.20        magrittr_1.5       
-##  [4] clisymbols_1.2.0    tools_3.6.0         GlobalOptions_0.1.1
-##  [7] stringi_1.4.6       digest_0.6.25       stringr_1.4.0      
-## [10] xfun_0.12           evaluate_0.14
+##  [1] Rcpp_1.0.4          clisymbols_1.2.0    digest_0.6.25      
+##  [4] magrittr_1.5        evaluate_0.14       rlang_0.4.5        
+##  [7] stringi_1.4.6       GlobalOptions_0.1.1 rmarkdown_1.18     
+## [10] rjson_0.2.20        tools_3.6.0         stringr_1.4.0      
+## [13] xfun_0.12           yaml_2.2.1          compiler_3.6.0     
+## [16] htmltools_0.4.0
 ```
 
 
