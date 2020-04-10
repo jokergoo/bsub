@@ -5,21 +5,6 @@ Load the library:
 
 ```r
 library(bsub)
-```
-
-```
-## Configurations for bsub:
-##   * user for connecting submission node: guz
-##   * submission node: odcf-worker01,odcf-cn34u03s10,odcf-cn34u03s12
-##   * global R version: 3.6.0
-##   * command to call `Rscript`:
-##       qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript") 
-##   * temporary directory: /home/guz/.bsub_temp
-## 
-## Configuations can be modified by `bsub_opt()` function
-```
-
-```r
 library(GetoptLong)
 ```
 
@@ -61,11 +46,11 @@ bsub_chunk(
 ## - job: 'R_code_c3481a47' from a code chunk
 ## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/R_code_c3481a47.out' \
-##     '/home/guz/.bsub_temp/R_code_c3481a47_754e4678507a.sh'
+##     '/home/guz/.bsub_temp/R_code_c3481a47_e0ec7a36c3fe.sh'
 ```
 
 ```
-## [1] "3139713"
+## [1] "3139729"
 ```
 
 The value returned by `bsub_chunk()` is the job ID from LSF cluster.
@@ -86,11 +71,11 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
 ## - job: 'example' from a code chunk
 ## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' \
 ##      -o '/home/guz/.bsub_temp/example.out' \
-##     '/home/guz/.bsub_temp/example_754e5e60410b.sh'
+##     '/home/guz/.bsub_temp/example_e0ec47667385.sh'
 ```
 
 ```
-## [1] "3139714"
+## [1] "3139730"
 ```
 
 If `name` is not specified, an internal name calculated by `digest::digest()`
@@ -386,11 +371,11 @@ bsub_chunk(name = "example2", save_var = TRUE,
 ## - job: 'example2' from a code chunk
 ## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example2.out' \
-##     '/home/guz/.bsub_temp/example2_754e1d40d339.sh'
+##     '/home/guz/.bsub_temp/example2_e0ec3fb3dd84.sh'
 ```
 
 ```
-## [1] "3139715"
+## [1] "3139731"
 ```
 
 ```r
@@ -551,7 +536,7 @@ bsub_chunk(name = "example", local = TRUE,
 
 ```
 ## - job: 'example' from a code chunk
-## bash /home/guz/.bsub_temp/example_754e580c3a1b.sh
+## bash /home/guz/.bsub_temp/example_e0ec684b4b6e.sh
 ```
 
 ## Send R script
@@ -649,19 +634,19 @@ for(i in 1:4) {
 ## - job: 'example_1' from a code chunk
 ## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_1.out' \
-##     '/home/guz/.bsub_temp/example_1_754e640357f2.sh' 
+##     '/home/guz/.bsub_temp/example_1_e0ec189967bd.sh' 
 ## - job: 'example_2' from a code chunk
 ## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_2.out' \
-##     '/home/guz/.bsub_temp/example_2_754e7085cc76.sh' 
+##     '/home/guz/.bsub_temp/example_2_e0ec622c8ae1.sh' 
 ## - job: 'example_3' from a code chunk
 ## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_3.out' \
-##     '/home/guz/.bsub_temp/example_3_754e612c0310.sh' 
+##     '/home/guz/.bsub_temp/example_3_e0ece4bfe2.sh' 
 ## - job: 'example_4' from a code chunk
 ## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_4.out' \
-##     '/home/guz/.bsub_temp/example_4_754e6bf701cf.sh'
+##     '/home/guz/.bsub_temp/example_4_e0ec23572751.sh'
 ```
 
 ```r
@@ -671,12 +656,12 @@ bjobs
 ```
 ## ─────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3139716 PEND example_1 2020-04-10 14:35:04 -           -         -     -   -      
-##  3139717 PEND example_2 2020-04-10 14:35:04 -           -         -     -   -      
-##  3139718 PEND example_3 2020-04-10 14:35:04 -           -         -     -   -      
-##  3139719 PEND example_4 2020-04-10 14:35:04 -           -         -     -   -      
+##  3139732 PEND example_1 2020-04-10 15:52:45 -           -         -     -   -      
+##  3139733 PEND example_2 2020-04-10 15:52:45 -           -         -     -   -      
+##  3139734 PEND example_3 2020-04-10 15:52:45 -           -         -     -   -      
+##  3139735 PEND example_4 2020-04-10 15:52:46 -           -         -     -   -      
 ## ─────────────────────────────────────────────────────────────────────────────────── 
-##  38 DONE jobs, 4 PEND jobs within one week.
+##  52 DONE jobs, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
 ```
 
@@ -691,45 +676,57 @@ bjobs(status = "all", filter = "example")
 ```
 ## ────────────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3139446 DONE example   6      2020-04-10 09:14:24 0:00        -         4     -   12Mb   
-##  3139447 DONE example2  6      2020-04-10 09:14:24 0:00        -         1     -   41Mb   
-##  3139448 DONE example_1 6      2020-04-10 09:15:05 0:00        -         1     -   41Mb   
-##  3139449 DONE example_2 6      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139450 DONE example_3 6      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139451 DONE example_4 6      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139453 DONE example   5      2020-04-10 09:16:00 0:00        -         4     -   37Mb   
-##  3139454 DONE example2  5      2020-04-10 09:16:01 0:00        -         1     -   41Mb   
-##  3139455 DONE example_1 5      2020-04-10 09:16:42 0:00        -         1     -   41Mb   
-##  3139456 DONE example_2 5      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
-##  3139457 DONE example_3 5      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
-##  3139458 DONE example_4 5      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
-##  3139641 DONE example   4      2020-04-10 11:55:54 0:00        -         4     -   6Mb    
-##  3139642 DONE example2  4      2020-04-10 11:55:54 0:00        -         1     -   41Mb   
-##  3139643 DONE example_1 4      2020-04-10 11:56:36 0:00        -         1     -   37Mb   
-##  3139644 DONE example_2 4      2020-04-10 11:56:36 0:00        -         1     -   37Mb   
-##  3139645 DONE example_3 4      2020-04-10 11:56:36 0:00        -         1     -   41Mb   
-##  3139646 DONE example_4 4      2020-04-10 11:56:36 0:00        -         1     -   41Mb   
-##  3139698 DONE example   3      2020-04-10 14:22:53 0:00        -         4     -   15Mb   
-##  3139699 DONE example2  3      2020-04-10 14:22:53 0:00        -         1     -   41Mb   
-##  3139700 DONE example_1 3      2020-04-10 14:23:34 0:00        -         1     -   42Mb   
-##  3139701 DONE example_2 3      2020-04-10 14:23:35 0:00        -         1     -   41Mb   
-##  3139702 DONE example_3 3      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
-##  3139703 DONE example_4 3      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
-##  3139706 DONE example   2      2020-04-10 14:27:26 0:00        -         4     -   37Mb   
-##  3139707 DONE example2  2      2020-04-10 14:27:26 0:00        -         1     -   41Mb   
-##  3139708 DONE example_1 2      2020-04-10 14:28:08 0:00        -         1     -   40Mb   
-##  3139709 DONE example_2 2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
-##  3139710 DONE example_3 2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
-##  3139711 DONE example_4 2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
-##  3139714 DONE example   1      2020-04-10 14:34:22 0:00        -         4     -   41Mb   
-##  3139715 DONE example2  1      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
-##  3139716 PEND example_1 1      2020-04-10 14:35:04 -           -         -     -   -      
-##  3139717 PEND example_2 1      2020-04-10 14:35:04 -           -         -     -   -      
-##  3139718 PEND example_3 1      2020-04-10 14:35:04 -           -         -     -   -      
-##  3139719 PEND example_4 1      2020-04-10 14:35:04 -           -         -     -   -      
+##  3139446 DONE example   8      2020-04-10 09:14:24 0:00        -         4     -   12Mb   
+##  3139447 DONE example2  8      2020-04-10 09:14:24 0:00        -         1     -   41Mb   
+##  3139448 DONE example_1 8      2020-04-10 09:15:05 0:00        -         1     -   41Mb   
+##  3139449 DONE example_2 8      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139450 DONE example_3 8      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139451 DONE example_4 8      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
+##  3139453 DONE example   7      2020-04-10 09:16:00 0:00        -         4     -   37Mb   
+##  3139454 DONE example2  7      2020-04-10 09:16:01 0:00        -         1     -   41Mb   
+##  3139455 DONE example_1 7      2020-04-10 09:16:42 0:00        -         1     -   41Mb   
+##  3139456 DONE example_2 7      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
+##  3139457 DONE example_3 7      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
+##  3139458 DONE example_4 7      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
+##  3139641 DONE example   6      2020-04-10 11:55:54 0:00        -         4     -   6Mb    
+##  3139642 DONE example2  6      2020-04-10 11:55:54 0:00        -         1     -   41Mb   
+##  3139643 DONE example_1 6      2020-04-10 11:56:36 0:00        -         1     -   37Mb   
+##  3139644 DONE example_2 6      2020-04-10 11:56:36 0:00        -         1     -   37Mb   
+##  3139645 DONE example_3 6      2020-04-10 11:56:36 0:00        -         1     -   41Mb   
+##  3139646 DONE example_4 6      2020-04-10 11:56:36 0:00        -         1     -   41Mb   
+##  3139698 DONE example   5      2020-04-10 14:22:53 0:00        -         4     -   15Mb   
+##  3139699 DONE example2  5      2020-04-10 14:22:53 0:00        -         1     -   41Mb   
+##  3139700 DONE example_1 5      2020-04-10 14:23:34 0:00        -         1     -   42Mb   
+##  3139701 DONE example_2 5      2020-04-10 14:23:35 0:00        -         1     -   41Mb   
+##  3139702 DONE example_3 5      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
+##  3139703 DONE example_4 5      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
+##  3139706 DONE example   4      2020-04-10 14:27:26 0:00        -         4     -   37Mb   
+##  3139707 DONE example2  4      2020-04-10 14:27:26 0:00        -         1     -   41Mb   
+##  3139708 DONE example_1 4      2020-04-10 14:28:08 0:00        -         1     -   40Mb   
+##  3139709 DONE example_2 4      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
+##  3139710 DONE example_3 4      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
+##  3139711 DONE example_4 4      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
+##  3139714 DONE example   3      2020-04-10 14:34:22 0:00        -         4     -   41Mb   
+##  3139715 DONE example2  3      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
+##  3139716 DONE example_1 3      2020-04-10 14:35:04 0:00        -         1     -   34Mb   
+##  3139717 DONE example_2 3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
+##  3139718 DONE example_3 3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
+##  3139719 DONE example_4 3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
+##  3139723 DONE example   2      2020-04-10 15:48:23 0:00        -         4     -   24Mb   
+##  3139724 DONE example2  2      2020-04-10 15:48:23 0:00        -         1     -   37Mb   
+##  3139725 DONE example_1 2      2020-04-10 15:49:05 0:00        -         1     -   37Mb   
+##  3139726 DONE example_2 2      2020-04-10 15:49:05 0:00        -         1     -   25Mb   
+##  3139727 DONE example_3 2      2020-04-10 15:49:05 0:00        -         1     -   27Mb   
+##  3139728 DONE example_4 2      2020-04-10 15:49:05 0:00        -         1     -   26Mb   
+##  3139730 DONE example   1      2020-04-10 15:52:03 0:00        -         4     -   37Mb   
+##  3139731 DONE example2  1      2020-04-10 15:52:03 0:00        -         1     -   43Mb   
+##  3139732 PEND example_1 1      2020-04-10 15:52:45 -           -         -     -   -      
+##  3139733 PEND example_2 1      2020-04-10 15:52:45 -           -         -     -   -      
+##  3139734 PEND example_3 1      2020-04-10 15:52:45 -           -         -     -   -      
+##  3139735 PEND example_4 1      2020-04-10 15:52:46 -           -         -     -   -      
 ##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
 ## ────────────────────────────────────────────────────────────────────────────────────────── 
-##  38 DONE jobs, 4 PEND jobs within one week.
+##  52 DONE jobs, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
 ```
 
@@ -743,28 +740,28 @@ brecent
 ```
 ## ──────────────────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME        RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3139698 DONE example         3      2020-04-10 14:22:53 0:00        -         4     -   15Mb   
-##  3139699 DONE example2        3      2020-04-10 14:22:53 0:00        -         1     -   41Mb   
-##  3139700 DONE example_1       3      2020-04-10 14:23:34 0:00        -         1     -   42Mb   
-##  3139701 DONE example_2       3      2020-04-10 14:23:35 0:00        -         1     -   41Mb   
-##  3139702 DONE example_3       3      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
-##  3139703 DONE example_4       3      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
-##  3139705 DONE R_code_c3481a47 2      2020-04-10 14:27:25 0:00        -         1     -   37Mb   
-##  3139706 DONE example         2      2020-04-10 14:27:26 0:00        -         4     -   37Mb   
-##  3139707 DONE example2        2      2020-04-10 14:27:26 0:00        -         1     -   41Mb   
-##  3139708 DONE example_1       2      2020-04-10 14:28:08 0:00        -         1     -   40Mb   
-##  3139709 DONE example_2       2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
-##  3139710 DONE example_3       2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
-##  3139711 DONE example_4       2      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
-##  3139713 DONE R_code_c3481a47 1      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
-##  3139714 DONE example         1      2020-04-10 14:34:22 0:00        -         4     -   41Mb   
-##  3139715 DONE example2        1      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
-##  3139716 PEND example_1       1      2020-04-10 14:35:04 -           -         -     -   -      
-##  3139717 PEND example_2       1      2020-04-10 14:35:04 -           -         -     -   -      
-##  3139718 PEND example_3       1      2020-04-10 14:35:04 -           -         -     -   -      
-##  3139719 PEND example_4       1      2020-04-10 14:35:04 -           -         -     -   -      
+##  3139714 DONE example         3      2020-04-10 14:34:22 0:00        -         4     -   41Mb   
+##  3139715 DONE example2        3      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
+##  3139716 DONE example_1       3      2020-04-10 14:35:04 0:00        -         1     -   34Mb   
+##  3139717 DONE example_2       3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
+##  3139718 DONE example_3       3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
+##  3139719 DONE example_4       3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
+##  3139722 DONE R_code_c3481a47 2      2020-04-10 15:48:22 0:00        -         1     -   24Mb   
+##  3139723 DONE example         2      2020-04-10 15:48:23 0:00        -         4     -   24Mb   
+##  3139724 DONE example2        2      2020-04-10 15:48:23 0:00        -         1     -   37Mb   
+##  3139725 DONE example_1       2      2020-04-10 15:49:05 0:00        -         1     -   37Mb   
+##  3139726 DONE example_2       2      2020-04-10 15:49:05 0:00        -         1     -   25Mb   
+##  3139727 DONE example_3       2      2020-04-10 15:49:05 0:00        -         1     -   27Mb   
+##  3139728 DONE example_4       2      2020-04-10 15:49:05 0:00        -         1     -   26Mb   
+##  3139729 DONE R_code_c3481a47 1      2020-04-10 15:52:03 0:00        -         1     -   24Mb   
+##  3139730 DONE example         1      2020-04-10 15:52:03 0:00        -         4     -   37Mb   
+##  3139731 DONE example2        1      2020-04-10 15:52:03 0:00        -         1     -   43Mb   
+##  3139732 PEND example_1       1      2020-04-10 15:52:45 -           -         -     -   -      
+##  3139733 PEND example_2       1      2020-04-10 15:52:45 -           -         -     -   -      
+##  3139734 PEND example_3       1      2020-04-10 15:52:45 -           -         -     -   -      
+##  3139735 PEND example_4       1      2020-04-10 15:52:46 -           -         -     -   -      
 ## ──────────────────────────────────────────────────────────────────────────────────────────────── 
-##  38 DONE jobs, 4 PEND jobs within one week.
+##  52 DONE jobs, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
 ```
 
@@ -822,15 +819,7 @@ bconf
 ```
 
 ```
-## Configurations for bsub:
-##   * user for connecting submission node: guz
-##   * submission node: odcf-worker01,odcf-cn34u03s10,odcf-cn34u03s12
-##   * global R version: 3.6.0
-##   * command to call `Rscript`:
-##       qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript") 
-##   * temporary directory: /home/guz/.bsub_temp
-## 
-## Configuations can be modified by `bsub_opt()` function
+##  Configurations for bsub:   * user for connecting submission node: guz   * submission node: odcf-worker01, odcf-cn34u03s10, odcf-cn34u03s12   * global R version: 3.6.0   * command to call `Rscript`:      qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript")   * temporary directory: /home/guz/.bsub_temp  Configuations can be modified by `bsub_opt()` function
 ```
 
 ## Interactive job monitor
@@ -890,12 +879,10 @@ sessionInfo()
 ## [1] GetoptLong_0.1.8 bsub_1.0.0       knitr_1.28      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.4          clisymbols_1.2.0    digest_0.6.25      
-##  [4] magrittr_1.5        evaluate_0.14       rlang_0.4.5        
-##  [7] stringi_1.4.6       GlobalOptions_0.1.1 rmarkdown_1.18     
-## [10] rjson_0.2.20        tools_3.6.0         stringr_1.4.0      
-## [13] xfun_0.12           yaml_2.2.1          compiler_3.6.0     
-## [16] htmltools_0.4.0
+##  [1] compiler_3.6.0      rjson_0.2.20        magrittr_1.5       
+##  [4] clisymbols_1.2.0    tools_3.6.0         GlobalOptions_0.1.1
+##  [7] stringi_1.4.6       digest_0.6.25       stringr_1.4.0      
+## [10] xfun_0.12           evaluate_0.14
 ```
 
 
