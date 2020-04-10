@@ -37,7 +37,7 @@
 
 	if(grepl("odcf|w610", Sys.info()["nodename"])) {
 		msg = TRUE
-		config_odcf()
+		config_odcf(verbose = FALSE)
 	}
 	
 	if(msg) packageStartupMessage("")

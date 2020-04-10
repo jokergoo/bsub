@@ -1,8 +1,8 @@
 ---
-title: "Use bsub package on the DKFZ ODCF cluster"
+title: "Use bsub package on DKFZ ODCF cluster"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2. Use bsub package on the DKFZ ODCF cluster}
+  %\VignetteIndexEntry{2. Use bsub package on DKFZ ODCF cluster}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

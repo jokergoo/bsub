@@ -18,6 +18,8 @@ default configurations work fine there. It is also possible for other clusters
 that use LSF system to use **bsub** package. Following global options should
 be properly configured.
 
+You can find examples from https://github.com/jokergoo/bsub/blob/master/R/config.R .
+
 ### How to call Rscript binary
 
 You need to configure how to call the `Rscript` binary, especially when you
@@ -30,6 +32,18 @@ bsub_opt$call_Rscript = function(version) qq("module load gcc/7.2.0; module load
 
 Then the different version of `Rscript` can be switched by setting different
 `bsub_opt$R_version` option.
+
+Similarlly, if you use [conda](https://docs.conda.io/en/latest/) for managing
+different versions of software, you can also choose R with different versions
+by setting a proper `bsub_opt$call_Rscript`. Let assume you have conda
+environments for different R versions with the name schema `R_$version` (e.g.
+R_3.6.0), then you can set `bsub_opt$call_Rscript` as:
+
+```{r, eval = FALSE}
+bsub_opt$call_Rscript = function(version) {
+    qq("conda activate R_@{version}; Rscript")
+}
+```
 
 
 ### Submission node
