@@ -7,11 +7,9 @@ library(bsub)
 library(GetoptLong)
 ```
 
-**For DFKZ ODCF users: The _bsub_ package works on the submission nodes, the
-computing nodes and the Rstudio node.If the current node is not the submission
-node, a connection via ssh is automatically established. You might be asked to
-enter password for the connection.**
-
+**Note: you need to properly configure to use bsub package. Using bsub package on
+DKFZ ODCF cluster has already configured and automatically loaded. For other institutes,
+please refer to [other_insititute.html](other_insititute.html).**
 
 ## Send R code
 
@@ -531,6 +529,12 @@ There are some helper functions which only list running/pending/done/failed jobs
 
 ```{r}
 bsub_opt
+```
+
+Or a more readable text:
+
+```{r}
+bconf
 ```
 
 ## Interactive job monitor

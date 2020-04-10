@@ -58,7 +58,7 @@
 # can be defined as:
 #
 #     bsub_opt$parse_time = function(x) {
-#         as.POSIXlt(x, format = "%b %d %H:%M:%S %Y")
+#         as.POSIXlt(x, format = "\\%b \\%d \\%H:\\%M:\\%S \\%Y")
 #     }
 #
 # == example
@@ -211,3 +211,71 @@ bsub_opt = set_opt(
 )
 
 bsub_opt$temp_dir = "~/.bsub_temp"
+
+# == title (variable:bconf)
+# Print current configuation
+#
+# == details
+# This function is only for printing. Use `bsub_opt` to change configurations.
+#
+bconf = "foo"
+class(bconf) = "bconf"
+
+# == title
+# Print the configurations
+#
+# == param
+# -x A bconf object
+# -... Other parameters
+#
+print.bconf = function(x, ...) {
+    x = bsub_opt()
+    cat("Configuations for bsub:\n")
+    if(is.null(x$user)) {
+        cat("  * user is not defined\n")
+    } else {
+        qqcat("  * user for connecting submission node: @{x$user}\n")
+    }
+
+    if(!is.null(x$group)) {
+        qqcat("  * user group : @{x$group}\n")
+    }
+
+    if(is.null(x$submission_node)) {
+        cat("  * submission node is not defined\n")
+    } else {
+        qqcat("  * submission node: @{paste(x$submission_node, collapse = ',')}\n")
+
+        if(length(setdiff(x$login_node, x$submission_node))) {
+            qqcat("  * login node: @{paste(x$login_node, collapse = ',')}\n")
+        }
+    }
+    
+    if(!is.null(x$R_version)) {
+        qqcat("  * global R version: @{x$R_version}\n")
+    }
+    
+    cat("  * command to call `Rscript`:\n")
+    cat("     ", deparse(body(x$call_Rscript)), "\n")
+
+    if(!is.null(x$package)) {
+        cat("  * Global R packages: @{paste(x$packages, collapse=',')}\n")
+    }
+
+    if(!is.null(x$image)) {
+        cat("  * Global image files that will be loaded to every job:\n")
+        for(f in x$image) {
+            cat("    - {f}\n")
+        }
+    }
+
+    qqcat("  * temporary directory: @{x$temp_dir}\n")
+
+    if(!x$enforce) {
+        cat("  - successful jobs are skipped.")
+    }
+
+    cat("\n")
+    cat("Configuations can be modified by `bsub_opt()` function\n")
+}
+

@@ -69,7 +69,7 @@ can be defined as:
 
   \preformatted{
     bsub_opt$parse_time = function(x) \{
-        as.POSIXlt(x, format = "%b %d %H:%M:%S %Y")
+        as.POSIXlt(x, format = "\\%b \\%d \\%H:\\%M:\\%S \\%Y")
     \}  }
 }
 \examples{
