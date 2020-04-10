@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -57,7 +57,7 @@
       <a href="../articles/bsub_intro.html">Send R code/R scripts/shell commands to LSF cluster</a>
     </li>
     <li>
-      <a href="../articles/dkfz_odcf.html">Use bsub package on the DKFZ ODCF cluster</a>
+      <a href="../articles/dkfz_odcf.html">Use bsub package on DKFZ ODCF cluster</a>
     </li>
     <li>
       <a href="../articles/other_insititute.html">Configure bsub package for other institutes using LSF</a>
@@ -99,36 +99,43 @@
     
     
 <p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2020-02-12</p>
+<p><strong>Date</strong>: 2020-04-10</p>
 <hr>
 <p>The <strong>bsub</strong> package is only broadly tested on DKFZ ODCF cluster and the default configurations work fine there. It is also possible for other clusters that use LSF system to use <strong>bsub</strong> package. Following global options should be properly configured.</p>
+<p>You can find examples from <a href="https://github.com/jokergoo/bsub/blob/master/R/config.R" class="uri">https://github.com/jokergoo/bsub/blob/master/R/config.R</a> .</p>
 <div id="how-to-call-rscript-binary" class="section level3">
 <h3 class="hasAnchor">
 <a href="#how-to-call-rscript-binary" class="anchor"></a>How to call Rscript binary</h3>
 <p>You need to configure how to call the <code>Rscript</code> binary, especially when you have different versions of R installed. Following is how we call <code>Rscript</code> on our cluster (we use <code>module</code> to manage the bash environment).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) <span class="kw">qq</span>(<span class="st">"module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) {
+    <span class="kw">qq</span>(<span class="st">"module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript"</span>)
+}</code></pre></div>
 <p>Then the different version of <code>Rscript</code> can be switched by setting different <code>bsub_opt$R_version</code> option.</p>
+<p>Similarlly, if you use <a href="https://docs.conda.io/en/latest/">conda</a> for managing different versions of software, you can also choose R with different versions by setting a proper <code>bsub_opt$call_Rscript</code>. Let assume you have conda environments for different R versions with the name schema <code>R_$version</code> (e.g. R_3.6.0), then you can set <code>bsub_opt$call_Rscript</code> as:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) {
+    <span class="kw">qq</span>(<span class="st">"conda activate R_@{version}; Rscript"</span>)
+}</code></pre></div>
 </div>
 <div id="submission-node" class="section level3">
 <h3 class="hasAnchor">
 <a href="#submission-node" class="anchor"></a>Submission node</h3>
 <p>The names of the nodes where the jobs are submitted can be set by <code>bsub_opt$submission_node</code> option. The value can be a vector of node names. <strong>bsub</strong> will randomly select one to connect.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">bsub_opt<span class="op">$</span>submission_node =<span class="st"> </span>...</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>submission_node =<span class="st"> </span>...</code></pre></div>
 </div>
 <div id="username-on-the-submission-node" class="section level3">
 <h3 class="hasAnchor">
 <a href="#username-on-the-submission-node" class="anchor"></a>Username on the submission node</h3>
 <p>Your username on the submission node can be set by <code>bsub_opt$user</code>. The default value is <code>Sys.info()['user']</code>. If the username on the submission node is different, you need to explicitly set it.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">bsub_opt<span class="op">$</span>user =<span class="st"> </span>...</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>user =<span class="st"> </span>...</code></pre></div>
 </div>
 <div id="bash-environment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bash-environment" class="anchor"></a>Bash environment</h3>
 <p><code>bsub_opt$ssh_envir</code> should be properly set so that LSF binaries such as <code>bsub</code> or <code>bjobs</code> can be properly found. There are some environment variables initialized when logging in the bash terminal while they are not initialized with the ssh connection. Thus, some environment variables should be manually set.</p>
 <p>An example for <code>bsub_opt$ssh_envir</code> is as follows. The <code>LSF_ENVDIR</code> and <code>LSF_SERVERDIR</code> should be defined and exported.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">bsub_opt<span class="op">$</span>ssh_envir =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"source /etc/profile"</span>,</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">                       <span class="st">"export LSF_ENVDIR=/opt/lsf/conf"</span>,</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">                       <span class="st">"export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>ssh_envir =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"source /etc/profile"</span>,
+                       <span class="st">"export LSF_ENVDIR=/opt/lsf/conf"</span>,
+                       <span class="st">"export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc"</span>)</code></pre></div>
 <p>The values of these two variables can be obtained by entering following commands in your bash terminal (on the submission node):</p>
 <pre><code>echo $LSF_ENVDIR
 echo $LSF_SERVERDIR</code></pre>
@@ -153,18 +160,18 @@ echo $LSF_SERVERDIR</code></pre>
 </ul>
 <p>The temporary bash script to submit is automatically appended as the last argument of <code>bsub</code>.</p>
 <p>E.g., the template on DKFZ ODCF is defined as:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">bsub_opt<span class="op">$</span>bsub_template =<span class="st"> </span><span class="cf">function</span>(name, hour, memory, core, output, ...) {</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">    glue<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/glue/man/glue.html">glue</a></span>(<span class="st">"bsub -J '{name}' -W '{hour}:00' -n {core} -R 'rusage[mem={memory}GB]' -o '{output}'"</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">}</a></code></pre></div>
-<p>You can use <code><a href="https://rdrr.io/pkg/glue/man/glue.html">glue::glue()</a></code> or <code><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">GetoptLong::qq()</a></code> to construct a complex string with multiple variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>bsub_template =<span class="st"> </span><span class="cf">function</span>(name, hour, memory, core, output, ...) {
+    glue<span class="op">::</span><span class="kw"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span>(<span class="st">"bsub -J '{name}' -W '{hour}:00' -n {core} -R 'rusage[mem={memory}GB]' -o '{output}'"</span>)
+}</code></pre></div>
+<p>You can use <code><a href="https://glue.tidyverse.org/reference/glue.html">glue::glue()</a></code> or <code><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">GetoptLong::qq()</a></code> to construct a complex string with multiple variables.</p>
 </div>
 <div id="how-to-parse-the-time-strings" class="section level3">
 <h3 class="hasAnchor">
 <a href="#how-to-parse-the-time-strings" class="anchor"></a>How to parse the time strings</h3>
 <p>The time strings by LSF <code>bjobs</code> command might be different for different configurations. The <strong>bsub</strong> package needs to convert the time strings to <code>POSIXlt</code> objects for calculating the time difference. Thus, if the default time string parsing fails, users need to provide a user-defined function and set with <code>bsub_opt$parse_time</code> option in <code>bsub_opt</code>. The function accepts a vector of time strings and returns a <code>POSIXlt</code> object. For example, if the time string returned from <code>bjobs</code> command is in a form of <code>Dec 1 18:00:00 2019</code>, the parsing function can be defined as:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">bsub_opt<span class="op">$</span>parse_time =<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">    <span class="kw"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXlt</a></span>(x, <span class="dt">format =</span> <span class="st">"%b %d %H:%M:%S %Y"</span>)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">}</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>parse_time =<span class="st"> </span><span class="cf">function</span>(x) {
+    <span class="kw"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXlt</a></span>(x, <span class="dt">format =</span> <span class="st">"%b %d %H:%M:%S %Y"</span>)
+}</code></pre></div>
 </div>
   </div>
 
