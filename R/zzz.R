@@ -59,7 +59,7 @@
 
 	packageStartupMessage("==================================================================")
 
-	print(bconf)
+	packageStartupMessage(get_bconf_message(bconf))
 }
 
 

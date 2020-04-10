@@ -29,3 +29,4 @@ VignetteBuilder: knitr
 URL: https://github.com/jokergoo/bsub
 License: MIT + file LICENSE
 NeedsCompilation: no
+SystemRequirements: Platform LSF, bsub

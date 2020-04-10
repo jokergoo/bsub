@@ -14,7 +14,7 @@ vignette: >
 -------------------------------------------------------------
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, results = "asis"}
 if(grepl("odcf", Sys.info()["nodename"])) {
     library(knitr)
     knit("bsub_intro.Rmd2", "bsub_intro.md2")

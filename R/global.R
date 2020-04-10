@@ -229,53 +229,59 @@ class(bconf) = "bconf"
 # -... Other parameters
 #
 print.bconf = function(x, ...) {
+    cat(get_bconf_message(x))
+}
+
+get_bconf_message = function(x, ...) {
     x = bsub_opt()
-    cat("Configurations for bsub:\n")
+    msg = ""
+    msg = c(msg, "Configurations for bsub:")
     if(is.null(x$user)) {
-        cat("  * user is not defined\n")
+        msg = c(msg, "  * user is not defined")
     } else {
-        qqcat("  * user for connecting submission node: @{x$user}\n")
+        msg = c(msg, qq("  * user for connecting submission node: @{x$user}"))
     }
 
     if(!is.null(x$group)) {
-        qqcat("  * user group : @{x$group}\n")
+        msg = c(msg, qq("  * user group : @{x$group}"))
     }
 
     if(is.null(x$submission_node)) {
-        cat("  * submission node is not defined\n")
+        msg = c(msg, "  * submission node is not defined")
     } else {
-        qqcat("  * submission node: @{paste(x$submission_node, collapse = ',')}\n")
+        msg = c(msg, qq("  * submission node: @{paste(x$submission_node, collapse = ', ')}"))
 
         if(length(setdiff(x$login_node, x$submission_node))) {
-            qqcat("  * login node: @{paste(x$login_node, collapse = ',')}\n")
+            msg = c(msg, qq("  * login node: @{paste(x$login_node, collapse = ', ')}"))
         }
     }
     
     if(!is.null(x$R_version)) {
-        qqcat("  * global R version: @{x$R_version}\n")
+        msg = c(msg, qq("  * global R version: @{x$R_version}"))
     }
     
-    cat("  * command to call `Rscript`:\n")
-    cat("     ", deparse(body(x$call_Rscript)), "\n")
+    msg = c(msg, "  * command to call `Rscript`:")
+    msg = c(msg, paste0("     ", deparse(body(x$call_Rscript))))
 
     if(!is.null(x$package)) {
-        cat("  * Global R packages: @{paste(x$packages, collapse=',')}\n")
+        msg = c(msg, qq("  * Global R packages: @{paste(x$packages, collapse=',')}"))
     }
 
     if(!is.null(x$image)) {
-        cat("  * Global image files that will be loaded to every job:\n")
+        msg = c(msg, "  * Global image files that will be loaded to every job:")
         for(f in x$image) {
-            cat("    - {f}\n")
+            msg = c(msg, qq("    - @{f}"))
         }
     }
 
-    qqcat("  * temporary directory: @{x$temp_dir}\n")
+    msg = c(msg, qq("  * temporary directory: @{x$temp_dir}"))
 
     if(!x$enforce) {
-        cat("  - successful jobs are skipped.")
+        msg = c(msg, "  - successful jobs are skipped.")
     }
 
-    cat("\n")
-    cat("Configuations can be modified by `bsub_opt()` function\n")
+    msg = c(msg, "")
+    msg = c(msg, "Configuations can be modified by `bsub_opt()` function")
+    return(msg)
 }
 
