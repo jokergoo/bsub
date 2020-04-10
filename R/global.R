@@ -234,7 +234,7 @@ print.bconf = function(x, ...) {
 
 get_bconf_message = function(x, ...) {
     x = bsub_opt()
-    msg = ""
+    msg = NULL
     msg = c(msg, "Configurations for bsub:")
     if(is.null(x$user)) {
         msg = c(msg, "  * user is not defined")
@@ -281,7 +281,7 @@ get_bconf_message = function(x, ...) {
     }
 
     msg = c(msg, "")
-    msg = c(msg, "Configuations can be modified by `bsub_opt()` function")
-    return(msg)
+    msg = c(msg, "Configurations can be modified by `bsub_opt()` function")
+    return(paste(msg, collapse = "\n"))
 }
 
