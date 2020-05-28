@@ -50,6 +50,9 @@ get_dependency = function(job_tb = NULL) {
 # -job_id A job ID.
 # -job_tb A table from `bjobs`. Optional.
 #
+# == value
+# No value is returned.
+#
 plot_dependency = function(job_id, job_tb = NULL) {
 
     job_id = as.character(job_id)

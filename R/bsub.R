@@ -1,9 +1,9 @@
 
 # == title
-# Send R code
+# Submit R code
 #
 # == param
-# -code The code chunk, should be embrached by ``\{`` ``\}``.
+# -code The code chunk, it should be embraced by ``\{`` ``\}``.
 # -name If name is not specified, an internal name calculated by `digest::digest` on the chunk is automatically assigned. 
 # -packages A character vector with package names that will be loaded before running the script. There is a special name ``_in_session_``
 #     that loads all the packages loaded in current R session.
@@ -13,7 +13,7 @@
 #       will be removed after the job is finished.
 # -variables A character vector of variable names that will be loaded before running the script. There is a special name ``_all_functions_``
 #       that saves all functions defined in the global environment.
-# -wd The working directory.
+# -working_dir The working directory.
 # -hour Running time of the job.
 # -memory Memory usage of the job. It is measured in GB.
 # -core Number of cores.
@@ -31,7 +31,6 @@
 #    can be retrieved by `retrieve_var`.
 # -sh_head Commands that are written as head of the sh script.
 #
-#
 # == value
 # Job ID.
 #
@@ -47,7 +46,7 @@ bsub_chunk = function(code,
     packages = bsub_opt$packages, 
     image = bsub_opt$image,
     variables = character(),
-    wd = bsub_opt$wd,
+    working_dir = bsub_opt$working_dir,
     hour = 1, 
     memory = 1, 
     core = 1,
@@ -184,11 +183,11 @@ bsub_chunk = function(code,
         tail = c(tail, qq("saveRDS(foo, file = '@{output_dir}/@{name}_returned_var.rds')"))
     }
 
-    if(wd != "") {
-        if(!file.exists(wd)) {
-            stop(qq("'@{wd}'' does not exist."))
+    if(working_dir != "") {
+        if(!file.exists(working_dir)) {
+            stop(qq("'@{working_dir}'' does not exist."))
         }
-        head = c(head, qq("setwd('@{wd}')\n\n"))
+        head = c(head, qq("setwd('@{working_dir}')\n\n"))
     }
     writeLines(c(head, code, tail), con = tmp)
 
@@ -218,6 +217,9 @@ bsub_chunk = function(code,
 #
 # == details
 # It retrieve the saved variable in `bsub_chunk` when ``save_rds = TRUE`` is set.
+#
+# == value
+# The retrieved object.
 #
 retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
     rds_file = qq("@{output_dir}/@{name}_returned_var.rds")
@@ -256,7 +258,7 @@ retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
 }
 
 # == title
-# Send R script
+# Submit R script
 #
 # == param
 # -script The R script.
@@ -353,7 +355,7 @@ bsub_script = function(script,
 
 
 # == title
-# Send shell commands
+# Submit shell commands
 #
 # == param
 # -cmd A list of commands.

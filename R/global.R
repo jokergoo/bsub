@@ -21,7 +21,7 @@
 # -``output_dir`` Path of output folder where the output/flag files will be put.
 # -``enforce`` If a flag file for the job is found, whether to enforce to rerun the job.
 # -``R_version`` The version of R.
-# -``wd`` The working directory.
+# -``working_dir`` The working directory.
 # -``ignore`` Whether ignore `bsub_chunk`, `bsub_script` and `bsub_cmd`.
 # -``local`` Run job locally (not submitting to the LSF cluster)?
 # -``call_Rscript`` How to call ``Rscript`` by specifying an R version number.
@@ -60,6 +60,9 @@
 #     bsub_opt$parse_time = function(x) {
 #         as.POSIXlt(x, format = "\\%b \\%d \\%H:\\%M:\\%S \\%Y")
 #     }
+#
+# == value
+# The corresponding option values.
 #
 # == example
 # # The default bsub_opt
@@ -140,11 +143,12 @@ bsub_opt = set_opt(
     R_version = list(
         .value = qq("@{R.version$major}.@{R.version$minor}")
     ),
-    wd = list(
+    working_dir = list(
         .value = "",
         .validate = file.exists,
         .length = 1
     ),
+    wd = list(.synonymous = "working_dir"),
     ignore = list(
         .value = FALSE,
         .class = "logical"
@@ -205,12 +209,10 @@ bsub_opt = set_opt(
         .class = "function"
     ),
     verbose = list(
-        .value = FALSE,
+        .value = TRUE,
         .class = "logical"
     )
 )
-
-bsub_opt$temp_dir = "~/.bsub_temp"
 
 # == title (variable:bconf)
 # Print current configuation
@@ -228,8 +230,10 @@ class(bconf) = "bconf"
 # -x A bconf object
 # -... Other parameters
 #
+# == value
+# No value is returned.
 print.bconf = function(x, ...) {
-    cat(get_bconf_message(x))
+    cat(get_bconf_message(x), "\n")
 }
 
 get_bconf_message = function(x, ...) {
@@ -247,7 +251,7 @@ get_bconf_message = function(x, ...) {
     }
 
     if(is.null(x$submission_node)) {
-        msg = c(msg, "  * submission node is not defined")
+        msg = c(msg, qq("  ! submission node is not defined"))
     } else {
         msg = c(msg, qq("  * submission node: @{paste(x$submission_node, collapse = ', ')}"))
 
@@ -259,9 +263,9 @@ get_bconf_message = function(x, ...) {
     if(!is.null(x$R_version)) {
         msg = c(msg, qq("  * global R version: @{x$R_version}"))
     }
-    
+
     msg = c(msg, "  * command to call `Rscript`:")
-    msg = c(msg, paste0("     ", deparse(body(x$call_Rscript))))
+    msg = c(msg, paste0("     ", deparse(body(x$call_Rscript)), " foo.R"))
 
     if(!is.null(x$package)) {
         msg = c(msg, qq("  * Global R packages: @{paste(x$packages, collapse=',')}"))

@@ -2,16 +2,16 @@ Package: bsub
 Type: Package
 Title: Submitter and Monitor of the LSF Cluster
 Version: 1.0.0
-Date: 2020-04-10
+Date: 2020-05-05
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.0.0)
-Imports: GlobalOptions (>= 0.1.1), 
+Imports: GlobalOptions (>= 0.1.3), 
          GetoptLong (>= 0.1.8), 
          digest, 
          utils, 
          stats, 
-         clisymbols, 
+         crayon,
          methods, 
          grDevices, 
          graphics
@@ -23,8 +23,9 @@ Suggests: knitr,
           graph, 
           Rgraphviz
 biocViews: Software, Infrastructure
-Description: It submits R code/R scripts/shell commands to LSF cluster (the bsub system) without leaving R.
-    There is also an interactive web app for monitoring the job status.
+Description: It submits R code/R scripts/shell commands to LSF cluster 
+  (the bsub system) without leaving R. There is also an interactive 
+  web app for monitoring the job status.
 VignetteBuilder: knitr
 URL: https://github.com/jokergoo/bsub
 License: MIT + file LICENSE
