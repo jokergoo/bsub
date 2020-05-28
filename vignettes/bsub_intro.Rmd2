@@ -10,15 +10,21 @@ library(GetoptLong)
 **Note: you need to properly configure to use bsub package. Using bsub package
 on DKFZ ODCF cluster has already configured and is automatically loaded. For
 other institutes, please refer to
-[other_insititute.html](other_insititute.html).**
+[configure_bsub_package.html](configure_bsub_package.html).**
 
-We suggest to use **bsub** directly on the submission node, i.e. the node that
-has the same file system as the computing nodes. Nevertheless, it can still be
-used on any computer for managing jobs.
+We suggest to use **bsub** directly on the node that has the same file system
+as the computing nodes. If the file system is different from the computing nodes,
+you can only monitor jobs status while you cannot submit jobs.
+
+**bsub** package can submit R code, R scripts and bash commands to the LSF cluster
+purely inside the R session. We suggest to save the output into permanent files in
+the jobs.
 
 ## Send R code
 
-The code chunk should be embraced by `{...}`.
+`bsub_chunk()` submits the R chunk. The code chunk should be embraced by
+`{...}`. For example, `NMF::nmf()` normally takes very long time to run. We
+submit the NMF analysis to the cluster and save the results as an RDS file.
 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", memory = 10, hour = 10, core = 4, 
@@ -39,7 +45,8 @@ bsub_chunk(
 })
 ```
 
-The value returned by `bsub_chunk()` is the job ID from LSF cluster.
+The `bsub_chunk()` prints the `bsub` command and the value returned by
+`bsub_chunk()` is the job ID from LSF cluster.
 
 ### Job settings
 
@@ -55,9 +62,48 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
 If `name` is not specified, an internal name calculated by `digest::digest()`
 on the chunk is automatically assigned. The unit of `memory` is GB.
 
-### R version
+### Call Rscript
 
-The R version can be specified by `R_version` argument.
+The R chunk is saved into a temporary R script and called by `Rscript` command
+when it is executed in the cluster. A lot of LSF clusters have customized installation
+of R, which means, calling `Rscript` is specific for every LSF cluster, thus, you 
+need to configure how to call the `Rscript` command. By default, it simply calls `Rscript`
+with the default R version installed on the cluster.
+
+To set `Rscript` calling with a specific version or in a specific path, you need to 
+configure the `bsub_opt$call_Rscript` option. The value for `bsub_opt$call_Rscript` 
+should be a user-defined function where the R version in the only argument. The default
+value for `bsub_opt$call_Rscript` is
+
+```{r, eval = FALSE}
+function(version) "Rscript"
+```
+
+which ignores the R version. If you want to specify `Rscritp` with a specific path, you
+can set `bsub_opt$call_Rscript` as:
+
+
+```{r, eval = FALSE}
+bsub_opt$call_Rscript = function(version) "/the/absolute/path/of/Rscript"
+```
+
+To make it more flexible, the R version can be used when setting how to call `Rscript`.
+By default, when installing R, R will installed into folder with the version name of e.g.
+`/.../3.6/...`, thus, if there are several R versions are installed on your cluster,
+you can set `bsub_opt$call_Rscript` as:
+
+
+```{r, eval = FALSE}
+bsub_opt$call_Rscript = function(version) qq("/the/absolute/path/of/@{gsub('\\.\\d+$', '', version)}/Rscript")
+```
+
+where `qq()` is from _GetoptLong_ package which does [variable
+interpolation](https://en.wikipedia.org/wiki/String_interpolation). You can use
+similar packages such as **glue** here.
+
+Later, the R version can be easily switched by setting `bsub_opt$R_version`
+or the `R_version` argument in `bsub_chunk()`. E.g:
+
 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", R_version = "3.6.0",
@@ -76,20 +122,8 @@ bsub_chunk(name = "example",
 })
 ```
 
-The R version is used for finding proper `Rscript` binary. To achieve this, users
-need to configure `bsub_opt$call_Rscript` option as a function taking R version as 
-argument. The default value of `bsub_opt$call_Rscript` is set as:
-
-```{r, eval = FALSE}
-function(version) "Rscript"
-```
-
-which uses the default `Rscript` without considering the R version. In real cases, 
-there might be several R with different versions installed on the cluster. Setting
-`bsub_opt$call_Rscript` ensure running the analysis with the specific R version you want.
-
 On DKFZ ODCF cluster, software with different versions are managed by
-[Environment Modules](http://modules.sourceforge.net/). E.g.
+[Environment Modules](http://modules.sourceforge.net/). 
 `bsub_opt$call_Rscript` was set as follows:
 
 ```{r, eval = FALSE}
@@ -98,10 +132,15 @@ function(version) {
 }
 ```
 
-where `qq()` is from _GetoptLong_ package which does [variable
-interpolation](https://en.wikipedia.org/wiki/String_interpolation). The module
-loading for `gcc/7.2.0` and `java/1.8.0_131` ensures that R packages depending
-on specific C/Java libraries can be successfully loaded.
+The module loading for `gcc/7.2.0` and `java/1.8.0_131` ensures that R
+packages depending on specific C/Java libraries can be successfully loaded.
+So, if `R_version` is set to `4.0.0`, the `Rscript` call would be 
+
+```
+module load gcc/7.2.0; module load java/1.8.0_131; module load R/4.0.0; Rscript
+```
+
+which makes sure the `Rscript` from R-4.0.0 is used.
 
 Similarlly, if you use [conda](https://docs.conda.io/en/latest/) for managing
 different versions of software, you can also choose R with different versions
@@ -118,10 +157,10 @@ bsub_opt$call_Rscript = function(version) {
 ### Bash environment
 
 In previous example, we load the `gcc/7.2.0` and `java/1.8.0_131` modules, or
-activate the conda environment before loading R. These bash-level
-initialization can also be set by `sh_head` which adds shell commands as
-header in the bash script that is used for job submission. E.g. to load R
-3.6.0, we can do the other way:
+activate the conda environment as parts in the command callling `Rscript`.
+These bash-level initialization can also be set by `sh_head` which adds shell
+commands as header in the bash script that is used for job submission. E.g.,
+we can do the other way:
 
 ```{r, eval = FALSE}
 bsub_opt$call_Rscript = function(version) qq("module load R/@{version}; Rscript")
@@ -142,29 +181,14 @@ bsub_chunk(name = "example",
 })
 ```
 
-One usage of this functionality is to load `pandoc` module if the `rmarkdown` is used in the code chunk:
+One usage of this functionality is to load `pandoc` module if the `rmarkdown`
+is used in the code chunk (on DKFZ ODCF cluster):
 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", sh_head = "module load pandoc/2.2.1",
 {
     library(rmarkdown)
     render(...)
-})
-```
-
-Another example is you can specify your conda environment via `sh_head`:
-
-```{r, eval = FALSE}
-bsub_chunk(name = "example", sh_head = "conda activate ...",
-{
-    ...
-})
-
-# or set it globally
-bsub_opt$sh_head = "conda activate ..."
-bsub_chunk(name = "example",
-{
-    ...
 })
 ```
 

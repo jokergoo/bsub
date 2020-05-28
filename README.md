@@ -27,8 +27,7 @@ The online documentation is available at https://jokergoo.github.io/bsub/.
 There are four vignettes:
 
 - [Send R code/R scripts/shell commands to LSF cluster](https://jokergoo.github.io/bsub/articles/bsub_intro.html) 
-- [Use bsub package on the DKFZ ODCF cluster](https://jokergoo.github.io/bsub/articles/dkfz_odcf.html)
-- [Configure bsub package for other LSF institutes](https://jokergoo.github.io/bsub/articles/other_insititute.html)
+- [Configure bsub package for other LSF institutes](https://jokergoo.github.io/bsub/articles/configure_bsub_package.html)
 - [What if you need to establish two ssh connections to reach the submission node](https://jokergoo.github.io/bsub/articles/two_ssh.html)
 
 ### Submit jobs

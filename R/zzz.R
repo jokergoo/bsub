@@ -67,11 +67,6 @@
 	if(!is.null(bsub_opt$ssh_session)) ssh_disconnect()
 }
 
-
-if(identical(topenv(), .GlobalEnv)) {
-    bsub_opt$temp_dir = "~/.bsub_temp"
-}
-
 if(identical(environment(), .GlobalEnv)) {
 	if(grepl("odcf|w610", Sys.info()["nodename"])) {
 		config_odcf(verbose = FALSE)
