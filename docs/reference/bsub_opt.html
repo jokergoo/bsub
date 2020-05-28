@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -95,7 +95,7 @@
       <a href="../articles/bsub_intro.html">Send R code/R scripts/shell commands to LSF cluster</a>
     </li>
     <li>
-      <a href="../articles/dkfz_odcf.html">Use bsub package on the DKFZ ODCF cluster</a>
+      <a href="../articles/dkfz_odcf.html">Use bsub package on DKFZ ODCF cluster</a>
     </li>
     <li>
       <a href="../articles/other_insititute.html">Configure bsub package for other institutes using LSF</a>
@@ -210,32 +210,32 @@ if the time string returned from <code>bjobs</code> command is in a form of <cod
 can be defined as:</p>
 <p></p><pre>
     bsub_opt$parse_time = function(x) {
-        as.POSIXlt(x, format = "<!-- %b %d %H:%M:%S %Y") -->
+        as.POSIXlt(x, format = "\<!-- %b \\%d \\%H:\\%M:\\%S \\%Y") -->
     }  </pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># The default bsub_opt</span>
-<span class='no'>bsub_opt</span></div><div class='output co'>#&gt;           Option                                    Value
-#&gt;         packages                                     NULL
-#&gt;            image                                     NULL
-#&gt;         temp_dir                     /home/guz/.bsub_temp
-#&gt;       output_dir                     /home/guz/.bsub_temp
-#&gt;          enforce                                     TRUE
-#&gt;        R_version                                    3.6.0
-#&gt;               wd                                       ""
-#&gt;           ignore                                    FALSE
-#&gt;            local                                    FALSE
-#&gt;     call_Rscript                  a user-defined function
-#&gt;  submission_node odcf-worker01, odcf-cn34u03s10, odcf....
-#&gt;       login_node odcf-worker01, odcf-cn34u03s10, odcf....
-#&gt;          sh_head                                       ""
-#&gt;             user                                      guz
-#&gt;            group                                     NULL
-#&gt;        ssh_envir source /etc/profile, export LSF_ENVD....
-#&gt;    bsub_template                  a user-defined function
-#&gt;       parse_time                                     NULL
-#&gt;          verbose                                    FALSE</div></pre>
+<span class='no'>bsub_opt</span></div><div class='output co'>#&gt;           Option                      Value
+#&gt;         packages                       NULL
+#&gt;            image                       NULL
+#&gt;         temp_dir /Users/jokergoo/.bsub_temp
+#&gt;       output_dir /Users/jokergoo/.bsub_temp
+#&gt;          enforce                       TRUE
+#&gt;        R_version                      3.6.2
+#&gt;               wd                         ""
+#&gt;           ignore                      FALSE
+#&gt;            local                      FALSE
+#&gt;     call_Rscript    a user-defined function
+#&gt;  submission_node                       NULL
+#&gt;       login_node                       NULL
+#&gt;          sh_head                         ""
+#&gt;             user                   jokergoo
+#&gt;            group                       NULL
+#&gt;        ssh_envir        source /etc/profile
+#&gt;    bsub_template    a user-defined function
+#&gt;       parse_time                       NULL
+#&gt;          verbose                      FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

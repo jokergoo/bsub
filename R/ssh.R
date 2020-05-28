@@ -4,6 +4,9 @@
 #
 # == details
 # If ssh connection is lost, run this function to reconnect.
+#
+# == value
+# No value is returned.
 ssh_connect = function() {
 
 	if(!is.null(bsub_opt$ssh_session)) {
@@ -16,7 +19,7 @@ ssh_connect = function() {
 	if(length(login_node) == 0) login_node = submission_node
 
 	if(length(login_node) == 0) {
-		stop("bsub_opt$submission_node is not defined.")
+		stop("bsub_opt$submission_node is not defined. No node to connect.")
 	}
 
 	if(Sys.info()["nodename"] %in% login_node) {
@@ -64,6 +67,8 @@ ssh_connect = function() {
 # == title
 # Disconnect ssh connection
 #
+# == value
+# No value is returned.
 ssh_disconnect = function() {
 	if(!is.null(bsub_opt$ssh_session)) {
 		ssh::ssh_disconnect(bsub_opt$ssh_session)

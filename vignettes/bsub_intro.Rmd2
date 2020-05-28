@@ -279,10 +279,10 @@ separated files for different jobs even if the variable names are the same.
 
 ### The working directory
 
-If the code chunk replies on the working directory, it can be specified by `wd` argument:
+If the code chunk replies on the working directory, it can be specified by `working_dir` argument:
 
 ```{r, eval = FALSE}
-bsub_chunk(name = "example", wd = "/path"
+bsub_chunk(name = "example", working_dir = "/path"
 { 
     Sys.sleep(5)
 })
@@ -291,7 +291,7 @@ bsub_chunk(name = "example", wd = "/path"
 Or set it as a global parameter:
 
 ```{r, eval = FALSE}
-bsub_opt$wd = "/path"
+bsub_opt$working_dir = "/path"
 bsub_chunk(name = "example",
 { 
     Sys.sleep(5)

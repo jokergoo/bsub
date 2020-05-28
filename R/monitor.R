@@ -377,6 +377,8 @@ format_difftime = function(x, add_unit = FALSE) {
 # == param
 # -job_id A vector of job ids.
 #
+# == value
+# No value is returned.
 bkill = function(job_id) {
 
     cmd = qq("bkill @{paste(job_id, collapse = ' ')} 2>&1")
@@ -417,6 +419,8 @@ run_cmd = function(cmd, print = FALSE) {
 # -x a ``bjobs`` class object
 # -... other arguments
 #
+# == value
+# No value is returned.
 print.bjobs = function(x, ...) {
     x()
 }
@@ -431,6 +435,8 @@ print.bjobs = function(x, ...) {
 # == details
 # It tests whether the ".done" flag files exist
 #
+# == value
+# A logical scalar.
 is_job_finished = function(job_name, output_dir = bsub_opt$output_dir) {
     sapply(job_name, function(x) {
         flag_file = qq("@{output_dir}/@{x}.done")
@@ -447,6 +453,8 @@ is_job_finished = function(job_name, output_dir = bsub_opt$output_dir) {
 # -output_dir Output dir
 # -wait seconds to wait
 #
+# == value
+# No value is returned.
 wait_jobs = function(job_name, output_dir = bsub_opt$output_dir, wait = 30) {
     while(1) {
         finished = is_job_finished(job_name, output_dir)
@@ -472,6 +480,8 @@ wait_jobs = function(job_name, output_dir = bsub_opt$output_dir, wait = 30) {
 # The temporary files might be used by the running/pending jobs. Deleting them might affect some of the jobs.
 # You better delete them after all jobs are done.
 #
+# == value
+# No value is returned.
 clear_temp_dir = function(ask = TRUE) {
     files = list.files(bsub_opt$temp_dir, full.names = TRUE)
     if(length(files) == 0) {
@@ -533,7 +543,10 @@ clear_temp_dir = function(ask = TRUE) {
 #
 # == details
 # You can directly type ``brecent`` without parentheses which runs `brecent` with defaults.
-#   
+# 
+# == value
+# The same output format as `bjobs`.
+#
 brecent = function(max = 20, filter = NULL) {
     bjobs(status = "all", max = max, filter = filter)
 }
@@ -548,6 +561,9 @@ class(brecent) = "bjobs"
 #
 # == details
 # You can directly type ``bjobs_running`` without parentheses which runs `bjobs_running` with defaults.
+#
+# == value
+# The same output format as `bjobs`.
 #
 bjobs_running = function(max = Inf, filter = NULL) {
     bjobs(status = "RUN", max = max, filter = filter)
@@ -564,6 +580,9 @@ class(bjobs_running) = "bjobs"
 # == details
 # You can directly type ``bjobs_pending`` without parentheses which runs `bjobs_pending` with defaults.
 #
+# == value
+# The same output format as `bjobs`.
+#
 bjobs_pending = function(max = Inf, filter = NULL) {
     bjobs(status = "PEND", max = max, filter = filter)
 }
@@ -579,6 +598,9 @@ class(bjobs_pending) = "bjobs"
 # == details
 # You can directly type ``bjobs_done`` without parentheses which runs `bjobs_done` with defaults.
 #
+# == value
+# The same output format as `bjobs`.
+#
 bjobs_done = function(max = Inf, filter = NULL) {
     bjobs(status = "DONE", max = max, filter = filter)
 }
@@ -593,6 +615,9 @@ class(bjobs_done) = "bjobs"
 #
 # == details
 # You can directly type ``bjobs_exit`` without parentheses which runs `bjobs_exit` with defaults.
+#
+# == value
+# The same output format as `bjobs`.
 #
 bjobs_exit = function(max = Inf, filter = NULL) {
     bjobs(status = "EXIT", max = max, filter = filter)
@@ -662,6 +687,9 @@ job_status_by_id = function(job_id) {
 #
 # == details
 # The monitor is implemented as a shiny app.
+#
+# == value
+# No value is returned.
 monitor = function() {
     
     if(!on_submission_node()) {
@@ -669,12 +697,16 @@ monitor = function() {
     }
 
     if(identical(topenv(), asNamespace("bsub"))) {
+        if(bsub_opt$verbose) cat("run job monitor from the package.\n")
         shiny::runApp(system.file("app", package = "bsub"))
     } else if(grepl("odcf", Sys.info()["nodename"])) {
+        if(bsub_opt$verbose) cat("run job monitor from odcf node.\n")
         shiny::runApp("/desktop-home/guz/project/development/bsub/inst/app")
     } else if(grepl("w610", Sys.info()["nodename"])) {
+        if(bsub_opt$verbose) cat("run job monitor from w610 node.\n")
         shiny::runApp("~/project/development/bsub/inst/app")
     } else {
+        if(bsub_opt$verbose) cat("run job monitor from local laptop.\n")
         shiny::runApp("~/project/bsub/inst/app")
     }
 }
@@ -693,6 +725,8 @@ class(monitor) = "bjobs"
 #
 # Note if you manually set working directory in your R code/script, the R dump file can be not caught.
 #
+# == value
+# A vector of file names.
 check_dump_files = function(print = TRUE) {
     job_tb = bjobs(status = "all", print = FALSE)
     wd = job_tb$EXEC_CWD

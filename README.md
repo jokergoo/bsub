@@ -1,5 +1,9 @@
 # Submitter and Monitor of the LSF Cluster
 
+[![Build Status](https://travis-ci.org/jokergoo/bsub.svg)](https://travis-ci.org/jokergoo/bsub)
+[![CRAN](https://www.r-pkg.org/badges/version/bsub)](https://cran.r-project.org/web/packages/bsub/index.html)
+
+
 It sends R code/R scripts/shell commands to LSF cluster without leaving R.
 
 ### Install

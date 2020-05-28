@@ -50,6 +50,9 @@ get_dependency = function(job_tb = NULL) {
 # -job_id A job ID.
 # -job_tb A table from `bjobs`. Optional.
 #
+# == value
+# No value is returned.
+#
 plot_dependency = function(job_id, job_tb = NULL) {
 
     job_id = as.character(job_id)
@@ -104,7 +107,7 @@ plot_dependency = function(job_id, job_tb = NULL) {
     node_fill = rgb(t(col2rgb(node_color)/255), alpha = 0.2)
     names(node_fill) = node_id
 
-    node_width = (5*label_width - 5)/5/5
+    node_width = (5*label_width - 5)/5/5 * 1.2
     node_height = rep(1, n_node)
 
     node_shape = rep("rectangle", n_node)
@@ -123,14 +126,18 @@ plot_dependency = function(job_id, job_tb = NULL) {
     x = Rgraphviz::layoutGraph(g2, nodeAttrs = nAttr)
     graph::nodeRenderInfo(x) = list(color = node_color, fill = node_fill, cex = 1, lwd = node_lwd)
     
-    omar = par("mar")
-    on.exit(par(mar = omar))
+    op = par(no.readonly = TRUE)
+    on.exit(par(op))
 
-    par(mar = c(6, 0, 0, 0), xpd = NA)
+    par(xpd = NA)
+    layout(matrix(1:2, ncol = 1), heights = c(1, "2 cm"))
     Rgraphviz::renderGraph(x)
 
     usr = par("usr")
-    legend(x = mean(usr[c(1, 2)]), y = usr[3] - (usr[4] - usr[3])* 0.1, xjust = 0.5, yjust = 1,
+    par(mar = c(0, 0, 0, 0))
+    plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE, ann = FALSE)
+    legend(x = 0.5, y = 0.5, xjust = 0.5, yjust = 0.5,
         pch = 0, col = stat_col, legend = names(stat_col), 
         pt.cex = 2, bty = "n", ncol = length(stat_col))
+    layout(1)
 }
