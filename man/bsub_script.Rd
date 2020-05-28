@@ -1,10 +1,10 @@
 \name{bsub_script}
 \alias{bsub_script}
 \title{
-Send R script
+Submit R script
 }
 \description{
-Send R script
+Submit R script
 }
 \usage{
 bsub_script(script,

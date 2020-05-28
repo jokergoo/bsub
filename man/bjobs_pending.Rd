@@ -18,6 +18,9 @@ bjobs_pending(max = Inf, filter = NULL)
 \details{
 You can directly type \code{bjobs_pending} without parentheses which runs \code{\link{bjobs_pending}} with defaults.
 }
+\value{
+The same output format as \code{\link{bjobs}}.
+}
 \examples{
 # There is no example
 NULL

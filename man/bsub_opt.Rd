@@ -28,7 +28,7 @@ There are following parameters:
   \item{\code{output_dir}}{Path of output folder where the output/flag files will be put.}
   \item{\code{enforce}}{If a flag file for the job is found, whether to enforce to rerun the job.}
   \item{\code{R_version}}{The version of R.}
-  \item{\code{wd}}{The working directory.}
+  \item{\code{working_dir}}{The working directory.}
   \item{\code{ignore}}{Whether ignore \code{\link{bsub_chunk}}, \code{\link{bsub_script}} and \code{\link{bsub_cmd}}.}
   \item{\code{local}}{Run job locally (not submitting to the LSF cluster)?}
   \item{\code{call_Rscript}}{How to call \code{Rscript} by specifying an R version number.}
@@ -71,6 +71,9 @@ can be defined as:
     bsub_opt$parse_time = function(x) \{
         as.POSIXlt(x, format = "\\%b \\%d \\%H:\\%M:\\%S \\%Y")
     \}  }
+}
+\value{
+The corresponding option values.
 }
 \examples{
 # The default bsub_opt

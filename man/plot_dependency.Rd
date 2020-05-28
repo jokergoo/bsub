@@ -15,6 +15,9 @@ plot_dependency(job_id, job_tb = NULL)
   \item{job_tb}{A table from \code{\link{bjobs}}. Optional.}
 
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL

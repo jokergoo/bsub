@@ -16,4 +16,5 @@ This function is only for printing. Use \code{\link{bsub_opt}} to change configu
 \examples{
 # There is no example
 NULL
+
 }

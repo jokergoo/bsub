@@ -9,6 +9,9 @@ Disconnect ssh connection
 \usage{
 ssh_disconnect()
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL

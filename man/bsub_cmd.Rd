@@ -1,10 +1,10 @@
 \name{bsub_cmd}
 \alias{bsub_cmd}
 \title{
-Send shell commands
+Submit shell commands
 }
 \description{
-Send shell commands
+Submit shell commands
 }
 \usage{
 bsub_cmd(cmd,

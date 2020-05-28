@@ -12,6 +12,9 @@ monitor()
 \details{
 The monitor is implemented as a shiny app.
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL

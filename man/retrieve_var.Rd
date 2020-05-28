@@ -19,6 +19,9 @@ retrieve_var(name, output_dir = bsub_opt$output_dir, wait = 30)
 \details{
 It retrieve the saved variable in \code{\link{bsub_chunk}} when \code{save_rds = TRUE} is set.
 }
+\value{
+The retrieved object.
+}
 \examples{
 # There is no example
 NULL

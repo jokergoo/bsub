@@ -18,6 +18,9 @@ bjobs_exit(max = Inf, filter = NULL)
 \details{
 You can directly type \code{bjobs_exit} without parentheses which runs \code{\link{bjobs_exit}} with defaults.
 }
+\value{
+The same output format as \code{\link{bjobs}}.
+}
 \examples{
 # There is no example
 NULL
