@@ -1,8 +1,8 @@
 ---
-title: "Configure bsub package for other institutes using LSF"
+title: "Configure bsub package"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{3. Configure bsub package for other institutes using LSF}
+  %\VignetteIndexEntry{2. Configure bsub package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,9 +20,12 @@ be properly configured.
 
 You can find examples from https://github.com/jokergoo/bsub/blob/master/R/config.R .
 
-### How to call Rscript binary
+If you have difficulty to configure **bsub** package for your cluster, please
+feel free to contact me. I am glad to help.
 
-You need to configure how to call the `Rscript` binary, especially when you
+### How to call Rscript command
+
+You need to configure how to call the `Rscript` command, especially when you
 have different versions of R installed. Following is how we call `Rscript` on
 our cluster (we use `module` to manage the bash environment).
 
@@ -46,7 +49,6 @@ bsub_opt$call_Rscript = function(version) {
     qq("conda activate R_@{version}; Rscript")
 }
 ```
-
 
 ### Submission node
 

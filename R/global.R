@@ -209,10 +209,13 @@ bsub_opt = set_opt(
         .class = "function"
     ),
     verbose = list(
-        .value = TRUE,
+        .value = FALSE,
         .class = "logical"
     )
 )
+
+bsub_opt$temp_dir = "~/.bsub_temp"
+
 
 # == title (variable:bconf)
 # Print current configuation

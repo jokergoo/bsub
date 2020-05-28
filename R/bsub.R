@@ -108,7 +108,7 @@ bsub_chunk = function(code,
 
     output_dir = normalizePath(output_dir)
 
-    qqcat("- job: '@{name}' from a code chunk\n")
+    cat(cyan(qq("- job: '@{magenta(name)}' from a code chunk\n")))
 
     if(length(variables)) {
         if(!inherits(variables, "character")) {
@@ -335,7 +335,7 @@ bsub_script = function(script,
 
     output_dir = normalizePath(output_dir)
 
-    qqcat("- job: '@{name}' from script @{basename(script)}\n")
+    cat(cyan(qq("- job: '@{magenta(name)}' from script @{basename(script)}\n")))
     
     command = qq("@{bsub_opt$call_Rscript(R_version)} '@{script}' @{argv};")
 
@@ -404,7 +404,7 @@ bsub_cmd = function(cmd,
 
     output_dir = normalizePath(output_dir)
 
-    qqcat("- job: '@{name}' from a list of commands\n")
+    cat(cyan(qq("- job: '@{magenta(name)}' from a list of commands\n")))
     
     command = paste(cmd, collapse = "\n")
 
@@ -517,7 +517,7 @@ fi", con)
         cmd = qq("@{cmd} -w '@{dependency_str}'")
     }
     cmd = qq("@{cmd} '@{sh_file}'")
-    cat(cmd, "\n")
+    cat(silver(cmd), "\n")
 
     file.create(pend)
     txt = run_cmd(cmd, print = FALSE)
