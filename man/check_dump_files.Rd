@@ -19,6 +19,9 @@ For the failed jobs, LSF cluster generates a core dump file and R generates a .R
 
 Note if you manually set working directory in your R code/script, the R dump file can be not caught.
 }
+\value{
+A vector of file names.
+}
 \examples{
 # There is no example
 NULL

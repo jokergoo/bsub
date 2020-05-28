@@ -15,7 +15,11 @@ Print the configurations
   \item{...}{Other parameters}
 
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL
+
 }

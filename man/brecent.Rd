@@ -18,6 +18,9 @@ brecent(max = 20, filter = NULL)
 \details{
 You can directly type \code{brecent} without parentheses which runs \code{\link{brecent}} with defaults.
 }
+\value{
+The same output format as \code{\link{bjobs}}.
+}
 \examples{
 # There is no example
 NULL

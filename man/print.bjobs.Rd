@@ -15,6 +15,9 @@ Summary of jobs
   \item{...}{other arguments}
 
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL

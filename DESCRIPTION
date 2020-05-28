@@ -19,6 +19,7 @@ Suggests: knitr,
           ssh, 
           DT, 
           shiny (>= 1.0.0), 
+          shinyjqui,
           igraph, 
           graph, 
           Rgraphviz

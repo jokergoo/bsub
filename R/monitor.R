@@ -697,12 +697,16 @@ monitor = function() {
     }
 
     if(identical(topenv(), asNamespace("bsub"))) {
+        if(bsub_opt$verbose) cat("run job monitor from the package.\n")
         shiny::runApp(system.file("app", package = "bsub"))
     } else if(grepl("odcf", Sys.info()["nodename"])) {
+        if(bsub_opt$verbose) cat("run job monitor from odcf node.\n")
         shiny::runApp("/desktop-home/guz/project/development/bsub/inst/app")
     } else if(grepl("w610", Sys.info()["nodename"])) {
+        if(bsub_opt$verbose) cat("run job monitor from w610 node.\n")
         shiny::runApp("~/project/development/bsub/inst/app")
     } else {
+        if(bsub_opt$verbose) cat("run job monitor from local laptop.\n")
         shiny::runApp("~/project/bsub/inst/app")
     }
 }

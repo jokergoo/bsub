@@ -2,12 +2,16 @@
 suppressPackageStartupMessages(library(DT))
 suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(GetoptLong))
+suppressPackageStartupMessages(library(shinyjqui))
 
 ui = fluidPage(
     tags$style("body {
         font-size: 1.4em;
         width:1200px;
         margin: auto;
+    }
+    .ui-resizable {
+        border: 1px grey solid;
     }"),
     tags$script(HTML(
         paste(readLines("format.js"), collapse = "\n")
@@ -169,7 +173,7 @@ server <- function(input, output, session) {
         
         showModal(modalDialog(
             title = qq("Job dependency (@{job_name_selected} <@{job_name}>)"),
-            plotOutput("dependency_plot", width = "auto", height = "600px"),
+            jqui_resizable(plotOutput("dependency_plot", width = "auto", height = "600px")),
             footer = actionButton("close_job_dep", "Close"),
             easyClose = TRUE,
             size = "l"

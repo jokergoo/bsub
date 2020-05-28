@@ -12,6 +12,9 @@ ssh_connect()
 \details{
 If ssh connection is lost, run this function to reconnect.
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL

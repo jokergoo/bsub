@@ -18,6 +18,9 @@ bjobs_done(max = Inf, filter = NULL)
 \details{
 You can directly type \code{bjobs_done} without parentheses which runs \code{\link{bjobs_done}} with defaults.
 }
+\value{
+The same output format as \code{\link{bjobs}}.
+}
 \examples{
 # There is no example
 NULL

@@ -14,6 +14,9 @@ bkill(job_id)
   \item{job_id}{A vector of job ids.}
 
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL

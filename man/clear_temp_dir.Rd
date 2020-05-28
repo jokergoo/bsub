@@ -18,6 +18,9 @@ clear_temp_dir(ask = TRUE)
 The temporary files might be used by the running/pending jobs. Deleting them might affect some of the jobs.
 You better delete them after all jobs are done.
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL
