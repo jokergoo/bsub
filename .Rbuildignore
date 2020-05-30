@@ -8,3 +8,4 @@ build_pkg_site.R
 README.md
 test_no_run
 sftp-config.json
+.DS_Store

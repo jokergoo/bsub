@@ -54,11 +54,11 @@ bsub_chunk(
 ## - job: 'R_code_c3481a47' from a code chunk
 ## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/R_code_c3481a47.out' \
-##     '/home/guz/.bsub_temp/R_code_c3481a47_4046f88ac14.sh'
+##     '/home/guz/.bsub_temp/R_code_c3481a47_c03680e7b34.sh'
 ```
 
 ```
-## [1] "3343843"
+## [1] "3344195"
 ```
 
 The `bsub_chunk()` prints the `bsub` command and the value returned by
@@ -80,11 +80,11 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
 ## - job: 'example' from a code chunk
 ## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' \
 ##      -o '/home/guz/.bsub_temp/example.out' \
-##     '/home/guz/.bsub_temp/example_40465586a545.sh'
+##     '/home/guz/.bsub_temp/example_c036498b11cc.sh'
 ```
 
 ```
-## [1] "3343844"
+## [1] "3344196"
 ```
 
 If `name` is not specified, an internal name calculated by `digest::digest()`
@@ -399,11 +399,11 @@ bsub_chunk(name = "example2", save_var = TRUE,
 ## - job: 'example2' from a code chunk
 ## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example2.out' \
-##     '/home/guz/.bsub_temp/example2_404656c09c75.sh'
+##     '/home/guz/.bsub_temp/example2_c0365af3a46f.sh'
 ```
 
 ```
-## [1] "3343845"
+## [1] "3344197"
 ```
 
 ```r
@@ -565,7 +565,7 @@ bsub_chunk(name = "example", local = TRUE,
 
 ```
 ## - job: 'example' from a code chunk
-## bash /home/guz/.bsub_temp/example_40467ac12f9e.sh
+## bash /home/guz/.bsub_temp/example_c036255d2ebe.sh
 ```
 
 ### Submit jobs over different parameters
@@ -690,19 +690,19 @@ for(i in 1:4) {
 ## - job: 'example_1' from a code chunk
 ## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_1.out' \
-##     '/home/guz/.bsub_temp/example_1_40465dd5526.sh' 
+##     '/home/guz/.bsub_temp/example_1_c0366678c6a9.sh' 
 ## - job: 'example_2' from a code chunk
 ## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_2.out' \
-##     '/home/guz/.bsub_temp/example_2_40461ecc49bb.sh' 
+##     '/home/guz/.bsub_temp/example_2_c03627989693.sh' 
 ## - job: 'example_3' from a code chunk
 ## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_3.out' \
-##     '/home/guz/.bsub_temp/example_3_404626b80b15.sh' 
+##     '/home/guz/.bsub_temp/example_3_c036e84fe13.sh' 
 ## - job: 'example_4' from a code chunk
 ## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_4.out' \
-##     '/home/guz/.bsub_temp/example_4_404612d5e88d.sh'
+##     '/home/guz/.bsub_temp/example_4_c03659d700dd.sh'
 ```
 
 ```r
@@ -712,12 +712,12 @@ bjobs
 ```
 ## ─────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3343846 PEND example_1 2020-05-30 13:29:49 -           -         -     -   -      
-##  3343847 PEND example_2 2020-05-30 13:29:49 -           -         -     -   -      
-##  3343848 PEND example_3 2020-05-30 13:29:49 -           -         -     -   -      
-##  3343849 PEND example_4 2020-05-30 13:29:50 -           -         -     -   -      
+##  3344221 PEND example_1 2020-05-30 19:43:54 -           -         -     -   -      
+##  3344222 PEND example_2 2020-05-30 19:43:55 -           -         -     -   -      
+##  3344223 PEND example_3 2020-05-30 19:43:55 -           -         -     -   -      
+##  3344224 PEND example_4 2020-05-30 19:43:55 -           -         -     -   -      
 ## ─────────────────────────────────────────────────────────────────────────────────── 
-##  54 DONE jobs, 7 EXIT jobs, 4 PEND jobs within one week.
+##  64 DONE jobs, 10 EXIT jobs, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
 ```
 
@@ -738,11 +738,11 @@ for(i in 1:2) {
 ## - job: 'example' from a code chunk
 ## bsub -J 'example' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example.out' \
-##     '/home/guz/.bsub_temp/example_4046512e6d4c.sh' 
+##     '/home/guz/.bsub_temp/example_c0363a31bcfc.sh' 
 ## - job: 'example' from a code chunk
 ## bsub -J 'example' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example.out' \
-##     '/home/guz/.bsub_temp/example_40465c58eeda.sh'
+##     '/home/guz/.bsub_temp/example_c036327519c6.sh'
 ```
 
 
@@ -753,22 +753,31 @@ bjobs(status = "all", filter = "example")
 ```
 ## ────────────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3340294 DONE example   4      2020-05-28 23:09:59 0:00        -         4     -   34Mb   
-##  3340295 DONE example2  2      2020-05-28 23:10:00 0:00        -         1     -   41Mb   
-##  3340296 DONE example_1 2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
-##  3340297 DONE example_2 2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
-##  3340298 DONE example_3 2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
-##  3340299 DONE example_4 2      2020-05-28 23:10:43 0:00        -         1     -   41Mb   
-##  3343844 DONE example   3      2020-05-30 13:29:07 0:00        -         4     -   12Mb   
-##  3343845 DONE example2  1      2020-05-30 13:29:08 0:00        -         1     -   41Mb   
-##  3343846 PEND example_1 1      2020-05-30 13:29:49 -           -         -     -   -      
-##  3343847 PEND example_2 1      2020-05-30 13:29:49 -           -         -     -   -      
-##  3343848 PEND example_3 1      2020-05-30 13:29:49 -           -         -     -   -      
-##  3343849 PEND example_4 1      2020-05-30 13:29:50 -           -         -     -   -      
-##  3343850 PEND example   2      2020-05-30 13:29:50 -           -         -     -   -      
-##  3343851 PEND example   1      2020-05-30 13:29:50 -           -         -     -   -      
+##  3340294 DONE example   7      2020-05-28 23:09:59 0:00        -         4     -   34Mb   
+##  3340295 DONE example2  3      2020-05-28 23:10:00 0:00        -         1     -   41Mb   
+##  3340296 DONE example_1 3      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
+##  3340297 DONE example_2 3      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
+##  3340298 DONE example_3 3      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
+##  3340299 DONE example_4 3      2020-05-28 23:10:43 0:00        -         1     -   41Mb   
+##  3343844 DONE example   6      2020-05-30 13:29:07 0:00        -         4     -   12Mb   
+##  3343845 DONE example2  2      2020-05-30 13:29:08 0:00        -         1     -   41Mb   
+##  3343846 DONE example_1 2      2020-05-30 13:29:49 0:00        -         1     -   41Mb   
+##  3343847 DONE example_2 2      2020-05-30 13:29:49 0:00        -         1     -   41Mb   
+##  3343848 DONE example_3 2      2020-05-30 13:29:49 0:00        -         1     -   41Mb   
+##  3343849 DONE example_4 2      2020-05-30 13:29:50 0:00        -         1     -   41Mb   
+##  3343850 DONE example   5      2020-05-30 13:29:50 0:00        -         1     -   41Mb   
+##  3343851 DONE example   4      2020-05-30 13:29:50 0:00        -         1     -   41Mb   
+##  3344196 DONE example   3      2020-05-30 19:43:13 0:00        -         4     -   37Mb   
+##  3344197 DONE example2  1      2020-05-30 19:43:13 0:00        -         1     -   41Mb   
+##  3344221 RUN  example_1 1      2020-05-30 19:43:54 0:00        0:59      1     0Mb -      
+##  3344222 RUN  example_2 1      2020-05-30 19:43:55 0:00        0:59      1     0Mb -      
+##  3344223 PEND example_3 1      2020-05-30 19:43:55 -           -         -     -   -      
+##  3344224 PEND example_4 1      2020-05-30 19:43:55 -           -         -     -   -      
+##  3344225 PEND example   2      2020-05-30 19:43:55 -           -         -     -   -      
+##  3344226 PEND example   1      2020-05-30 19:43:56 -           -         -     -   -      
+##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
 ## ────────────────────────────────────────────────────────────────────────────────────────── 
-##  54 DONE jobs, 7 EXIT jobs, 6 PEND jobs within one week.
+##  64 DONE jobs, 10 EXIT jobs, 4 PEND jobs, 2 RUN jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
 ```
 
@@ -783,28 +792,28 @@ brecent
 ```
 ## ──────────────────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME        RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3337833 DONE job4            1      2020-05-28 15:27:39 0:00        -         1     -   41Mb   
-##  3340283 DONE job1            3      2020-05-28 22:48:04 0:00        -         1     -   41Mb   
-##  3340284 DONE job1            2      2020-05-28 22:49:08 0:00        -         1     -   41Mb   
-##  3340285 DONE job1            1      2020-05-28 22:49:32 0:00        -         1     -   41Mb   
-##  3340293 DONE R_code_c3481a47 2      2020-05-28 23:09:59 0:00        -         1     -   12Mb   
-##  3340294 DONE example         4      2020-05-28 23:09:59 0:00        -         4     -   34Mb   
-##  3340295 DONE example2        2      2020-05-28 23:10:00 0:00        -         1     -   41Mb   
-##  3340296 DONE example_1       2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
-##  3340297 DONE example_2       2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
-##  3340298 DONE example_3       2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
-##  3340299 DONE example_4       2      2020-05-28 23:10:43 0:00        -         1     -   41Mb   
-##  3343843 DONE R_code_c3481a47 1      2020-05-30 13:29:07 0:00        -         1     -   12Mb   
-##  3343844 DONE example         3      2020-05-30 13:29:07 0:00        -         4     -   12Mb   
-##  3343845 DONE example2        1      2020-05-30 13:29:08 0:00        -         1     -   41Mb   
-##  3343846 PEND example_1       1      2020-05-30 13:29:49 -           -         -     -   -      
-##  3343847 PEND example_2       1      2020-05-30 13:29:49 -           -         -     -   -      
-##  3343848 PEND example_3       1      2020-05-30 13:29:49 -           -         -     -   -      
-##  3343849 PEND example_4       1      2020-05-30 13:29:50 -           -         -     -   -      
-##  3343850 PEND example         2      2020-05-30 13:29:50 -           -         -     -   -      
-##  3343851 PEND example         1      2020-05-30 13:29:50 -           -         -     -   -      
+##  3343845 DONE example2        2      2020-05-30 13:29:08 0:00        -         1     -   41Mb   
+##  3343846 DONE example_1       2      2020-05-30 13:29:49 0:00        -         1     -   41Mb   
+##  3343847 DONE example_2       2      2020-05-30 13:29:49 0:00        -         1     -   41Mb   
+##  3343848 DONE example_3       2      2020-05-30 13:29:49 0:00        -         1     -   41Mb   
+##  3343849 DONE example_4       2      2020-05-30 13:29:50 0:00        -         1     -   41Mb   
+##  3343850 DONE example         5      2020-05-30 13:29:50 0:00        -         1     -   41Mb   
+##  3343851 DONE example         4      2020-05-30 13:29:50 0:00        -         1     -   41Mb   
+##  3344191 EXIT job1            4      2020-05-30 18:26:40 0:00        -         1     -   6Mb    
+##  3344192 EXIT job1            3      2020-05-30 18:27:48 0:00        -         1     -   7Mb    
+##  3344193 EXIT job1            2      2020-05-30 19:38:59 0:00        -         1     -   1Mb    
+##  3344194 DONE job1            1      2020-05-30 19:41:48 0:00        -         1     -   41Mb   
+##  3344195 DONE R_code_c3481a47 1      2020-05-30 19:43:12 0:00        -         1     -   37Mb   
+##  3344196 DONE example         3      2020-05-30 19:43:13 0:00        -         4     -   37Mb   
+##  3344197 DONE example2        1      2020-05-30 19:43:13 0:00        -         1     -   41Mb   
+##  3344221 RUN  example_1       1      2020-05-30 19:43:54 0:00        0:59      1     0Mb -      
+##  3344222 RUN  example_2       1      2020-05-30 19:43:55 0:00        0:59      1     0Mb -      
+##  3344223 PEND example_3       1      2020-05-30 19:43:55 -           -         -     -   -      
+##  3344224 PEND example_4       1      2020-05-30 19:43:55 -           -         -     -   -      
+##  3344225 PEND example         2      2020-05-30 19:43:55 -           -         -     -   -      
+##  3344226 PEND example         1      2020-05-30 19:43:56 -           -         -     -   -      
 ## ──────────────────────────────────────────────────────────────────────────────────────────────── 
-##  54 DONE jobs, 7 EXIT jobs, 6 PEND jobs within one week.
+##  64 DONE jobs, 10 EXIT jobs, 4 PEND jobs, 2 RUN jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.
 ```
 
@@ -839,8 +848,8 @@ bsub_opt
 ##  ---------------:---------------------------------------------------------------
 ##  packages        NULL                                                                                                                   
 ##  image           NULL                                                                                                                   
-##  temp_dir        /home/guz/.bsub_temp                                                                                                   
-##  output_dir      /home/guz/.bsub_temp                                                                                                   
+##  temp_dir        ~/.bsub_temp                                                                                                           
+##  output_dir      ~/.bsub_temp                                                                                                           
 ##  enforce         TRUE                                                                                                                   
 ##  R_version       3.6.0                                                                                                                  
 ##  working_dir     ""                                                                                                                     
@@ -873,7 +882,7 @@ bconf
 ##   * global R version: 3.6.0
 ##   * command to call `Rscript`:
 ##      qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript") foo.R
-##   * temporary directory: /home/guz/.bsub_temp
+##   * temporary directory: ~/.bsub_temp
 ## 
 ## Configurations can be modified by `bsub_opt()` function
 ```

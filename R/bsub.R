@@ -106,6 +106,17 @@ bsub_chunk = function(code,
         name = qq(name)
     }
 
+
+    if(!file.exists(temp_dir)) {
+        qqcat("create temp_dir: @{temp_dir}\n")
+        dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)
+    }
+    if(!file.exists(output_dir)) {
+        qqcat("create output_dir: @{output_dir}\n")
+        dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+    }
+
+    temp_dir = normalizePath(temp_dir)
     output_dir = normalizePath(output_dir)
 
     cat(cyan(qq("- job: '@{magenta(name)}' from a code chunk\n")))
@@ -333,6 +344,15 @@ bsub_script = function(script,
         name = qq(name)
     }
 
+    if(!file.exists(temp_dir)) {
+        qqcat("create temp_dir: @{temp_dir}\n")
+        dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)
+    }
+    if(!file.exists(output_dir)) {
+        qqcat("create output_dir: @{output_dir}\n")
+        dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+    }
+    temp_dir = normalizePath(temp_dir)
     output_dir = normalizePath(output_dir)
 
     cat(cyan(qq("- job: '@{magenta(name)}' from script @{basename(script)}\n")))
@@ -402,6 +422,15 @@ bsub_cmd = function(cmd,
         name = qq(name)
     }
 
+    if(!file.exists(temp_dir)) {
+        qqcat("create temp_dir: @{temp_dir}\n")
+        dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)
+    }
+    if(!file.exists(output_dir)) {
+        qqcat("create output_dir: @{output_dir}\n")
+        dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+    }
+    temp_dir = normalizePath(temp_dir)
     output_dir = normalizePath(output_dir)
 
     cat(cyan(qq("- job: '@{magenta(name)}' from a list of commands\n")))

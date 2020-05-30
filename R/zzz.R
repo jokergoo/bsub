@@ -6,62 +6,40 @@
 
 	version = utils::packageDescription(pkgname, fields = "Version")
 
-	packageStartupMessage("==================================================================")
-	packageStartupMessage(paste0("bsub version ", version))
-	packageStartupMessage("Github page: https://github.com/jokergoo/bsub")
-	packageStartupMessage("")
-
-
-	msg = FALSE
-	if(!file.exists("~/.bsub_temp")) {
-	    packageStartupMessage("create temp_dir: ~/.bsub_temp")
-	    dir.create("~/.bsub_temp", recursive = TRUE, showWarnings = FALSE)
-	    msg = TRUE
-	}
-
-	# all_f = list.files("~/.bsub_temp/", full.names = TRUE)
-	# if(length(all_f)) {
-	# 	file_size = sum(file.info(all_f)[, "size"])
-	# 	if(file_size < 1024) {
-	# 		fs = paste0(file_size, "Byte")
-	# 	} else if(file_size < 1024^2) {
-	# 		fs = paste0(round(file_size/1024, 1), "KB")
-	# 	} else if(file_size < 1024^3) {
-	# 		fs = paste0(round(file_size/1024^2, 1), "MB")
-	# 	} else {
-	# 		fs = paste0(round(file_size/1024^3, 1), "GB")
-	# 	}
-	# 	packageStartupMessage(qq("There are @{length(all_f)} temporary files (@{fs}) in ~/.bsub_temp"))
-	# 	msg = TRUE
-	# }
+	msg = NULL
+	msg = c(msg, "==================================================================")
+	msg = c(msg, paste0("bsub version ", version))
+	msg = c(msg, "Github page: https://github.com/jokergoo/bsub")
+	msg = c(msg, "")
 
 	if(grepl("odcf|w610", Sys.info()["nodename"])) {
-		msg = TRUE
 		config_odcf(verbose = FALSE)
+		msg = c(msg, qq("Configured for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}"))
+		msg = c(msg, "")
 	}
 	
-	if(msg) packageStartupMessage("")
-	packageStartupMessage("- submit R code: `bsub_chunk()`")
-	packageStartupMessage("- submit R script: `bsub_script()`")
-	packageStartupMessage("- submit shell commands: ``bsub_cmd()`")
-	packageStartupMessage("- kill jobs: `bkill()`")
-	packageStartupMessage("- view job summary: `bjobs`/`brecent`/`bjobs_running`/")
-	packageStartupMessage("                    `bjobs_pending`/`bjobs_done`/`bjobs_exit`")
-	packageStartupMessage("- view job log: `job_log()`")
-	packageStartupMessage("- remove temporary files : `clear_temp_dir()`/`check_dump_files()`")
-	packageStartupMessage("- interactive job monitor: `monitor()`")
+	msg = c(msg, "- submit R code: `bsub_chunk()`")
+	msg = c(msg, "- submit R script: `bsub_script()`")
+	msg = c(msg, "- submit shell commands: `bsub_cmd()`")
+	msg = c(msg, "- kill jobs: `bkill()`")
+	msg = c(msg, "- view job summary: `bjobs`/`brecent`/`bjobs_running`/")
+	msg = c(msg, "                    `bjobs_pending`/`bjobs_done`/`bjobs_exit`")
+	msg = c(msg, "- view job log: `job_log()`")
+	msg = c(msg, "- remove temporary files : `clear_temp_dir()`/`check_dump_files()`")
+	msg = c(msg, "- interactive job monitor: `monitor()`")
 
-	packageStartupMessage("")
-	packageStartupMessage("`bsub_chunk()`/`bsub_script()`/`bsub_cmd()` should only be")
-	packageStartupMessage("applied on the node that has the same file system as the computing")
-	packageStartupMessage("nodes. Other functions for monitoring and cleaning jobs can be")
-	packageStartupMessage("applied on any computer.")
+	msg = c(msg, "")
+	msg = c(msg, "`bsub_chunk()`/`bsub_script()`/`bsub_cmd()` should only be")
+	msg = c(msg, "applied on the node that has the same file system as the computing")
+	msg = c(msg, "nodes. Other functions for monitoring and cleaning jobs can be")
+	msg = c(msg, "applied on any computer.")
 
-	packageStartupMessage("==================================================================")
+	msg = c(msg, "==================================================================")
 
-	packageStartupMessage(get_bconf_message(bconf))
-	packageStartupMessage("==================================================================")
+	msg = c(msg, get_bconf_message(bconf))
+	msg = c(msg, "==================================================================")
 
+	packageStartupMessage(paste(msg, collapse = "\n"))
 }
 
 
@@ -69,9 +47,9 @@
 	if(!is.null(bsub_opt$ssh_session)) ssh_disconnect()
 }
 
-if(identical(environment(), .GlobalEnv)) {
+if(identical(topenv(), .GlobalEnv)) {
 	if(grepl("odcf|w610", Sys.info()["nodename"])) {
-		config_odcf(verbose = FALSE)
+		config_odcf()
 	}
 }
 

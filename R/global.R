@@ -98,25 +98,7 @@ bsub_opt = set_opt(
     temp_dir = list(
         .value = "~/.bsub_temp",
         .validate = function(x) {
-            if(!file.exists(x)) {
-                qqcat("create temp_dir: @{x}\n")
-                dir.create(x, recursive = TRUE, showWarnings = FALSE)
-            }
-            all_f = list.files(x, full.names = TRUE)
-
-            if(length(all_f)) {
-                file_size = sum(file.info(all_f)[, "size"])
-                if(file_size < 1024) {
-                    fs = paste0(file_size, "Byte")
-                } else if(file_size < 1024^2) {
-                    fs = paste0(round(file_size/1024, 1), "KB")
-                } else if(file_size < 1024^3) {
-                    fs = paste0(round(file_size/1024^2, 1), "MB")
-                } else {
-                    fs = paste0(round(file_size/1024^3, 1), "GB")
-                }
-                message(qq("There are @{length(all_f)} temporary files (@{fs}) in @{x}"))
-            }
+            check_temp_dir(x)
             TRUE
         },
         .filter = function(x) {
@@ -214,8 +196,28 @@ bsub_opt = set_opt(
     )
 )
 
-suppressMessages(bsub_opt$temp_dir <- "~/.bsub_temp")
+check_temp_dir = function(x) {
+    if(!file.exists(x)) {
+        qqcat("create temp_dir: @{x}\n")
+        dir.create(x, recursive = TRUE, showWarnings = FALSE)
+    } else {
+        all_f = list.files(x, full.names = TRUE)
 
+        if(length(all_f)) {
+            file_size = sum(file.info(all_f)[, "size"])
+            if(file_size < 1024) {
+                fs = paste0(file_size, "Byte")
+            } else if(file_size < 1024^2) {
+                fs = paste0(round(file_size/1024, 1), "KB")
+            } else if(file_size < 1024^3) {
+                fs = paste0(round(file_size/1024^2, 1), "MB")
+            } else {
+                fs = paste0(round(file_size/1024^3, 1), "GB")
+            }
+            message(qq("There are @{length(all_f)} temporary files (@{fs}) in @{x}"))
+        }
+    }
+}
 
 # == title (variable:bconf)
 # Print current configuation
