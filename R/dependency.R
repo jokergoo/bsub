@@ -6,7 +6,7 @@
 # -job_tb A table from `bjobs`. Optional.
 #
 # == value
-# If there is no dependency of all jobs, it returns ``NULl``. If there are dependencies,
+# If there is no dependency of all jobs, it returns ``NULL``. If there are dependencies,
 # it returns a list of three elements:
 #
 # -``dep_mat``: a two column matrix containing dependencies from parents to children.

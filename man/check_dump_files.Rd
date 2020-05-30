@@ -11,11 +11,11 @@ check_dump_files(print = TRUE)
 }
 \arguments{
 
-  \item{print}{Whether print messages}
+  \item{print}{Whether to print messages.}
 
 }
 \details{
-For the failed jobs, LSF cluster generates a core dump file and R generates a .RDataTmp file.
+For the failed jobs, LSF cluster might generate a core dump file and R might generate a .RDataTmp file.
 
 Note if you manually set working directory in your R code/script, the R dump file can be not caught.
 }

@@ -15,7 +15,7 @@ get_dependency(job_tb = NULL)
 
 }
 \value{
-If there is no dependency of all jobs, it returns \code{NULl}. If there are dependencies,
+If there is no dependency of all jobs, it returns \code{NULL}. If there are dependencies,
 it returns a list of three elements:
 
 \describe{

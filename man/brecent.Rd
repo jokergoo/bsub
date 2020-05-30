@@ -1,18 +1,18 @@
 \name{brecent}
 \alias{brecent}
 \title{
-Recent jobs
+Recent jobs with status "all"
 }
 \description{
-Recent jobs
+Recent jobs with status "all"
 }
 \usage{
 brecent(max = 20, filter = NULL)
 }
 \arguments{
 
-  \item{max}{Maximal number of recent jobs}
-  \item{filter}{Regular expression to filter on job names}
+  \item{max}{Maximal number of recent jobs.}
+  \item{filter}{Regular expression to filter on job names.}
 
 }
 \details{

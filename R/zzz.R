@@ -60,6 +60,8 @@
 	packageStartupMessage("==================================================================")
 
 	packageStartupMessage(get_bconf_message(bconf))
+	packageStartupMessage("==================================================================")
+
 }
 
 

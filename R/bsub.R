@@ -211,7 +211,7 @@ bsub_chunk = function(code,
 # Retrieve saved variable
 #
 # == param
-# -name Job name
+# -name Job name.
 # -output_dir The output dir set in `bsub_chunk`.
 # -wait Seconds to wait.
 #
@@ -284,7 +284,7 @@ retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
 # - `bsub_cmd`submits shell commands.
 #
 # == example
-# # exaples are in the vignette.
+# # examples are in the vignette.
 #
 bsub_script = function(script, 
     argv = "", 
@@ -379,7 +379,7 @@ bsub_script = function(script,
 # - `bsub_script` submits R scripts.
 #
 # == example
-# # exaples are in the vignette.
+# # examples are in the vignette.
 #
 bsub_cmd = function(cmd, 
     name = NULL, 
@@ -444,20 +444,20 @@ bsub_submit = function(command,
     run = qq("@{output_dir}/@{name}.run")
 
     if(!enforce && (file.exists(done) || file.exists(old_flag))) {
-        qqcat("Job '@{name}' is already done, skip.\n")
+        cat(cyan(qq("Job '@{name}' is already done, skip.\n")))
         return(invisible(NULL))
     }
     if(!enforce && file.exists(pend)) {
         # if the pending job is killed, the pend flag is still there
         if("PEND" %in% job_status_by_name(name, output_dir)) {
-            qqcat("Job '@{name}' is pending, skip.\n")
+            cat(cyan(qq("Job '@{name}' is pending, skip.\n")))
             return(invisible(NULL))
         }
     }
     if(!enforce && file.exists(run)) {
         # if the running job is killed, the run flag is still there
         if("RUN" %in% job_status_by_name(name, output_dir)) {
-            qqcat("Job '@{name}' is running, skip.\n")
+            cat(cyan(qq("Job '@{name}' is running, skip.\n")))
             return(invisible(NULL))
         }
     }

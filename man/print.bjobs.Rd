@@ -11,8 +11,8 @@ Summary of jobs
 }
 \arguments{
 
-  \item{x}{a \code{bjobs} class object}
-  \item{...}{other arguments}
+  \item{x}{a \code{bjobs} class object.}
+  \item{...}{other arguments.}
 
 }
 \value{

@@ -12,7 +12,7 @@ job_status_by_name(job_name, output_dir = bsub_opt$output_dir)
 \arguments{
 
   \item{job_name}{Job name.}
-  \item{output_dir}{The output dir}
+  \item{output_dir}{The output dir.}
 
 }
 \value{

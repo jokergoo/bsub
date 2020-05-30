@@ -11,7 +11,7 @@ retrieve_var(name, output_dir = bsub_opt$output_dir, wait = 30)
 }
 \arguments{
 
-  \item{name}{Job name}
+  \item{name}{Job name.}
   \item{output_dir}{The output dir set in \code{\link{bsub_chunk}}.}
   \item{wait}{Seconds to wait.}
 

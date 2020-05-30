@@ -50,5 +50,5 @@ Job ID.
 }
 }
 \examples{
-# exaples are in the vignette.
+# examples are in the vignette.
 }
