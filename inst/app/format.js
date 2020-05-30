@@ -11,11 +11,11 @@ format_file_size = function(x) {
 	}
 }
 
-DTWidget.formatFileSize = function(thiz, row, data, col) {
-	var d = parseFloat(data[col]);
-	if (isNaN(d)) return;
+DTWidget.formatFileSize = function(data) {
+	var d = parseFloat(data);
+	if (isNaN(d)) return "";
 
-	$(thiz.api().cell(row, col).node()).html(format_file_size(d));
+	return format_file_size(d);
 }
 
 format_time_diff = function(x) {
@@ -36,9 +36,9 @@ format_time_diff = function(x) {
 	}
 }
 
-DTWidget.formatTimeDiff = function(thiz, row, data, col) {
-	var d = parseFloat(data[col]);
-	if (isNaN(d)) return;
+DTWidget.formatTimeDiff = function(data) {
+	var d = parseFloat(data);
+	if (isNaN(d)) return "";
 
-	$(thiz.api().cell(row, col).node()).html(format_time_diff(d));
+	return format_time_diff(d);
 }

@@ -18,7 +18,7 @@ Imports: GlobalOptions (>= 0.1.1),
          graphics
 Suggests: knitr, 
           ssh, 
-          DT, 
+          DT (>= 0.13), 
           shiny (>= 1.0.0), 
           shinyjqui,
           igraph, 
