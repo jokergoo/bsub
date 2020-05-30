@@ -42,7 +42,7 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
 {
     fit = NMF::nmf(...)
     # you better save `fit` into a permanent file
-    saveRDS(fit, file = "fit.rds")
+    saveRDS(fit, file = "/path/of/fit.rds")
 })
 ```
 
@@ -51,7 +51,7 @@ Submit an R script:
 ```r
 # R script
 bsub_script(name = "example",
-    script = "/path/foo.R", ...)
+    script = "/path/of/foo.R", ...)
 ```
 
 Submit shell commands:

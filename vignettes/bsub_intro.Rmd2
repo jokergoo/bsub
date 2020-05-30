@@ -35,7 +35,7 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
 {
     fit = NMF::nmf(...)
     # you better save `fit` into a permanent file in an absolute path
-    saveRDS(fit, file = "/the/path/to/fit.rds")
+    saveRDS(fit, file = "/path/to/fit.rds")
 })
 ```
 

@@ -1,9 +1,9 @@
-pandoc: 1.19.2.1
-pkgdown: 1.4.1
+pandoc: 2.9.2.1
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   bsub_intro: bsub_intro.html
-  dkfz_odcf: dkfz_odcf.html
-  other_insititute: other_insititute.html
+  configure_bsub_package: configure_bsub_package.html
   two_ssh: two_ssh.html
+last_built: 2020-05-30T11:54Z
 

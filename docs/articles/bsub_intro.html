@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Send R code/R scripts/shell commands to LSF cluster • bsub</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Send R code/R scripts/shell commands to LSF cluster">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="bsub">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -57,10 +57,7 @@
       <a href="../articles/bsub_intro.html">Send R code/R scripts/shell commands to LSF cluster</a>
     </li>
     <li>
-      <a href="../articles/dkfz_odcf.html">Use bsub package on DKFZ ODCF cluster</a>
-    </li>
-    <li>
-      <a href="../articles/other_insititute.html">Configure bsub package for other institutes using LSF</a>
+      <a href="../articles/configure_bsub_package.html">Configure bsub package</a>
     </li>
     <li>
       <a href="../articles/two_ssh.html">What if you need to establish two ssh connections to reach the submission node</a>
@@ -70,7 +67,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jokergoo/bsub">
+  <a href="https://github.com/jokergoo/bsub/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -85,10 +82,10 @@
 
       
 
-      </header><div class="row">
+      </header><script src="bsub_intro_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Send R code/R scripts/shell commands to LSF cluster</h1>
+      <h1 data-toc-skip>Send R code/R scripts/shell commands to LSF cluster</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/jokergoo/bsub/blob/master/vignettes/bsub_intro.Rmd"><code>vignettes/bsub_intro.Rmd</code></a></small>
@@ -98,461 +95,454 @@
 
     
     
-<p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2020-04-10</p>
+<p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a> )</p>
+<p><strong>Date</strong>: 2020-05-30</p>
 <hr>
 <p>Load the library:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(bsub)
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)</code></pre></div>
-<p><strong>Note: you need to properly configure to use bsub package. Using bsub package on DKFZ ODCF cluster has already configured and is automatically loaded. For other institutes, please refer to <a href="other_insititute.html" class="uri">other_insititute.html</a>.</strong></p>
-<p>We suggest to use <strong>bsub</strong> directly on the submission node, i.e. the node that has the same file system as the computing nodes. Nevertheless, it can still be used on any computer for managing jobs.</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">bsub</span>)</pre></body></html></div>
+<p><strong>Note: you need to properly configure to use bsub package. Using bsub package on DKFZ ODCF cluster has already configured and is automatically loaded. For other institutes, please refer to <a href="configure_bsub_package.html">configure_bsub_package.html</a>.</strong></p>
+<p>We suggest to use <strong>bsub</strong> directly on the node that has the same file system as the computing nodes. If the file system is different from the computing nodes, you can only monitor jobs status while you cannot submit jobs.</p>
+<p><strong>bsub</strong> package can submit R code (by <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code>), R scripts (by <code><a href="../reference/bsub_script.html">bsub_script()</a></code>) and bash commands (by <code><a href="../reference/bsub_cmd.html">bsub_cmd()</a></code>) to the LSF cluster purely inside the R session. We suggest to save the output into permanent files in the jobs while not directly retrieving the results on the fly.</p>
 <div id="send-r-code" class="section level2">
 <h2 class="hasAnchor">
 <a href="#send-r-code" class="anchor"></a>Send R code</h2>
-<p>The code chunk should be embraced by <code>{...}</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">memory =</span> <span class="dv">10</span>, <span class="dt">hour =</span> <span class="dv">10</span>, <span class="dt">core =</span> <span class="dv">4</span>, 
+<p><code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> submits the R chunk. The code chunk should be embraced by <code>{...}</code>. For example, <code>NMF::nmf()</code> normally takes very long time to run. We submit the NMF analysis to the cluster and save the results as an RDS file.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">memory</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">hour</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">core</span> <span class="kw">=</span> <span class="fl">4</span>,
 {
-    fit =<span class="st"> </span>NMF<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/NMF/man/nmf.html">nmf</a></span>(...)
-    <span class="co"># you better save `fit` into a permanent file</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(fit, <span class="dt">file =</span> <span class="st">"fit.rds"</span>)
-})</code></pre></div>
-<p>In following examples, we use <code><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep(5)</a></code> to simulate a chunk of code which runs for a short time.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(
+    <span class="no">fit</span> <span class="kw">=</span> <span class="kw pkg">NMF</span><span class="kw ns">::</span><span class="fu">nmf</span>(<span class="no">...</span>)
+    <span class="co"># you better save `fit` into a permanent file in an absolute path</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">fit</span>, <span class="kw">file</span> <span class="kw">=</span> <span class="st">"/path/to/fit.rds"</span>)
+})</pre></body></html></div>
+<p>In the following examples, we use <code><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep(5)</a></code> to simulate a chunk of code which runs for a short time.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <pre><code>## - job: 'R_code_c3481a47' from a code chunk
 ## bsub -J 'R_code_c3481a47' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/R_code_c3481a47.out' \
-##     '/home/guz/.bsub_temp/R_code_c3481a47_e0ec7a36c3fe.sh'</code></pre>
-<pre><code>## [1] "3139729"</code></pre>
-<p>The value returned by <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> is the job ID from LSF cluster.</p>
+##     '/home/guz/.bsub_temp/R_code_c3481a47_4046f88ac14.sh'</code></pre>
+<pre><code>## [1] "3343843"</code></pre>
+<p>The <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> prints the <code>bsub</code> command and the value returned by <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> is the job ID from LSF cluster.</p>
 <div id="job-settings" class="section level3">
 <h3 class="hasAnchor">
 <a href="#job-settings" class="anchor"></a>Job settings</h3>
 <p>Set job name, memory, running time and number of cores:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">memory =</span> <span class="dv">10</span>, <span class="dt">hour =</span> <span class="dv">10</span>, <span class="dt">core =</span> <span class="dv">4</span>, 
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">memory</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">hour</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">core</span> <span class="kw">=</span> <span class="fl">4</span>,
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <pre><code>## - job: 'example' from a code chunk
 ## bsub -J 'example' -W '10:00' -n 4 -R 'rusage[mem=10240]' \
 ##      -o '/home/guz/.bsub_temp/example.out' \
-##     '/home/guz/.bsub_temp/example_e0ec47667385.sh'</code></pre>
-<pre><code>## [1] "3139730"</code></pre>
+##     '/home/guz/.bsub_temp/example_40465586a545.sh'</code></pre>
+<pre><code>## [1] "3343844"</code></pre>
 <p>If <code>name</code> is not specified, an internal name calculated by <code><a href="https://rdrr.io/pkg/digest/man/digest.html">digest::digest()</a></code> on the chunk is automatically assigned. The unit of <code>memory</code> is GB.</p>
 </div>
-<div id="r-version" class="section level3">
+<div id="call-rscript" class="section level3">
 <h3 class="hasAnchor">
-<a href="#r-version" class="anchor"></a>R version</h3>
-<p>The R version can be specified by <code>R_version</code> argument.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">R_version =</span> <span class="st">"3.6.0"</span>,
+<a href="#call-rscript" class="anchor"></a>Call Rscript</h3>
+<p>The R chunk is saved into a temporary R script and called by <code>Rscript</code> command when it is executed on the cluster. A lot of LSF clusters have customized installation of R, which means, calling <code>Rscript</code> is specific for every LSF cluster, thus, you need to configure how to call the <code>Rscript</code> command. By default, it simply calls <code>Rscript</code> with the default R version installed on the cluster.</p>
+<p>To set <code>Rscript</code> calling with a specific version or in a specific path, you need to configure the <code>bsub_opt$call_Rscript</code> option. The value for <code>bsub_opt$call_Rscript</code> should be a user-defined function where the R version in the only argument. The default value for <code>bsub_opt$call_Rscript</code> is</p>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="kw">function</span>(<span class="no">version</span>) <span class="st">"Rscript"</span></pre></body></html></div>
+<p>which ignores the R version. If you want to specify <code>Rscritp</code> with a specific path, you can set <code>bsub_opt$call_Rscript</code> as:</p>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">call_Rscript</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">version</span>) <span class="st">"/the/absolute/path/of/Rscript"</span></pre></body></html></div>
+<p>To make it more flexible, the R version can be used when setting how to call <code>Rscript</code>. By default, when installing R, R will installed into folder with the version name of e.g. <code>/.../3.6/...</code>, thus, if there are several R versions are installed on your cluster, you can set <code>bsub_opt$call_Rscript</code> as:</p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">GetoptLong</span>)
+<span class="no">bsub_opt</span>$<span class="no">call_Rscript</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">version</span>) {
+    <span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"/the/absolute/path/of/@{gsub('\\.\\d+$', '', version)}/Rscript"</span>)
+}</pre></body></html></div>
+<p>Here <code><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq()</a></code> is from <strong>GetoptLong</strong> package which does <a href="https://en.wikipedia.org/wiki/String_interpolation">variable interpolation</a>. You can use similar packages such as <strong>glue</strong> here.</p>
+<p>Later, the R version can be easily switched by setting <code>bsub_opt$R_version</code> or the <code>R_version</code> argument in <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> (The value of <code>R_version</code> is sent to <code>call_Rscript</code> function). E.g:</p>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">R_version</span> <span class="kw">=</span> <span class="st">"3.6.0"</span>,
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
-<p><code>R_version</code> can be set as a global parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>R_version =<span class="st"> "3.6.0"</span>
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, 
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
+<p>Or set <code>R_version</code> as a global parameter:</p>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">R_version</span> <span class="kw">=</span> <span class="st">"3.6.0"</span>
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
-<p>The R version is used for finding proper <code>Rscript</code> binary. To achieve this, users need to configure <code>bsub_opt$call_Rscript</code> option as a function taking R version as argument. The default value of <code>bsub_opt$call_Rscript</code> is set as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">function</span>(version) <span class="st">"Rscript"</span></code></pre></div>
-<p>which uses the default <code>Rscript</code> without considering the R version. In real cases, there might be several R with different versions installed on the cluster. Setting <code>bsub_opt$call_Rscript</code> ensure running the analysis with the specific R version you want.</p>
-<p>On DKFZ ODCF cluster, software with different versions are managed by <a href="http://modules.sourceforge.net/">Environment Modules</a>. E.g. <code>bsub_opt$call_Rscript</code> was set as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">function</span>(version) {
-    <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript"</span>)
-}</code></pre></div>
-<p>where <code><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq()</a></code> is from <em>GetoptLong</em> package which does <a href="https://en.wikipedia.org/wiki/String_interpolation">variable interpolation</a>. The module loading for <code>gcc/7.2.0</code> and <code>java/1.8.0_131</code> ensures that R packages depending on specific C/Java libraries can be successfully loaded.</p>
-<p>Similarlly, if you use <a href="https://docs.conda.io/en/latest/">conda</a> for managing different versions of software, you can also choose R with different versions by setting a proper <code>bsub_opt$call_Rscript</code>. Let assume you have conda environments for different R versions with the name schema <code>R_$version</code> (e.g. R_3.6.0), then you can set <code>bsub_opt$call_Rscript</code> as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) {
-    <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"conda activate R_@{version}; Rscript"</span>)
-}</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
+<p>On DKFZ ODCF cluster, software with different versions are managed by <a href="http://modules.sourceforge.net/">Environment Modules</a>. <code>bsub_opt$call_Rscript</code> was set as follows:</p>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="kw">function</span>(<span class="no">version</span>) {
+    <span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript"</span>)
+}</pre></body></html></div>
+<p>The module loading for <code>gcc/7.2.0</code> and <code>java/1.8.0_131</code> ensures that R packages depending on specific C/Java libraries can be successfully loaded. So, if <code>R_version</code> is set to <code>4.0.0</code>, the <code>Rscript</code> call would be</p>
+<pre><code>module load gcc/7.2.0; module load java/1.8.0_131; module load R/4.0.0; Rscript</code></pre>
+<p>which makes sure the <code>Rscript</code> from R-4.0.0 is used.</p>
+<p>Similarlly, if you use <a href="https://docs.conda.io/en/latest/">conda</a> for managing different versions of software, you can also choose R with different versions by setting a proper <code>bsub_opt$call_Rscript</code>. Let assume you have conda environments for different R versions with the name schema <code>R_$version</code> (e.g. <code>R_3.6.0</code>), then you can set <code>bsub_opt$call_Rscript</code> as:</p>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">call_Rscript</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">version</span>) {
+    <span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"conda activate R_@{version}; Rscript"</span>)
+}</pre></body></html></div>
 </div>
 <div id="bash-environment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bash-environment" class="anchor"></a>Bash environment</h3>
-<p>In previous example, we load the <code>gcc/7.2.0</code> and <code>java/1.8.0_131</code> modules, or activate the conda environment before loading R. These bash-level initialization can also be set by <code>sh_head</code> which adds shell commands as header in the bash script that is used for job submission. E.g. to load R 3.6.0, we can do the other way:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"module load R/@{version}; Rscript"</span>)
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">sh_head =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"module load gcc/7.2.0"</span>, <span class="st">"module load java/1.8.0_131"</span>),
+<p>In previous examples, we load the <code>gcc/7.2.0</code> and <code>java/1.8.0_131</code> modules, or activate the conda environment as parts of the command callling <code>Rscript</code>. These bash-level initialization can also be set by <code>sh_head</code> which adds shell commands as header in the bash script that is used for job submission. E.g., we can do the other way:</p>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">call_Rscript</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">version</span>) <span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"module load R/@{version}; Rscript"</span>)
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">sh_head</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"module load gcc/7.2.0"</span>, <span class="st">"module load java/1.8.0_131"</span>),
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p>Or set <code>sh_head</code> as a global option:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>call_Rscript =<span class="st"> </span><span class="cf">function</span>(version) <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"module load R/@{version}; Rscript"</span>)
-bsub_opt<span class="op">$</span>sh_head =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"module load gcc/7.2.0"</span>, <span class="st">"module load java/1.8.0_131"</span>)
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">call_Rscript</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">version</span>) <span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"module load R/@{version}; Rscript"</span>)
+<span class="no">bsub_opt</span>$<span class="no">sh_head</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"module load gcc/7.2.0"</span>, <span class="st">"module load java/1.8.0_131"</span>)
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
-<p>One usage of this functionality is to load <code>pandoc</code> module if the <code>rmarkdown</code> is used in the code chunk:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">sh_head =</span> <span class="st">"module load pandoc/2.2.1"</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
+<p>One usage of this functionality is to load <code>pandoc</code> module if the <code>rmarkdown</code> is used in the code chunk (on DKFZ ODCF cluster):</p>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">sh_head</span> <span class="kw">=</span> <span class="st">"module load pandoc/2.2.1"</span>,
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rmarkdown)
-    <span class="kw"><a href="https://rdrr.io/pkg/rmarkdown/man/render.html">render</a></span>(...)
-})</code></pre></div>
-<p>Another example is you can specify your conda environment via <code>sh_head</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">sh_head =</span> <span class="st">"conda activate ..."</span>,
-{
-    ...
-})
-
-<span class="co"># or set it globally</span>
-bsub_opt<span class="op">$</span>sh_head =<span class="st"> "conda activate ..."</span>
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
-{
-    ...
-})</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rmarkdown</span>)
+    <span class="fu"><a href="https://rdrr.io/pkg/rmarkdown/man/render.html">render</a></span>(<span class="no">...</span>)
+})</pre></body></html></div>
 </div>
 <div id="load-other-packages" class="section level3">
 <h3 class="hasAnchor">
 <a href="#load-other-packages" class="anchor"></a>Load other packages</h3>
 <p>The packages that are needed can be directly added in the code chunk:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(package1)
-    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(package2)
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">package1</span>)
+    <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">package2</span>)
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p>Or assign by <code>packages</code> argument:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">packages =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"package1"</span>, <span class="st">"package2"</span>),
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">packages</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"package1"</span>, <span class="st">"package2"</span>),
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p>Or set it as a global parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>packages =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"package1"</span>, <span class="st">"package2"</span>)
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">packages</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"package1"</span>, <span class="st">"package2"</span>)
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p>There is a special value <code>_in_session_</code> for <code>packages</code> argument that loads all packages in the current R session.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(foo)
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(bar)
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">packages =</span> <span class="st">"_in_session_"</span>,
-{   
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">foo</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">bar</span>)
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">packages</span> <span class="kw">=</span> <span class="st">"_in_session_"</span>,
+{
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 </div>
 <div id="other-r-variables" class="section level3">
 <h3 class="hasAnchor">
 <a href="#other-r-variables" class="anchor"></a>Other R variables</h3>
 <p>The R variables that are defined outside the code chunk and need to be used inside the code chunk can by specified by <code>variables</code> argument:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">foo =<span class="st"> </span><span class="dv">1</span>
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">variables =</span> <span class="st">"foo"</span>,
-{ 
-    bar =<span class="st"> </span>foo
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">foo</span> <span class="kw">=</span> <span class="fl">1</span>
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">variables</span> <span class="kw">=</span> <span class="st">"foo"</span>,
+{
+    <span class="no">bar</span> <span class="kw">=</span> <span class="no">foo</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p><code>variables</code> argument has a special value <code>_all_functions_</code> that loads all functions defined in the global environment.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f1 =<span class="st"> </span><span class="cf">function</span>() <span class="dv">1</span>
-f2 =<span class="st"> </span><span class="cf">function</span>() <span class="dv">2</span>
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">variables =</span> <span class="st">"_all_functions_"</span>,
-{ 
-    <span class="kw">f1</span>()
-    <span class="kw">f2</span>()
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">f1</span> <span class="kw">=</span> <span class="kw">function</span>() <span class="fl">1</span>
+<span class="no">f2</span> <span class="kw">=</span> <span class="kw">function</span>() <span class="fl">2</span>
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">variables</span> <span class="kw">=</span> <span class="st">"_all_functions_"</span>,
+{
+    <span class="fu">f1</span>()
+    <span class="fu">f2</span>()
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 </div>
 <div id="the-workspace-image" class="section level3">
 <h3 class="hasAnchor">
 <a href="#the-workspace-image" class="anchor"></a>The workspace image</h3>
 <p>If you have too many external variables that are used in the code chunk or they are used in multiple jobs, you can directly save the workspace or the objects as an image and specify the <code>image</code> argument:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/save.html">save.image</a></span>(<span class="dt">file =</span> <span class="st">"/path/foo.RData"</span>)
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/save.html">save.image</a></span>(<span class="kw">file</span> <span class="kw">=</span> <span class="st">"/path/foo.RData"</span>)
 <span class="co"># or </span>
 <span class="co"># save(var1, var2, ..., file = "...")</span>
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">image =</span> <span class="st">"/path/foo.RData"</span>,
-{ 
-    ...
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">image</span> <span class="kw">=</span> <span class="st">"/path/foo.RData"</span>,
+{
+    <span class="no">...</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p>Or set the image file as a global parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/save.html">save.image</a></span>(<span class="dt">file =</span> <span class="st">"/path/foo.RData"</span>)
-bsub_opt<span class="op">$</span>image =<span class="st"> "/path/foo.RData"</span>
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
-{ 
-    ...
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
-<p>When <code>image</code> is set to <code>TRUE</code>, all variables in <code>.GlobalEnv</code> will be saved into a temporary file and all attached packages will be recorded. The temporary files will be removed after the job is finished, but note if you have multiple jobs, each job will save the image in a different file.</p>
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/save.html">save.image</a></span>(<span class="kw">file</span> <span class="kw">=</span> <span class="st">"/path/foo.RData"</span>)
+<span class="no">bsub_opt</span>$<span class="no">image</span> <span class="kw">=</span> <span class="st">"/path/foo.RData"</span>
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
+{
+    <span class="no">...</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p>Absolute paths should be used instead of relative paths.</p>
-<p>Image files can be shared between different jobs. <code>variables</code> are saved into separated files for different jobs even if the variable names are the same.</p>
+<p>Please note, image files can be shared between different jobs and they are not deleted after all the jobs are finished, as a comparison, <code>variables</code> are saved into separated temporary files for different jobs even when the variable names are the same, and they are deleted after the jobs are finished.</p>
 </div>
 <div id="the-working-directory" class="section level3">
 <h3 class="hasAnchor">
 <a href="#the-working-directory" class="anchor"></a>The working directory</h3>
-<p>If the code chunk replies on the working directory, it can be specified by <code>wd</code> argument:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">wd =</span> <span class="st">"/path"</span>
+<p>If the code chunk replies on the working directory, it can be specified by <code>working_dir</code> argument:</p>
+<div class="sourceCode" id="cb28"><html><body><pre class="r">bsub_chunk(name = "example", working_dir = "/path"
 { 
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+    Sys.sleep(5)
+})</pre></body></html></div>
 <p>Or set it as a global parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>wd =<span class="st"> "/path"</span>
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
-{ 
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">working_dir</span> <span class="kw">=</span> <span class="st">"/path"</span>
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
+{
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p>Note it is not recommended to let all file pathes in the jobs be relative or be affected by the working directory. It is recommended to use absolute path everywhere in the job.</p>
 </div>
 <div id="retrieve-the-last-variable" class="section level3">
 <h3 class="hasAnchor">
 <a href="#retrieve-the-last-variable" class="anchor"></a>Retrieve the last variable</h3>
-<p>The last variable in the code chunk can be saved by setting <code>save_var = TRUE</code> and retrieved back by <code><a href="../reference/retrieve_var.html">retrieve_var()</a></code> by specifying the job name. Since the variable is looked up by the job name, there should be no job with the same name submitted before retrieving the variable.</p>
+<p>The last variable in the code chunk can be saved by setting <code>save_var = TRUE</code> and retrieved back by <code><a href="../reference/retrieve_var.html">retrieve_var()</a></code> by specifying the job name. Since the variable is looked up by the job name, there should be no job with the same name submitted before retrieving the variable, or else it will only look at the newest one with the same job name.</p>
 <p><code><a href="../reference/retrieve_var.html">retrieve_var()</a></code> waits until the job is finished.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example2"</span>, <span class="dt">save_var =</span> <span class="ot">TRUE</span>,
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example2"</span>, <span class="kw">save_var</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
 {
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">10</span>)
-    <span class="dv">1</span><span class="op">+</span><span class="dv">1</span>
-})</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">10</span>)
+    <span class="fl">1</span>+<span class="fl">1</span>
+})</pre></body></html></div>
 <pre><code>## - job: 'example2' from a code chunk
 ## bsub -J 'example2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example2.out' \
-##     '/home/guz/.bsub_temp/example2_e0ec3fb3dd84.sh'</code></pre>
-<pre><code>## [1] "3139731"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/retrieve_var.html">retrieve_var</a></span>(<span class="st">"example2"</span>)</code></pre></div>
+##     '/home/guz/.bsub_temp/example2_404656c09c75.sh'</code></pre>
+<pre><code>## [1] "3343845"</code></pre>
+<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="fu"><a href="../reference/retrieve_var.html">retrieve_var</a></span>(<span class="st">"example2"</span>)</pre></body></html></div>
 <pre><code>## job is running or pending, retry in 30 seconds.</code></pre>
 <pre><code>## [1] 2</code></pre>
-<p>However, it is not recommended to directly retrieve the returned value from the code chunk. Better choice is to save the variable into permanent file in the code chunk so you don’t need to rerun the code which normally has very long runing time, E.g.:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, 
+<p>However, it is not recommended to directly retrieve the returned value from the code chunk. Better choice is to save the variable into permanent file in the code chunk so you don’t need to rerun the code in the future which normally has very long runing time, E.g.:</p>
+<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
 {
-    ...
-    <span class="kw"><a href="https://rdrr.io/r/base/save.html">save</a></span>(...)
+    <span class="no">...</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span>(<span class="no">...</span>)
     <span class="co"># or</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(...)
-})</code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">...</span>)
+})</pre></body></html></div>
 </div>
 <div id="rerun-the-job" class="section level3">
 <h3 class="hasAnchor">
 <a href="#rerun-the-job" class="anchor"></a>Rerun the job</h3>
 <p>There is a flag file to mark whether the job was successfully finished or not. If the job has been successfully done, the job with the same name will be skipped. <code>enforce</code> argument controls how to rerun the jobs with the same names. If it is set to <code>TRUE</code>, jobs will be rerun no matter they are done or not.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">enforce =</span> <span class="ot">FALSE</span>,
-{ 
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">enforce</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
+{
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <pre><code>## - job: 'example' from a code chunk
 ## Job 'example' is already done, skip.</code></pre>
 <p><code>enforce</code> can be set as a global parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>enforce =<span class="st"> </span><span class="ot">FALSE</span>
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
-{ 
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<div class="sourceCode" id="cb39"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">enforce</span> <span class="kw">=</span> <span class="fl">FALSE</span>
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
+{
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 </div>
 <div id="job-dependency" class="section level3">
 <h3 class="hasAnchor">
 <a href="#job-dependency" class="anchor"></a>Job dependency</h3>
 <p>Since <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> returns the job ID, it is can be used to specify the dependency in other jobs. The value for <code>dependency</code> can be a vector of job IDs.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">job1 =<span class="st"> </span><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example1"</span>,
-{ 
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
+<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">job1</span> <span class="kw">=</span> <span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example1"</span>,
+{
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
 })
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example2"</span>, <span class="dt">dependency =</span> job1,
-{ 
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example2"</span>, <span class="kw">dependency</span> <span class="kw">=</span> <span class="no">job1</span>,
+{
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 </div>
 <div id="temporary-and-output-directory" class="section level3">
 <h3 class="hasAnchor">
 <a href="#temporary-and-output-directory" class="anchor"></a>Temporary and output directory</h3>
 <p><code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> has two arguments <code>temp_dir</code> and <code>output_dir</code>. <code>temp_dir</code> is used for the temporary R script and sh files. <code>output_dir</code> is used for the flag files and the output files from LSF cluster.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">temp_dir =</span> ..., <span class="dt">output_dir =</span> ...,
-{ 
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">temp_dir</span> <span class="kw">=</span> <span class="no">...</span>, <span class="kw">output_dir</span> <span class="kw">=</span> <span class="no">...</span>,
+{
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p>They can be set as global parameters. The value of <code>output_dir</code> is by default set as the same as <code>temp_dir</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt<span class="op">$</span>temp_dir =<span class="st"> </span>...
-bsub_opt<span class="op">$</span>output_dir =<span class="st"> </span>...
-<span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
-{ 
-    <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
-})</code></pre></div>
+<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">temp_dir</span> <span class="kw">=</span> <span class="no">...</span>
+<span class="no">bsub_opt</span>$<span class="no">output_dir</span> <span class="kw">=</span> <span class="no">...</span>
+<span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
+{
+    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+})</pre></body></html></div>
 <p>To remove temporary files in <code>temp_dir</code>, run <code><a href="../reference/clear_temp_dir.html">clear_temp_dir()</a></code> function.</p>
 </div>
 <div id="run-code-chunk-from-a-script" class="section level3">
 <h3 class="hasAnchor">
 <a href="#run-code-chunk-from-a-script" class="anchor"></a>Run code chunk from a script</h3>
 <p>You can run code chunk from a script by specifying the starting line number and the ending line number. The R script is specified by <code>script</code> argument, the starting line number and the ending line number are specified by <code>start</code> and <code>end</code> arguments. (Note this functionality has not been tested yet.)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
-    <span class="dt">script =</span> <span class="st">"/path/foo.R"</span>,
-    <span class="dt">start =</span> <span class="dv">10</span>, <span class="dt">end =</span> <span class="dv">20</span>, ...)</code></pre></div>
-<p>Assume you are editing <code>foo.R</code> very offen and the line numbers that you want to run change from time to time. You can add tags in the R script and specifying <code>start</code> and <code>end</code> by those tags. In following example which is the source code of <code>foo.R</code>, we add tags for the code chunk we want to run:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">...
-<span class="co"># BSUB_START</span>
+<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
+    <span class="kw">script</span> <span class="kw">=</span> <span class="st">"/path/foo.R"</span>,
+    <span class="kw">start</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">end</span> <span class="kw">=</span> <span class="fl">20</span>, <span class="no">...</span>)</pre></body></html></div>
+<p>Assuming you are editing <code>foo.R</code> very offen and the line numbers that you want to run change from time to time, you can add tags in the R script and specifying <code>start</code> and <code>end</code> by those tags. In following example which is the source code of <code>foo.R</code>, we add tags for the code chunk we want to run:</p>
+<div class="sourceCode" id="cb44"><html><body><pre class="r">...
+# BSUB_START
 you code chunk here
-<span class="co"># BSUB_</span><span class="re">END</span>
-...</code></pre></div>
+# BSUB_END
+...</pre></body></html></div>
 <p>Then you can specify <code>start</code> and <code>end</code> by regular expressions to match them:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>,
-    <span class="dt">script =</span> <span class="st">"/path/foo.R"</span>,
-    <span class="dt">start =</span> <span class="st">"^# BSUB_START"</span>, 
-    <span class="dt">end =</span> <span class="st">"^# BSUB_END"</span>, ...)</code></pre></div>
+<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
+    <span class="kw">script</span> <span class="kw">=</span> <span class="st">"/path/foo.R"</span>,
+    <span class="kw">start</span> <span class="kw">=</span> <span class="st">"^# BSUB_START"</span>,
+    <span class="kw">end</span> <span class="kw">=</span> <span class="st">"^# BSUB_END"</span>, <span class="no">...</span>)</pre></body></html></div>
 </div>
 <div id="run-jobs-locally" class="section level3">
 <h3 class="hasAnchor">
 <a href="#run-jobs-locally" class="anchor"></a>Run jobs locally</h3>
-<p>Setting <code>local = TRUE</code> directly runs the code chunk in the same R session.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="st">"example"</span>, <span class="dt">local =</span> <span class="ot">TRUE</span>,
-{ 
-    <span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"blablabla...</span><span class="ch">\n</span><span class="st">"</span>)
-})</code></pre></div>
+<p>Setting <code>local = TRUE</code> directly runs the code chunk in the same R session (do not submit to the cluster).</p>
+<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">local</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+{
+    <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"blablabla...\n"</span>)
+})</pre></body></html></div>
 <pre><code>## - job: 'example' from a code chunk
-## bash /home/guz/.bsub_temp/example_e0ec684b4b6e.sh</code></pre>
+## bash /home/guz/.bsub_temp/example_40467ac12f9e.sh</code></pre>
+</div>
+<div id="submit-jobs-over-different-parameters" class="section level3">
+<h3 class="hasAnchor">
+<a href="#submit-jobs-over-different-parameters" class="anchor"></a>Submit jobs over different parameters</h3>
+<p>The nice thing for <strong>bsub</strong> package is you can programmatically submit many of jobs. Assuming we have a list of samples where the sample IDs are saved in <code>sample_id</code> variable, and a list of parameters (in <code>parameters</code> variable) to test, we want to apply the analysis by <code>analyze()</code> function to each sample with each parameter per single job. We can submit all the jobs as follows:</p>
+<div class="sourceCode" id="cb48"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">GetoptLong</span>)
+<span class="kw">for</span>(<span class="no">sid</span> <span class="kw">in</span> <span class="no">sample_id</span>) {
+    <span class="kw">for</span>(<span class="no">param</span> <span class="kw">in</span> <span class="no">parameters</span>) {
+        <span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"analysis_@{sid}_@{param}"</span>),
+            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sid"</span>, <span class="st">"param"</span>),
+            <span class="kw">packages</span> <span class="kw">=</span> <span class="no">...</span>, <span class="no">other_arguments...</span>,
+        {
+            <span class="no">res</span> <span class="kw">=</span> <span class="fu">analyze</span>(<span class="no">sid</span>, <span class="no">param</span>)
+            <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">res</span>, <span class="kw">file</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"/path/to/result_@{sid}_@{param}.rds"</span>))
+        })
+    }
+}</pre></body></html></div>
 </div>
 </div>
 <div id="send-r-script" class="section level2">
 <h2 class="hasAnchor">
 <a href="#send-r-script" class="anchor"></a>Send R script</h2>
 <p><code><a href="../reference/bsub_script.html">bsub_script()</a></code> submits the job from R scripts. The major arguments are the same as in <code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/foo.R"</span>, <span class="dt">name =</span> ..., <span class="dt">memory =</span> ..., <span class="dt">core =</span> ..., ...)</code></pre></div>
+<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/of/foo.R"</span>, <span class="kw">name</span> <span class="kw">=</span> <span class="no">...</span>, <span class="kw">memory</span> <span class="kw">=</span> <span class="no">...</span>, <span class="kw">core</span> <span class="kw">=</span> <span class="no">...</span>, <span class="no">...</span>)</pre></body></html></div>
 <p>If the R script needs command-line arguments, they can be specified by <code>argv</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/foo.R"</span>, <span class="dt">argv =</span> <span class="st">"--a 1 --b 3"</span>, ...)</code></pre></div>
+<div class="sourceCode" id="cb50"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/of/foo.R"</span>, <span class="kw">argv</span> <span class="kw">=</span> <span class="st">"--a 1 --b 3"</span>, <span class="no">...</span>)</pre></body></html></div>
 <p>When you have a list of jobs with the same argument names but with different argument values, you can construct <code>argv</code> by <code><a href="https://glue.tidyverse.org/reference/glue.html">glue::glue()</a></code> or <code><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">GetoptLong::qq()</a></code> to construct the <code>argv</code> string:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)
-<span class="cf">for</span>(a <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {
-    <span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">11</span><span class="op">:</span><span class="dv">20</span>) {
-        <span class="kw"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/foo.R"</span>, <span class="dt">argv =</span> <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"-a @{a} --b @{b}"</span>), ...)
+<div class="sourceCode" id="cb51"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">GetoptLong</span>)
+<span class="kw">for</span>(<span class="no">a</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">10</span>) {
+    <span class="kw">for</span>(<span class="no">b</span> <span class="kw">in</span> <span class="fl">11</span>:<span class="fl">20</span>) {
+        <span class="fu"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/foo.R"</span>, <span class="kw">argv</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"-a @{a} --b @{b}"</span>), <span class="no">...</span>)
     }
-}</code></pre></div>
-<p>The command-line arguments can also specified as arguments of <code><a href="../reference/bsub_script.html">bsub_script()</a></code>, but with <code>.</code> prefix.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/foo.R"</span>, <span class="dt">.a =</span> <span class="dv">1</span>, <span class="dt">.b =</span> <span class="dv">3</span>, ...)</code></pre></div>
+}</pre></body></html></div>
+<p>The command-line arguments of your R script can also specified as arguments of <code><a href="../reference/bsub_script.html">bsub_script()</a></code>, but with <code>.</code> prefix.</p>
+<div class="sourceCode" id="cb52"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/foo.R"</span>, <span class="kw">.a</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">.b</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="no">...</span>)</pre></body></html></div>
 <p>Then for the same example previously for submitting a list of jobs, it can be written as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span>(a <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {
-    <span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">11</span><span class="op">:</span><span class="dv">20</span>) {
-        <span class="kw"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/foo.R"</span>, <span class="dt">.a =</span> a, <span class="dt">.b =</span> b, ...)
+<div class="sourceCode" id="cb53"><html><body><pre class="r"><span class="kw">for</span>(<span class="no">a</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">10</span>) {
+    <span class="kw">for</span>(<span class="no">b</span> <span class="kw">in</span> <span class="fl">11</span>:<span class="fl">20</span>) {
+        <span class="fu"><a href="../reference/bsub_script.html">bsub_script</a></span>(<span class="st">"/path/foo.R"</span>, <span class="kw">.a</span> <span class="kw">=</span> <span class="no">a</span>, <span class="kw">.b</span> <span class="kw">=</span> <span class="no">b</span>, <span class="no">...</span>)
     }
-}</code></pre></div>
-<p>The R scripts should be used with the absolute paths.</p>
-<p>Note the bash environment can be initialized by setting a <code>sh_head</code>.</p>
+}</pre></body></html></div>
+<p>The R scripts should be used in the absolute paths.</p>
+<p>Note the bash environment can be initialized by setting the <code>sh_head</code> option.</p>
 </div>
 <div id="send-other-shell-commands" class="section level2">
 <h2 class="hasAnchor">
 <a href="#send-other-shell-commands" class="anchor"></a>Send other shell commands</h2>
 <p><code><a href="../reference/bsub_cmd.html">bsub_cmd()</a></code>submits shell commands. Basically it is similar as <code><a href="../reference/bsub_script.html">bsub_script()</a></code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="st">"samtools sort ..."</span>, <span class="dt">name =</span> ..., <span class="dt">memory =</span> ..., <span class="dt">core =</span> ..., ...)
-<span class="kw"><a href="../reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"cmd1"</span>, <span class="st">"cmd2"</span>, ...), <span class="dt">name =</span> ..., <span class="dt">memory =</span> ..., <span class="dt">core =</span> ..., ...)</code></pre></div>
+<div class="sourceCode" id="cb54"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="st">"samtools sort ..."</span>, <span class="kw">name</span> <span class="kw">=</span> <span class="no">...</span>, <span class="kw">memory</span> <span class="kw">=</span> <span class="no">...</span>, <span class="kw">core</span> <span class="kw">=</span> <span class="no">...</span>, <span class="no">...</span>)
+<span class="fu"><a href="../reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"cmd1"</span>, <span class="st">"cmd2"</span>, <span class="no">...</span>), <span class="kw">name</span> <span class="kw">=</span> <span class="no">...</span>, <span class="kw">memory</span> <span class="kw">=</span> <span class="no">...</span>, <span class="kw">core</span> <span class="kw">=</span> <span class="no">...</span>, <span class="no">...</span>)</pre></body></html></div>
 <p>The binary and the arguments should all be set in the first argument of <code><a href="../reference/bsub_cmd.html">bsub_cmd()</a></code>. Remember to use <code><a href="https://glue.tidyverse.org/reference/glue.html">glue::glue()</a></code> or <code><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">GetoptLong::qq()</a></code> to construct the commands if they contain variable arguments, e.g:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span>(bam <span class="cf">in</span> bam_file_list) {
-    <span class="kw"><a href="../reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"samtools sort @{bam} ... "</span>), <span class="dt">name =</span> <span class="kw"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"sort_@{basename(bam)}"</span>), 
-        <span class="dt">memory =</span> ..., <span class="dt">core =</span> ..., ...)
-}</code></pre></div>
+<div class="sourceCode" id="cb55"><html><body><pre class="r"><span class="kw">for</span>(<span class="no">bam</span> <span class="kw">in</span> <span class="no">bam_file_list</span>) {
+    <span class="fu"><a href="../reference/bsub_cmd.html">bsub_cmd</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"samtools sort @{bam} ... "</span>), <span class="kw">name</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GetoptLong/man/qq.html">qq</a></span>(<span class="st">"sort_@{basename(bam)}"</span>),
+        <span class="kw">memory</span> <span class="kw">=</span> <span class="no">...</span>, <span class="kw">core</span> <span class="kw">=</span> <span class="no">...</span>, <span class="no">...</span>)
+}</pre></body></html></div>
 </div>
 <div id="job-summary" class="section level2">
 <h2 class="hasAnchor">
 <a href="#job-summary" class="anchor"></a>Job Summary</h2>
-<p><code><a href="../reference/bjobs.html">bjobs()</a></code> or just entering <code>bjobs</code> gives a summary of running jobs. Job status (by default is <code>RUN</code> and <code>PEND</code>) is controlled by <code>status</code> argument. Number of most recent jobs is controlled by <code>max</code> argument. Filtering on the job name is controlled by <code>filter</code> argument.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
-    <span class="kw"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="dt">name =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"example_"</span>, i),
-    { 
-        <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
+<p><code><a href="../reference/bjobs.html">bjobs()</a></code> or just entering <code>bjobs</code> gives a summary of running and pending jobs. Job status (by default is <code>RUN</code> and <code>PEND</code>) is controlled by <code>status</code> argument. Number of most recent jobs is controlled by <code>max</code> argument. Filtering on the job name is controlled by <code>filter</code> argument. In the following example, we submit four tiny jobs.</p>
+<div class="sourceCode" id="cb56"><html><body><pre class="r"><span class="kw">for</span>(<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">4</span>) {
+    <span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"example_"</span>, <span class="no">i</span>),
+    {
+        <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
     })
-}</code></pre></div>
+}</pre></body></html></div>
 <pre><code>## - job: 'example_1' from a code chunk
 ## bsub -J 'example_1' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_1.out' \
-##     '/home/guz/.bsub_temp/example_1_e0ec189967bd.sh' 
+##     '/home/guz/.bsub_temp/example_1_40465dd5526.sh' 
 ## - job: 'example_2' from a code chunk
 ## bsub -J 'example_2' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_2.out' \
-##     '/home/guz/.bsub_temp/example_2_e0ec622c8ae1.sh' 
+##     '/home/guz/.bsub_temp/example_2_40461ecc49bb.sh' 
 ## - job: 'example_3' from a code chunk
 ## bsub -J 'example_3' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_3.out' \
-##     '/home/guz/.bsub_temp/example_3_e0ece4bfe2.sh' 
+##     '/home/guz/.bsub_temp/example_3_404626b80b15.sh' 
 ## - job: 'example_4' from a code chunk
 ## bsub -J 'example_4' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
 ##      -o '/home/guz/.bsub_temp/example_4.out' \
-##     '/home/guz/.bsub_temp/example_4_e0ec23572751.sh'</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bjobs</code></pre></div>
+##     '/home/guz/.bsub_temp/example_4_404612d5e88d.sh'</code></pre>
+<div class="sourceCode" id="cb58"><html><body><pre class="r"><span class="no">bjobs</span></pre></body></html></div>
 <pre><code>## ─────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3139732 PEND example_1 2020-04-10 15:52:45 -           -         -     -   -      
-##  3139733 PEND example_2 2020-04-10 15:52:45 -           -         -     -   -      
-##  3139734 PEND example_3 2020-04-10 15:52:45 -           -         -     -   -      
-##  3139735 PEND example_4 2020-04-10 15:52:46 -           -         -     -   -      
+##  3343846 PEND example_1 2020-05-30 13:29:49 -           -         -     -   -      
+##  3343847 PEND example_2 2020-05-30 13:29:49 -           -         -     -   -      
+##  3343848 PEND example_3 2020-05-30 13:29:49 -           -         -     -   -      
+##  3343849 PEND example_4 2020-05-30 13:29:50 -           -         -     -   -      
 ## ─────────────────────────────────────────────────────────────────────────────────── 
-##  52 DONE jobs, 4 PEND jobs within one week.
+##  54 DONE jobs, 7 EXIT jobs, 4 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
 <p>There is one additional column <code>RECENT</code> in the summary table which shows the order of the jobs with the same job name. The most recent job has the value 1.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/bjobs.html">bjobs</a></span>(<span class="dt">status =</span> <span class="st">"all"</span>, <span class="dt">filter =</span> <span class="st">"example"</span>)</code></pre></div>
+<div class="sourceCode" id="cb60"><html><body><pre class="r"><span class="kw">for</span>(<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">2</span>) {
+    <span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>,
+    {
+        <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="fl">5</span>)
+    })
+}</pre></body></html></div>
+<pre><code>## - job: 'example' from a code chunk
+## bsub -J 'example' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example.out' \
+##     '/home/guz/.bsub_temp/example_4046512e6d4c.sh' 
+## - job: 'example' from a code chunk
+## bsub -J 'example' -W '1:00' -n 1 -R 'rusage[mem=1024]' \
+##      -o '/home/guz/.bsub_temp/example.out' \
+##     '/home/guz/.bsub_temp/example_40465c58eeda.sh'</code></pre>
+<div class="sourceCode" id="cb62"><html><body><pre class="r"><span class="fu"><a href="../reference/bjobs.html">bjobs</a></span>(<span class="kw">status</span> <span class="kw">=</span> <span class="st">"all"</span>, <span class="kw">filter</span> <span class="kw">=</span> <span class="st">"example"</span>)</pre></body></html></div>
 <pre><code>## ────────────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3139446 DONE example   8      2020-04-10 09:14:24 0:00        -         4     -   12Mb   
-##  3139447 DONE example2  8      2020-04-10 09:14:24 0:00        -         1     -   41Mb   
-##  3139448 DONE example_1 8      2020-04-10 09:15:05 0:00        -         1     -   41Mb   
-##  3139449 DONE example_2 8      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139450 DONE example_3 8      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139451 DONE example_4 8      2020-04-10 09:15:06 0:00        -         1     -   41Mb   
-##  3139453 DONE example   7      2020-04-10 09:16:00 0:00        -         4     -   37Mb   
-##  3139454 DONE example2  7      2020-04-10 09:16:01 0:00        -         1     -   41Mb   
-##  3139455 DONE example_1 7      2020-04-10 09:16:42 0:00        -         1     -   41Mb   
-##  3139456 DONE example_2 7      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
-##  3139457 DONE example_3 7      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
-##  3139458 DONE example_4 7      2020-04-10 09:16:43 0:00        -         1     -   41Mb   
-##  3139641 DONE example   6      2020-04-10 11:55:54 0:00        -         4     -   6Mb    
-##  3139642 DONE example2  6      2020-04-10 11:55:54 0:00        -         1     -   41Mb   
-##  3139643 DONE example_1 6      2020-04-10 11:56:36 0:00        -         1     -   37Mb   
-##  3139644 DONE example_2 6      2020-04-10 11:56:36 0:00        -         1     -   37Mb   
-##  3139645 DONE example_3 6      2020-04-10 11:56:36 0:00        -         1     -   41Mb   
-##  3139646 DONE example_4 6      2020-04-10 11:56:36 0:00        -         1     -   41Mb   
-##  3139698 DONE example   5      2020-04-10 14:22:53 0:00        -         4     -   15Mb   
-##  3139699 DONE example2  5      2020-04-10 14:22:53 0:00        -         1     -   41Mb   
-##  3139700 DONE example_1 5      2020-04-10 14:23:34 0:00        -         1     -   42Mb   
-##  3139701 DONE example_2 5      2020-04-10 14:23:35 0:00        -         1     -   41Mb   
-##  3139702 DONE example_3 5      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
-##  3139703 DONE example_4 5      2020-04-10 14:23:35 0:00        -         1     -   42Mb   
-##  3139706 DONE example   4      2020-04-10 14:27:26 0:00        -         4     -   37Mb   
-##  3139707 DONE example2  4      2020-04-10 14:27:26 0:00        -         1     -   41Mb   
-##  3139708 DONE example_1 4      2020-04-10 14:28:08 0:00        -         1     -   40Mb   
-##  3139709 DONE example_2 4      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
-##  3139710 DONE example_3 4      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
-##  3139711 DONE example_4 4      2020-04-10 14:28:08 0:00        -         1     -   37Mb   
-##  3139714 DONE example   3      2020-04-10 14:34:22 0:00        -         4     -   41Mb   
-##  3139715 DONE example2  3      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
-##  3139716 DONE example_1 3      2020-04-10 14:35:04 0:00        -         1     -   34Mb   
-##  3139717 DONE example_2 3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
-##  3139718 DONE example_3 3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
-##  3139719 DONE example_4 3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
-##  3139723 DONE example   2      2020-04-10 15:48:23 0:00        -         4     -   24Mb   
-##  3139724 DONE example2  2      2020-04-10 15:48:23 0:00        -         1     -   37Mb   
-##  3139725 DONE example_1 2      2020-04-10 15:49:05 0:00        -         1     -   37Mb   
-##  3139726 DONE example_2 2      2020-04-10 15:49:05 0:00        -         1     -   25Mb   
-##  3139727 DONE example_3 2      2020-04-10 15:49:05 0:00        -         1     -   27Mb   
-##  3139728 DONE example_4 2      2020-04-10 15:49:05 0:00        -         1     -   26Mb   
-##  3139730 DONE example   1      2020-04-10 15:52:03 0:00        -         4     -   37Mb   
-##  3139731 DONE example2  1      2020-04-10 15:52:03 0:00        -         1     -   43Mb   
-##  3139732 PEND example_1 1      2020-04-10 15:52:45 -           -         -     -   -      
-##  3139733 PEND example_2 1      2020-04-10 15:52:45 -           -         -     -   -      
-##  3139734 PEND example_3 1      2020-04-10 15:52:45 -           -         -     -   -      
-##  3139735 PEND example_4 1      2020-04-10 15:52:46 -           -         -     -   -      
-##  JOBID   STAT JOB_NAME  RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
+##  3340294 DONE example   4      2020-05-28 23:09:59 0:00        -         4     -   34Mb   
+##  3340295 DONE example2  2      2020-05-28 23:10:00 0:00        -         1     -   41Mb   
+##  3340296 DONE example_1 2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
+##  3340297 DONE example_2 2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
+##  3340298 DONE example_3 2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
+##  3340299 DONE example_4 2      2020-05-28 23:10:43 0:00        -         1     -   41Mb   
+##  3343844 DONE example   3      2020-05-30 13:29:07 0:00        -         4     -   12Mb   
+##  3343845 DONE example2  1      2020-05-30 13:29:08 0:00        -         1     -   41Mb   
+##  3343846 PEND example_1 1      2020-05-30 13:29:49 -           -         -     -   -      
+##  3343847 PEND example_2 1      2020-05-30 13:29:49 -           -         -     -   -      
+##  3343848 PEND example_3 1      2020-05-30 13:29:49 -           -         -     -   -      
+##  3343849 PEND example_4 1      2020-05-30 13:29:50 -           -         -     -   -      
+##  3343850 PEND example   2      2020-05-30 13:29:50 -           -         -     -   -      
+##  3343851 PEND example   1      2020-05-30 13:29:50 -           -         -     -   -      
 ## ────────────────────────────────────────────────────────────────────────────────────────── 
-##  52 DONE jobs, 4 PEND jobs within one week.
+##  54 DONE jobs, 7 EXIT jobs, 6 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
-<p><code><a href="../reference/brecent.html">brecent()</a></code> returns 20 most recent jobs.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">brecent</code></pre></div>
+<p><code><a href="../reference/brecent.html">brecent()</a></code> by default returns 20 most recent jobs of “all” status. You can simply type <code>brecent</code> without the brackets.</p>
+<div class="sourceCode" id="cb64"><html><body><pre class="r"><span class="no">brecent</span></pre></body></html></div>
 <pre><code>## ──────────────────────────────────────────────────────────────────────────────────────────────── 
 ##  JOBID   STAT JOB_NAME        RECENT SUBMIT_TIME         TIME_PASSED TIME_LEFT SLOTS MEM MAX_MEM
-##  3139714 DONE example         3      2020-04-10 14:34:22 0:00        -         4     -   41Mb   
-##  3139715 DONE example2        3      2020-04-10 14:34:22 0:00        -         1     -   41Mb   
-##  3139716 DONE example_1       3      2020-04-10 14:35:04 0:00        -         1     -   34Mb   
-##  3139717 DONE example_2       3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
-##  3139718 DONE example_3       3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
-##  3139719 DONE example_4       3      2020-04-10 14:35:04 0:00        -         1     -   41Mb   
-##  3139722 DONE R_code_c3481a47 2      2020-04-10 15:48:22 0:00        -         1     -   24Mb   
-##  3139723 DONE example         2      2020-04-10 15:48:23 0:00        -         4     -   24Mb   
-##  3139724 DONE example2        2      2020-04-10 15:48:23 0:00        -         1     -   37Mb   
-##  3139725 DONE example_1       2      2020-04-10 15:49:05 0:00        -         1     -   37Mb   
-##  3139726 DONE example_2       2      2020-04-10 15:49:05 0:00        -         1     -   25Mb   
-##  3139727 DONE example_3       2      2020-04-10 15:49:05 0:00        -         1     -   27Mb   
-##  3139728 DONE example_4       2      2020-04-10 15:49:05 0:00        -         1     -   26Mb   
-##  3139729 DONE R_code_c3481a47 1      2020-04-10 15:52:03 0:00        -         1     -   24Mb   
-##  3139730 DONE example         1      2020-04-10 15:52:03 0:00        -         4     -   37Mb   
-##  3139731 DONE example2        1      2020-04-10 15:52:03 0:00        -         1     -   43Mb   
-##  3139732 PEND example_1       1      2020-04-10 15:52:45 -           -         -     -   -      
-##  3139733 PEND example_2       1      2020-04-10 15:52:45 -           -         -     -   -      
-##  3139734 PEND example_3       1      2020-04-10 15:52:45 -           -         -     -   -      
-##  3139735 PEND example_4       1      2020-04-10 15:52:46 -           -         -     -   -      
+##  3337833 DONE job4            1      2020-05-28 15:27:39 0:00        -         1     -   41Mb   
+##  3340283 DONE job1            3      2020-05-28 22:48:04 0:00        -         1     -   41Mb   
+##  3340284 DONE job1            2      2020-05-28 22:49:08 0:00        -         1     -   41Mb   
+##  3340285 DONE job1            1      2020-05-28 22:49:32 0:00        -         1     -   41Mb   
+##  3340293 DONE R_code_c3481a47 2      2020-05-28 23:09:59 0:00        -         1     -   12Mb   
+##  3340294 DONE example         4      2020-05-28 23:09:59 0:00        -         4     -   34Mb   
+##  3340295 DONE example2        2      2020-05-28 23:10:00 0:00        -         1     -   41Mb   
+##  3340296 DONE example_1       2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
+##  3340297 DONE example_2       2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
+##  3340298 DONE example_3       2      2020-05-28 23:10:42 0:00        -         1     -   41Mb   
+##  3340299 DONE example_4       2      2020-05-28 23:10:43 0:00        -         1     -   41Mb   
+##  3343843 DONE R_code_c3481a47 1      2020-05-30 13:29:07 0:00        -         1     -   12Mb   
+##  3343844 DONE example         3      2020-05-30 13:29:07 0:00        -         4     -   12Mb   
+##  3343845 DONE example2        1      2020-05-30 13:29:08 0:00        -         1     -   41Mb   
+##  3343846 PEND example_1       1      2020-05-30 13:29:49 -           -         -     -   -      
+##  3343847 PEND example_2       1      2020-05-30 13:29:49 -           -         -     -   -      
+##  3343848 PEND example_3       1      2020-05-30 13:29:49 -           -         -     -   -      
+##  3343849 PEND example_4       1      2020-05-30 13:29:50 -           -         -     -   -      
+##  3343850 PEND example         2      2020-05-30 13:29:50 -           -         -     -   -      
+##  3343851 PEND example         1      2020-05-30 13:29:50 -           -         -     -   -      
 ## ──────────────────────────────────────────────────────────────────────────────────────────────── 
-##  52 DONE jobs, 4 PEND jobs within one week.
+##  54 DONE jobs, 7 EXIT jobs, 6 PEND jobs within one week.
 ##  You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.</code></pre>
 <p>There are some helper functions which only list running/pending/done/failed jobs:</p>
 <ul>
@@ -579,36 +569,47 @@ you code chunk here
 <div id="global-parameters" class="section level2">
 <h2 class="hasAnchor">
 <a href="#global-parameters" class="anchor"></a>Global Parameters</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bsub_opt</code></pre></div>
-<pre><code>##           Option                                    Value
-##         packages                                     NULL
-##            image                                     NULL
-##         temp_dir                     /home/guz/.bsub_temp
-##       output_dir                     /home/guz/.bsub_temp
-##          enforce                                     TRUE
-##        R_version                                    3.6.0
-##               wd                                       ""
-##           ignore                                    FALSE
-##            local                                    FALSE
-##     call_Rscript                  a user-defined function
-##  submission_node odcf-worker01, odcf-cn34u03s10, odcf....
-##       login_node odcf-worker01, odcf-cn34u03s10, odcf....
-##          sh_head                                       ""
-##             user                                      guz
-##            group                                     NULL
-##        ssh_envir source /etc/profile, export LSF_ENVD....
-##    bsub_template                  a user-defined function
-##       parse_time                                     NULL
-##          verbose                                    FALSE</code></pre>
+<p>Type <code>bsub_opt</code> gives you a list of global options. Values can be set by in a form of <code>bsub_opt$opt = value</code>. All the values can be reset by <code><a href="../reference/bsub_opt.html">bsub_opt(RESET = TRUE)</a></code>.</p>
+<div class="sourceCode" id="cb66"><html><body><pre class="r"><span class="no">bsub_opt</span></pre></body></html></div>
+<pre><code>##  Option          Value                                                                                                                  
+##  ---------------:---------------------------------------------------------------
+##  packages        NULL                                                                                                                   
+##  image           NULL                                                                                                                   
+##  temp_dir        /home/guz/.bsub_temp                                                                                                   
+##  output_dir      /home/guz/.bsub_temp                                                                                                   
+##  enforce         TRUE                                                                                                                   
+##  R_version       3.6.0                                                                                                                  
+##  working_dir     ""                                                                                                                     
+##  wd              ""                                                                                                                     
+##  ignore          FALSE                                                                                                                  
+##  local           FALSE                                                                                                                  
+##  call_Rscript    a user-defined function                                                                                                
+##  submission_node odcf-worker01, odcf-cn34u03s10, odcf-cn34u03s12                                                                        
+##  login_node      odcf-worker01, odcf-cn34u03s10, odcf-cn34u03s12                                                                        
+##  sh_head         ""                                                                                                                     
+##  user            guz                                                                                                                    
+##  group           NULL                                                                                                                   
+##  ssh_envir       source /etc/profile, export LSF_ENVDIR=/opt/lsf/conf, export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc
+##  bsub_template   a user-defined function                                                                                                
+##  parse_time      NULL                                                                                                                   
+##  verbose         FALSE</code></pre>
 <p>Or a more readable text:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bconf</code></pre></div>
-<pre><code>##  Configurations for bsub:   * user for connecting submission node: guz   * submission node: odcf-worker01, odcf-cn34u03s10, odcf-cn34u03s12   * global R version: 3.6.0   * command to call `Rscript`:      qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript")   * temporary directory: /home/guz/.bsub_temp  Configuations can be modified by `bsub_opt()` function</code></pre>
+<div class="sourceCode" id="cb68"><html><body><pre class="r"><span class="no">bconf</span></pre></body></html></div>
+<pre><code>## Configurations for bsub:
+##   * user for connecting submission node: guz
+##   * submission node: odcf-worker01, odcf-cn34u03s10, odcf-cn34u03s12
+##   * global R version: 3.6.0
+##   * command to call `Rscript`:
+##      qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript") foo.R
+##   * temporary directory: /home/guz/.bsub_temp
+## 
+## Configurations can be modified by `bsub_opt()` function</code></pre>
 </div>
 <div id="interactive-job-monitor" class="section level2">
 <h2 class="hasAnchor">
 <a href="#interactive-job-monitor" class="anchor"></a>Interactive job monitor</h2>
 <p>Simply running <code><a href="../reference/monitor.html">monitor()</a></code> opens a shiny app where you can query and manage jobs.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/monitor.html">monitor</a></span>()</code></pre></div>
+<div class="sourceCode" id="cb70"><html><body><pre class="r"><span class="fu"><a href="../reference/monitor.html">monitor</a></span>()</pre></body></html></div>
 <p>Following are examples of the job monitor.</p>
 <p>The job summary table:</p>
 <p>
@@ -626,7 +627,7 @@ you code chunk here
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</code></pre></div>
+<div class="sourceCode" id="cb71"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</pre></body></html></div>
 <pre><code>## R version 3.6.0 (2019-04-26)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: CentOS Linux 7 (Core)
@@ -650,30 +651,20 @@ you code chunk here
 ## [1] GetoptLong_0.1.8 bsub_1.0.0       knitr_1.28      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] compiler_3.6.0      rjson_0.2.20        magrittr_1.5       
-##  [4] clisymbols_1.2.0    tools_3.6.0         GlobalOptions_0.1.1
-##  [7] stringi_1.4.6       digest_0.6.25       stringr_1.4.0      
-## [10] xfun_0.12           evaluate_0.14</code></pre>
+##  [1] Rcpp_1.0.4          clisymbols_1.2.0    digest_0.6.25      
+##  [4] crayon_1.3.4        magrittr_1.5        evaluate_0.14      
+##  [7] rlang_0.4.5         stringi_1.4.6       GlobalOptions_0.1.3
+## [10] rmarkdown_1.18      rjson_0.2.20        tools_3.6.0        
+## [13] stringr_1.4.0       xfun_0.13           yaml_2.2.1         
+## [16] compiler_3.6.0      htmltools_0.4.0</code></pre>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#send-r-code">Send R code</a></li>
-      <li><a href="#send-r-script">Send R script</a></li>
-      <li><a href="#send-other-shell-commands">Send other shell commands</a></li>
-      <li><a href="#job-summary">Job Summary</a></li>
-      <li><a href="#other-functions">Other functions</a></li>
-      <li><a href="#global-parameters">Global Parameters</a></li>
-      <li><a href="#interactive-job-monitor">Interactive job monitor</a></li>
-      <li><a href="#session-info">Session Info</a></li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -684,7 +675,7 @@ you code chunk here
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

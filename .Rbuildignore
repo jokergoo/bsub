@@ -7,3 +7,4 @@ build_pkg_site.R
 .travis.yml
 README.md
 test_no_run
+sftp-config.json
