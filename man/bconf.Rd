@@ -12,9 +12,9 @@ bconf
 }
 \details{
 This function is only for printing. Use \code{\link{bsub_opt}} to change configurations.
+
+You simply type \code{bconf} (without the brackets) in the interactive R console.
 }
 \examples{
-# There is no example
-NULL
-
+bconf
 }

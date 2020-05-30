@@ -11,9 +11,9 @@ wait_jobs(job_name, output_dir = bsub_opt$output_dir, wait = 30)
 }
 \arguments{
 
-  \item{job_name}{A vector of job names}
-  \item{output_dir}{Output dir}
-  \item{wait}{seconds to wait}
+  \item{job_name}{A vector of job names.}
+  \item{output_dir}{Output dir.}
+  \item{wait}{Seconds to wait.}
 
 }
 \value{

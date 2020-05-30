@@ -12,7 +12,7 @@ run_cmd(cmd, print = FALSE)
 \arguments{
 
   \item{cmd}{A single-line command.}
-  \item{print}{Whether print output from the command.}
+  \item{print}{Whether to print output from the command.}
 
 }
 \details{

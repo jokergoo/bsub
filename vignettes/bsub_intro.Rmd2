@@ -4,6 +4,9 @@ Load the library:
 
 ```{r, message = FALSE}
 library(bsub)
+```
+
+```{r, echo = FALSE}
 library(GetoptLong)
 ```
 
@@ -16,9 +19,10 @@ We suggest to use **bsub** directly on the node that has the same file system
 as the computing nodes. If the file system is different from the computing nodes,
 you can only monitor jobs status while you cannot submit jobs.
 
-**bsub** package can submit R code, R scripts and bash commands to the LSF cluster
-purely inside the R session. We suggest to save the output into permanent files in
-the jobs.
+**bsub** package can submit R code (by `bsub_chunk()`), R scripts (by
+`bsub_script()`) and bash commands (by `bsub_cmd()`) to the LSF cluster purely
+inside the R session. We suggest to save the output into permanent files in
+the jobs while not directly retrieving the results on the fly.
 
 ## Send R code
 
@@ -30,12 +34,12 @@ submit the NMF analysis to the cluster and save the results as an RDS file.
 bsub_chunk(name = "example", memory = 10, hour = 10, core = 4, 
 {
     fit = NMF::nmf(...)
-    # you better save `fit` into a permanent file
-    saveRDS(fit, file = "fit.rds")
+    # you better save `fit` into a permanent file in an absolute path
+    saveRDS(fit, file = "/the/path/to/fit.rds")
 })
 ```
 
-In following examples, we use `Sys.sleep(5)` to simulate a chunk of code which
+In the following examples, we use `Sys.sleep(5)` to simulate a chunk of code which
 runs for a short time.
 
 ```{r}
@@ -65,7 +69,7 @@ on the chunk is automatically assigned. The unit of `memory` is GB.
 ### Call Rscript
 
 The R chunk is saved into a temporary R script and called by `Rscript` command
-when it is executed in the cluster. A lot of LSF clusters have customized installation
+when it is executed on the cluster. A lot of LSF clusters have customized installation
 of R, which means, calling `Rscript` is specific for every LSF cluster, thus, you 
 need to configure how to call the `Rscript` command. By default, it simply calls `Rscript`
 with the default R version installed on the cluster.
@@ -94,16 +98,19 @@ you can set `bsub_opt$call_Rscript` as:
 
 
 ```{r, eval = FALSE}
-bsub_opt$call_Rscript = function(version) qq("/the/absolute/path/of/@{gsub('\\.\\d+$', '', version)}/Rscript")
+library(GetoptLong)
+bsub_opt$call_Rscript = function(version) {
+    qq("/the/absolute/path/of/@{gsub('\\.\\d+$', '', version)}/Rscript")
+}
 ```
 
-where `qq()` is from _GetoptLong_ package which does [variable
+Here `qq()` is from **GetoptLong** package which does [variable
 interpolation](https://en.wikipedia.org/wiki/String_interpolation). You can use
 similar packages such as **glue** here.
 
 Later, the R version can be easily switched by setting `bsub_opt$R_version`
-or the `R_version` argument in `bsub_chunk()`. E.g:
-
+or the `R_version` argument in `bsub_chunk()` (The value of `R_version` is sent
+to `call_Rscript` function). E.g:
 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", R_version = "3.6.0",
@@ -112,7 +119,7 @@ bsub_chunk(name = "example", R_version = "3.6.0",
 })
 ```
 
-`R_version` can be set as a global parameter:
+Or set `R_version` as a global parameter:
 
 ```{r, eval = FALSE}
 bsub_opt$R_version = "3.6.0"
@@ -146,7 +153,7 @@ Similarlly, if you use [conda](https://docs.conda.io/en/latest/) for managing
 different versions of software, you can also choose R with different versions
 by setting a proper `bsub_opt$call_Rscript`. Let assume you have conda
 environments for different R versions with the name schema `R_$version` (e.g.
-R_3.6.0), then you can set `bsub_opt$call_Rscript` as:
+`R_3.6.0`), then you can set `bsub_opt$call_Rscript` as:
 
 ```{r, eval = FALSE}
 bsub_opt$call_Rscript = function(version) {
@@ -156,8 +163,8 @@ bsub_opt$call_Rscript = function(version) {
 
 ### Bash environment
 
-In previous example, we load the `gcc/7.2.0` and `java/1.8.0_131` modules, or
-activate the conda environment as parts in the command callling `Rscript`.
+In previous examples, we load the `gcc/7.2.0` and `java/1.8.0_131` modules, or
+activate the conda environment as parts of the command callling `Rscript`.
 These bash-level initialization can also be set by `sh_head` which adds shell
 commands as header in the bash script that is used for job submission. E.g.,
 we can do the other way:
@@ -291,15 +298,12 @@ bsub_chunk(name = "example",
 })
 ```
 
-When `image` is set to `TRUE`, all variables in `.GlobalEnv` will be saved
-into a temporary file and all attached packages will be recorded. The
-temporary files will be removed after the job is finished, but note if you
-have multiple jobs, each job will save the image in a different file.
-
 Absolute paths should be used instead of relative paths.
 
-Image files can be shared between different jobs. `variables` are saved into
-separated files for different jobs even if the variable names are the same.
+Please note, image files can be shared between different jobs and they are not
+deleted after all the jobs are finished, as a comparison, `variables` are
+saved into separated temporary files for different jobs even when the variable
+names are the same, and they are deleted after the jobs are finished.
 
 ### The working directory
 
@@ -333,7 +337,8 @@ everywhere in the job.
 The last variable in the code chunk can be saved by setting `save_var = TRUE`
 and retrieved back by `retrieve_var()` by specifying the job name. Since the
 variable is looked up by the job name, there should be no job with the same
-name submitted before retrieving the variable.
+name submitted before retrieving the variable, or else it will only look at 
+the newest one with the same job name.
 
 `retrieve_var()` waits until the job is finished.
 
@@ -348,8 +353,8 @@ retrieve_var("example2")
 
 However, it is not recommended to directly retrieve the returned value from
 the code chunk. Better choice is to save the variable into permanent file in
-the code chunk so you don't need to rerun the code which normally has very long
-runing time, E.g.:
+the code chunk so you don't need to rerun the code in the future which
+normally has very long runing time, E.g.:
 
 ```{r, eval = FALSE}
 bsub_chunk(name = "example", 
@@ -444,8 +449,8 @@ bsub_chunk(name = "example",
     start = 10, end = 20, ...)
 ```
 
-Assume you are editing `foo.R` very offen and the line numbers that you want
-to run change from time to time. You can add tags in the R script and
+Assuming you are editing `foo.R` very offen and the line numbers that you want
+to run change from time to time, you can add tags in the R script and
 specifying `start` and `end` by those tags. In following example which is the
 source code of `foo.R`, we add tags for the code chunk we want to run:
 
@@ -468,7 +473,8 @@ bsub_chunk(name = "example",
 
 ### Run jobs locally
 
-Setting `local = TRUE` directly runs the code chunk in the same R session.
+Setting `local = TRUE` directly runs the code chunk in the same R session (do not submit
+to the cluster).
 
 ```{r}
 bsub_chunk(name = "example", local = TRUE,
@@ -477,18 +483,41 @@ bsub_chunk(name = "example", local = TRUE,
 })
 ```
 
+### Submit jobs over different parameters
+
+The nice thing for **bsub** package is you can programmatically submit many of
+jobs. Assuming we have a list of samples where the sample IDs are saved in
+`sample_id` variable, and a list of parameters (in `parameters` variable) to
+test, we want to apply the analysis by `analyze()` function to each sample
+with each parameter per single job. We can submit all the jobs as follows:
+
+
+```{r, eval = FALSE}
+for(sid in sample_id) {
+    for(param in parameters) {
+        bsub_chunk(name = qq("analysis_@{sid}_@{param}"), 
+            variables = c("sid", "param"), 
+            packages = ..., other_arguments...,
+        {
+            res = analyze(sid, param)
+            saveRDS(res, file = qq("/path/to/result_@{sid}_@{param}.rds"))
+        })
+    }
+}
+```
+
 ## Send R script
 
 `bsub_script()` submits the job from R scripts. The major arguments are the same as in `bsub_chunk()`.
 
 ```{r, eval = FALSE}
-bsub_script("/path/foo.R", name = ..., memory = ..., core = ..., ...)
+bsub_script("/path/of/foo.R", name = ..., memory = ..., core = ..., ...)
 ```
 
 If the R script needs command-line arguments, they can be specified by `argv`.
 
 ```{r, eval = FALSE}
-bsub_script("/path/foo.R", argv = "--a 1 --b 3", ...)
+bsub_script("/path/of/foo.R", argv = "--a 1 --b 3", ...)
 ```
 
 When you have a list of jobs with the same argument names but with different
@@ -504,7 +533,7 @@ for(a in 1:10) {
 }
 ```
 
-The command-line arguments can also specified as arguments of `bsub_script()`,
+The command-line arguments of your R script can also specified as arguments of `bsub_script()`,
 but with `.` prefix.
 
 ```{r, eval = FALSE}
@@ -521,9 +550,9 @@ for(a in 1:10) {
 }
 ```
 
-The R scripts should be used with the absolute paths.
+The R scripts should be used in the absolute paths.
 
-Note the bash environment can be initialized by setting a `sh_head`.
+Note the bash environment can be initialized by setting the `sh_head` option.
 
 ## Send other shell commands
 
@@ -547,9 +576,11 @@ for(bam in bam_file_list) {
 
 ## Job Summary
 
-`bjobs()` or just entering `bjobs` gives a summary of running jobs. Job status (by default is `RUN`
-and `PEND`) is controlled by `status` argument. Number of most recent jobs is controlled by `max` argument.
-Filtering on the job name is controlled by `filter` argument.
+`bjobs()` or just entering `bjobs` gives a summary of running and pending
+jobs. Job status (by default is `RUN` and `PEND`) is controlled by `status`
+argument. Number of most recent jobs is controlled by `max` argument.
+Filtering on the job name is controlled by `filter` argument. In the following
+example, we submit four tiny jobs.
 
 ```{r}
 for(i in 1:4) {
@@ -565,10 +596,20 @@ There is one additional column `RECENT` in the summary table which shows the ord
 of the jobs with the same job name. The most recent job has the value 1.
 
 ```{r}
+for(i in 1:2) {
+    bsub_chunk(name = "example",
+    { 
+        Sys.sleep(5)
+    })
+}
+```
+
+```{r}
 bjobs(status = "all", filter = "example")
 ```
 
-`brecent()` returns 20 most recent jobs.
+`brecent()` by default returns 20 most recent jobs of "all" status. You can
+simply type `brecent` without the brackets.
 
 ```{r}
 brecent
@@ -591,6 +632,9 @@ There are some helper functions which only list running/pending/done/failed jobs
 - `ssh_connect()` establishes the SSH connection to the submission node if it is lost.
 
 ## Global Parameters
+
+Type `bsub_opt` gives you a list of global options. Values can be set by in a
+form of `bsub_opt$opt = value`. All the values can be reset by `bsub_opt(RESET = TRUE)`.
 
 ```{r}
 bsub_opt

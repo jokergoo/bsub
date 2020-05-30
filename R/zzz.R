@@ -19,21 +19,21 @@
 	    msg = TRUE
 	}
 
-	all_f = list.files("~/.bsub_temp/", full.names = TRUE)
-	if(length(all_f)) {
-		file_size = sum(file.info(all_f)[, "size"])
-		if(file_size < 1024) {
-			fs = paste0(file_size, "Byte")
-		} else if(file_size < 1024^2) {
-			fs = paste0(round(file_size/1024, 1), "KB")
-		} else if(file_size < 1024^3) {
-			fs = paste0(round(file_size/1024^2, 1), "MB")
-		} else {
-			fs = paste0(round(file_size/1024^3, 1), "GB")
-		}
-		packageStartupMessage(qq("There are @{length(all_f)} temporary files (@{fs}) in ~/.bsub_temp"))
-		msg = TRUE
-	}
+	# all_f = list.files("~/.bsub_temp/", full.names = TRUE)
+	# if(length(all_f)) {
+	# 	file_size = sum(file.info(all_f)[, "size"])
+	# 	if(file_size < 1024) {
+	# 		fs = paste0(file_size, "Byte")
+	# 	} else if(file_size < 1024^2) {
+	# 		fs = paste0(round(file_size/1024, 1), "KB")
+	# 	} else if(file_size < 1024^3) {
+	# 		fs = paste0(round(file_size/1024^2, 1), "MB")
+	# 	} else {
+	# 		fs = paste0(round(file_size/1024^3, 1), "GB")
+	# 	}
+	# 	packageStartupMessage(qq("There are @{length(all_f)} temporary files (@{fs}) in ~/.bsub_temp"))
+	# 	msg = TRUE
+	# }
 
 	if(grepl("odcf|w610", Sys.info()["nodename"])) {
 		msg = TRUE
@@ -60,6 +60,8 @@
 	packageStartupMessage("==================================================================")
 
 	packageStartupMessage(get_bconf_message(bconf))
+	packageStartupMessage("==================================================================")
+
 }
 
 

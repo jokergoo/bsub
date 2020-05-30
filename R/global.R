@@ -214,7 +214,7 @@ bsub_opt = set_opt(
     )
 )
 
-bsub_opt$temp_dir = "~/.bsub_temp"
+suppressMessages(bsub_opt$temp_dir <- "~/.bsub_temp")
 
 
 # == title (variable:bconf)
@@ -223,7 +223,13 @@ bsub_opt$temp_dir = "~/.bsub_temp"
 # == details
 # This function is only for printing. Use `bsub_opt` to change configurations.
 #
-bconf = "foo"
+# You simply type ``bconf`` (without the brackets) in the interactive R console.
+#
+# == example
+# bconf
+bconf = function() {
+    structure("foo", class = "bconf")
+}
 class(bconf) = "bconf"
 
 # == title

@@ -11,8 +11,8 @@ bjobs_pending(max = Inf, filter = NULL)
 }
 \arguments{
 
-  \item{max}{Maximal number of jobs}
-  \item{filter}{Regular expression to filter on job names}
+  \item{max}{Maximal number of jobs.}
+  \item{filter}{Regular expression to filter on job names.}
 
 }
 \details{

@@ -11,7 +11,7 @@ job_status_by_id(job_id)
 }
 \arguments{
 
-  \item{job_id}{The job id}
+  \item{job_id}{The job id.}
 
 }
 \value{

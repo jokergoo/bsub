@@ -12,9 +12,9 @@ bjobs(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE)
 \arguments{
 
   \item{status}{Status of the jobs. Use "all" for all jobs.}
-  \item{max}{Maximal number of recent jobs}
-  \item{filter}{Regular expression to filter on job names}
-  \item{print}{Wether print the table}
+  \item{max}{Maximal number of recent jobs.}
+  \item{filter}{Regular expression to filter on job names.}
+  \item{print}{Wether to print the table.}
 
 }
 \details{
@@ -25,6 +25,15 @@ You can directly type \code{bjobs} without parentheses which runs \code{\link{bj
 }
 \value{
 A data frame with selected job summaries.
+}
+\seealso{
+\itemize{
+  \item \code{\link{brecent}} shows the most recent.
+  \item \code{\link{bjobs_done}} shows the "DONE" jobs.
+  \item \code{\link{bjobs_exit}} shows the "EXIT" jobs.
+  \item \code{\link{bjobs_pending}} shows the "PEND" jobs.
+  \item \code{\link{bjobs_running}} shows the "RUN" jobs.
+}
 }
 \examples{
 # There is no example

@@ -15,13 +15,13 @@ vignette: >
 
 The **bsub** package is only broadly tested on DKFZ ODCF cluster and the
 default configurations work fine there. It is also possible for other clusters
-that use LSF system to use **bsub** package. Following global options should
+that use LSF system to use **bsub** package. The following global options should
 be properly configured.
 
-You can find examples from https://github.com/jokergoo/bsub/blob/master/R/config.R .
-
-If you have difficulty to configure **bsub** package for your cluster, please
+If you have difficulties to configure **bsub** package for your cluster, please
 feel free to contact me. I am glad to help.
+
+You can find examples from https://github.com/jokergoo/bsub/blob/master/R/config.R.
 
 ### How to call Rscript command
 
@@ -36,12 +36,13 @@ bsub_opt$call_Rscript = function(version) {
 ```
 
 Then the different version of `Rscript` can be switched by setting different
-`bsub_opt$R_version` option.
+`bsub_opt$R_version` option (The value of `bsub_opt$R_version` will be passed 
+to the `call_Rscript()` function.
 
 Similarlly, if you use [conda](https://docs.conda.io/en/latest/) for managing
 different versions of software, you can also choose R with different versions
 by setting a proper `bsub_opt$call_Rscript`. Let assume you have conda
-environments for different R versions with the name schema `R_$version` (e.g.
+environments for different R versions with the naming schema `R_$version` (e.g.
 R_3.6.0), then you can set `bsub_opt$call_Rscript` as:
 
 ```{r, eval = FALSE}
@@ -60,6 +61,28 @@ The names of the nodes where the jobs are submitted can be set by
 bsub_opt$submission_node = ...
 ```
 
+### Login node
+
+If you want to submit jobs, the login node should be the same as the
+submission node. By default, the value for `login_node` is automatically
+copied from `submission_node`. But there are cases when the login node is
+different from the submission node. For example, If you are working on your
+own laptop, to connect to your institute's cluster, you need to first connect
+to server A to enter your institute's network, then on server A, you continue
+to connect to server B which is the submission node. In this case, server A is
+the login node. When you explicitly set `login_node`, you should also set
+`submission_node` to `NULL` because in this circumstance, you cannot submit
+jobs:
+
+```{r, eval = FALSE}
+bsub_opt$login_node = "server A"
+bsub_opt$submission_node = NULL
+```
+
+You can still query job status. Please refer to [two_ssh.html](two_ssh.html) to
+see the instructions of how to configure **bsub** packages when you need
+to establish two connections to the submission node.
+
 ### Username on the submission node
 
 Your username on the submission node can be set by `bsub_opt$user`. The
@@ -73,7 +96,7 @@ bsub_opt$user = ...
 ### Bash environment
 
 `bsub_opt$ssh_envir` should be properly set so that LSF binaries such as
-`bsub` or `bjobs` can be properly found. There are some environment variables
+`bsub` or `bjobs` can be found. There are some environment variables
 initialized when logging in the bash terminal while they are not initialized
 with the ssh connection. Thus, some environment variables should be manually
 set.
@@ -107,12 +130,11 @@ following arguments:
 - `memory` memory, in GB.
 - `core` number of cores to use.
 - `output` path of output file.
-- `...` should be added as the last argument of the function. Following is a
-  simple example for calling `bsub`.
+- `...` should be added as the last argument of the function.
 
 The temporary bash script to submit is automatically appended as the last argument of `bsub`.
 
-E.g., the template on DKFZ ODCF is defined as:
+_E.g._, the template on our cluster is defined as:
 
 ```{r, eval = FALSE}
 bsub_opt$bsub_template = function(name, hour, memory, core, output, ...) {
@@ -121,18 +143,19 @@ bsub_opt$bsub_template = function(name, hour, memory, core, output, ...) {
 ```
 
 You can use `glue::glue()` or `GetoptLong::qq()` to construct a complex string
-with multiple variables.
+with interpolating multiple variables.
 
 ### How to parse the time strings
 
 The time strings by LSF `bjobs` command might be different for different
-configurations. The **bsub** package needs to convert the time strings to
-`POSIXlt` objects for calculating the time difference. Thus, if the default
-time string parsing fails, users need to provide a user-defined function and
-set with `bsub_opt$parse_time` option in `bsub_opt`. The function accepts a
-vector of time strings and returns a `POSIXlt` object. For example, if the
-time string returned from `bjobs` command is in a form of `Dec 1 18:00:00
-2019`, the parsing function can be defined as:
+installations. The **bsub** package needs to convert the time strings to
+`POSIXlt` objects for calculating the time difference in the `bjobs()`
+function. Thus, if the default time string parsing fails, users need to
+provide a user-defined function and set with `bsub_opt$parse_time` option in
+`bsub_opt`. The function accepts a vector of time strings and returns a
+`POSIXlt` object. For example, if the time string returned from `bjobs`
+command is in a form of `Dec 1 18:00:00 2019`, the parsing function can be
+defined as:
 
 ```{r, eval = FALSE}
 bsub_opt$parse_time = function(x) {
@@ -140,4 +163,5 @@ bsub_opt$parse_time = function(x) {
 }
 ```
 
+**bsub** package automatically recognizes several format of time strings.
 

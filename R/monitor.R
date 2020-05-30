@@ -218,9 +218,9 @@ convert_to_POSIXlt = function(x) {
 # 
 # == param
 # -status Status of the jobs. Use "all" for all jobs.
-# -max Maximal number of recent jobs
-# -filter Regular expression to filter on job names
-# -print Wether print the table
+# -max Maximal number of recent jobs.
+# -filter Regular expression to filter on job names.
+# -print Wether to print the table.
 #
 # == details
 # There is an additional column "RECENT" which is the order
@@ -230,6 +230,13 @@ convert_to_POSIXlt = function(x) {
 #
 # == value
 # A data frame with selected job summaries.
+#
+# == seealso
+# - `brecent` shows the most recent.
+# - `bjobs_done` shows the "DONE" jobs.
+# - `bjobs_exit` shows the "EXIT" jobs.
+# - `bjobs_pending` shows the "PEND" jobs.
+# - `bjobs_running` shows the "RUN" jobs.
 #
 bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE) {
 
@@ -392,7 +399,7 @@ bkill = function(job_id) {
 #
 # == param
 # -cmd A single-line command.
-# -print Whether print output from the command.
+# -print Whether to print output from the command.
 #
 # == details
 # If current node is not the submission node, the command is executed via ssh.
@@ -417,8 +424,8 @@ run_cmd = function(cmd, print = FALSE) {
 # Summary of jobs
 #
 # == param
-# -x a ``bjobs`` class object
-# -... other arguments
+# -x a ``bjobs`` class object.
+# -... other arguments.
 #
 # == value
 # No value is returned.
@@ -430,8 +437,8 @@ print.bjobs = function(x, ...) {
 # Test whether the jobs are finished
 #
 # == param
-# -job_name A vector of job names
-# -output_dir Output dir
+# -job_name A vector of job names.
+# -output_dir Output dir.
 #
 # == details
 # It tests whether the ".done" flag files exist
@@ -450,9 +457,9 @@ is_job_finished = function(job_name, output_dir = bsub_opt$output_dir) {
 # Wait until all jobs are finished
 #
 # == param
-# -job_name A vector of job names
-# -output_dir Output dir
-# -wait seconds to wait
+# -job_name A vector of job names.
+# -output_dir Output dir.
+# -wait Seconds to wait.
 #
 # == value
 # No value is returned.
@@ -473,11 +480,11 @@ wait_jobs = function(job_name, output_dir = bsub_opt$output_dir, wait = 30) {
 
 
 # == title
-# Recent jobs
+# Recent jobs with status "all"
 #
 # == param
-# -max Maximal number of recent jobs
-# -filter Regular expression to filter on job names
+# -max Maximal number of recent jobs.
+# -filter Regular expression to filter on job names.
 #
 # == details
 # You can directly type ``brecent`` without parentheses which runs `brecent` with defaults.
@@ -494,8 +501,8 @@ class(brecent) = "bjobs"
 # Running jobs
 #
 # == param
-# -max Maximal number of jobs
-# -filter Regular expression to filter on job names
+# -max Maximal number of jobs.
+# -filter Regular expression to filter on job names.
 #
 # == details
 # You can directly type ``bjobs_running`` without parentheses which runs `bjobs_running` with defaults.
@@ -512,8 +519,8 @@ class(bjobs_running) = "bjobs"
 # Pending jobs
 #
 # == param
-# -max Maximal number of jobs
-# -filter Regular expression to filter on job names
+# -max Maximal number of jobs.
+# -filter Regular expression to filter on job names.
 #
 # == details
 # You can directly type ``bjobs_pending`` without parentheses which runs `bjobs_pending` with defaults.
@@ -530,8 +537,8 @@ class(bjobs_pending) = "bjobs"
 # Finished jobs
 #
 # == param
-# -max Maximal number of jobs
-# -filter Regular expression to filter on job names
+# -max Maximal number of jobs.
+# -filter Regular expression to filter on job names.
 #
 # == details
 # You can directly type ``bjobs_done`` without parentheses which runs `bjobs_done` with defaults.
@@ -548,8 +555,8 @@ class(bjobs_done) = "bjobs"
 # Failed jobs
 #
 # == param
-# -max Maximal number of jobs
-# -filter Regular expression to filter on job names
+# -max Maximal number of jobs.
+# -filter Regular expression to filter on job names.
 #
 # == details
 # You can directly type ``bjobs_exit`` without parentheses which runs `bjobs_exit` with defaults.
@@ -568,7 +575,7 @@ class(bjobs_exit) = "bjobs"
 #
 # == param
 # -job_name Job name.
-# -output_dir The output dir
+# -output_dir The output dir.
 #
 # == value
 # If the job is finished, it returns DONE/EXIT/MISSING. If the job is running or pending, it returns the corresponding
@@ -601,7 +608,7 @@ job_status_by_name = function(job_name, output_dir = bsub_opt$output_dir) {
 # Job status by id
 #
 # == param
-# -job_id The job id
+# -job_id The job id.
 #
 # == value
 # If the job has been deleted from the database, it returns MISSING.

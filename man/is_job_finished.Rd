@@ -11,8 +11,8 @@ is_job_finished(job_name, output_dir = bsub_opt$output_dir)
 }
 \arguments{
 
-  \item{job_name}{A vector of job names}
-  \item{output_dir}{Output dir}
+  \item{job_name}{A vector of job names.}
+  \item{output_dir}{Output dir.}
 
 }
 \details{
