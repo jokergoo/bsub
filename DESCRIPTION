@@ -27,7 +27,7 @@ Suggests: knitr,
 biocViews: Software, Infrastructure
 Description: It submits R code/R scripts/shell commands to LSF cluster 
   (the bsub system) without leaving R. There is also an interactive 
-  web app for monitoring the job status.
+  Shiny app for monitoring the job status.
 VignetteBuilder: knitr
 URL: https://github.com/jokergoo/bsub
 License: MIT + file LICENSE

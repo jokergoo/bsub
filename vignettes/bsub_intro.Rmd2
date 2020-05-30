@@ -493,6 +493,7 @@ with each parameter per single job. We can submit all the jobs as follows:
 
 
 ```{r, eval = FALSE}
+library(GetoptLong)
 for(sid in sample_id) {
     for(param in parameters) {
         bsub_chunk(name = qq("analysis_@{sid}_@{param}"), 
