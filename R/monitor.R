@@ -9,6 +9,19 @@
 # 
 # == value
 # The log message as a vector.
+#
+# == example
+# \dontrun{
+# # a single job
+# job_id = 1234567  # job ids can be get from `bjobs`
+# job_log(job_id)
+# # multiple jobs
+# job_id = c(10000000, 10000001, 10000002) 
+# job_log(job_id)  # by  default last 10 lines for each job are printed
+# job_log(job_id, n_line = 20) # print last 20 lines for each job
+# # logs for all running jobs
+# job_log()
+# }
 job_log = function(job_id, print = TRUE, n_line = 10) {
     
     tb = bjobs(print = FALSE, status = "all")
@@ -220,7 +233,7 @@ convert_to_POSIXlt = function(x) {
 # -status Status of the jobs. Use "all" for all jobs.
 # -max Maximal number of recent jobs.
 # -filter Regular expression to filter on job names.
-# -print Wether to print the table.
+# -print Whether to print the table.
 #
 # == details
 # There is an additional column "RECENT" which is the order
@@ -238,6 +251,18 @@ convert_to_POSIXlt = function(x) {
 # - `bjobs_pending` shows the "PEND" jobs.
 # - `bjobs_running` shows the "RUN" jobs.
 #
+# == example
+# \dontrun{
+# bjobs # this is the same as bjobs()
+# bjobs() # all running and pending jobs
+# bjobs(status = "all") # all jobs
+# bjobs(status = "RUN") # all running jobs, you can also use `bjobs_running`
+# bjobs(status = "PEND") # all pending jobs, you can also use `bjobs_pending`
+# bjobs(status = "DONE") # all done jobs, you can also use `bjobs_done`
+# bjobs(status = "EXIT") # all exit jobs, you can also use `bjobs_exit`
+# bjobs(status = "all", max = 20) # last 20 jobs
+# bjobs(status = "DONE", filter = "example") # done jobs with name '.*example.*'
+# }
 bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE) {
 
 
@@ -275,7 +300,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
     df$RECENT = recent[as.character(df$JOBID)]
 
     if(! "all" %in% status) {
-        df = df[df$STAT %in% status, , drop = FALSE]
+        df = df[df$STAT %in% toupper(status), , drop = FALSE]
     }
     if(!is.null(filter)) {
         df = df[grepl(filter, df$JOB_NAME), , drop = FALSE]
@@ -306,6 +331,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         cat(strrep(symbol$line, sum(max_width)), "\n")
         cat(" ", paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week.\n", sep = "")
         cat(" You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.\n")
+        cat(" Use `brecent` to retrieve recent jobs from all status.\n")
         options(width = ow)
 
         return(invisible(df[ind, , drop = FALSE]))
@@ -323,6 +349,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         cat(strrep(symbol$line, 78), "\n")
         cat(" ", paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week.\n", sep = "")
         cat(" You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.\n")
+        cat(" Use `brecent` to retrieve recent jobs from all status.\n")
         return(invisible(NULL))
     }
 }
@@ -384,10 +411,24 @@ format_difftime = function(x, add_unit = FALSE) {
 #
 # == param
 # -job_id A vector of job ids.
+# -filter Regular expression to filter on job names (only the running and pending jobs).
 #
 # == value
 # No value is returned.
-bkill = function(job_id) {
+#
+# == example
+# \dontrun{
+# job_id = c(10000000, 10000001, 10000002)  # job ids can be get from `bjobs`
+# bkill(job_id)
+# # kill all jobs (running and pending) of which the names contain "example"
+# bkill(filter = "example") 
+# }
+bkill = function(job_id, filter = NULL) {
+
+    if(missing(job_id)) {
+        job_df = bjobs(status = c("RUN", "PEND"), max = Inf, filter = filter, print = FALSE)
+        job_id = job_df$JOBID
+    }
 
     cmd = qq("bkill @{paste(job_id, collapse = ' ')} 2>&1")
 
@@ -407,6 +448,11 @@ bkill = function(job_id) {
 # == value
 # The output of the command
 #
+# == example
+# \dontrun{
+# # run pwd on remote node
+# run_cmd("pwd")
+# }
 run_cmd = function(cmd, print = FALSE) {
     if(on_submission_node()) {
        con = pipe(cmd)
@@ -480,7 +526,7 @@ wait_jobs = function(job_name, output_dir = bsub_opt$output_dir, wait = 30) {
 
 
 # == title
-# Recent jobs with status "all"
+# Recent jobs from all status
 #
 # == param
 # -max Maximal number of recent jobs.
@@ -492,6 +538,13 @@ wait_jobs = function(job_name, output_dir = bsub_opt$output_dir, wait = 30) {
 # == value
 # The same output format as `bjobs`.
 #
+# == example
+# \dontrun{
+# brecent  # this is the same as `brecent()`
+# brecent() # last 20 jobs (from all status)
+# brecent(max = 50) # last 50 jobs
+# brecent(filter = "example") # last 20 jobs with name ".*example.*"
+# }
 brecent = function(max = 20, filter = NULL) {
     bjobs(status = "all", max = max, filter = filter)
 }
@@ -510,6 +563,13 @@ class(brecent) = "bjobs"
 # == value
 # The same output format as `bjobs`.
 #
+# == example
+# \dontrun{
+# bjobs_running  # this is the same as `bjobs_running()`
+# bjobs_running() # all running jobs
+# bjobs_running(max = 50) # last 50 running jobs
+# bjobs_running(filter = "example") # running jobs with name ".*example.*"
+# }
 bjobs_running = function(max = Inf, filter = NULL) {
     bjobs(status = "RUN", max = max, filter = filter)
 }
@@ -528,6 +588,13 @@ class(bjobs_running) = "bjobs"
 # == value
 # The same output format as `bjobs`.
 #
+# == example
+# \dontrun{
+# bjobs_pending  # this is the same as `bjobs_pending()`
+# bjobs_pending() # all pending jobs
+# bjobs_pending(max = 50) # last 50 pending jobs
+# bjobs_pending(filter = "example") # pending jobs with name ".*example.*"
+# }
 bjobs_pending = function(max = Inf, filter = NULL) {
     bjobs(status = "PEND", max = max, filter = filter)
 }
@@ -546,6 +613,13 @@ class(bjobs_pending) = "bjobs"
 # == value
 # The same output format as `bjobs`.
 #
+# == example
+# \dontrun{
+# bjobs_done  # this is the same as `bjobs_done()`
+# bjobs_done() # all done jobs
+# bjobs_done(max = 50) # last 50 done jobs
+# bjobs_done(filter = "example") # done jobs with name ".*example.*"
+# }
 bjobs_done = function(max = Inf, filter = NULL) {
     bjobs(status = "DONE", max = max, filter = filter)
 }
@@ -564,6 +638,13 @@ class(bjobs_done) = "bjobs"
 # == value
 # The same output format as `bjobs`.
 #
+# == example
+# \dontrun{
+# bjobs_exit  # this is the same as `bjobs_exit()`
+# bjobs_exit() # all exit jobs
+# bjobs_exit(max = 50) # last 50 exit jobs
+# bjobs_exit(filter = "example") # exit jobs with name ".*example.*"
+# }
 bjobs_exit = function(max = Inf, filter = NULL) {
     bjobs(status = "EXIT", max = max, filter = filter)
 }
@@ -581,6 +662,10 @@ class(bjobs_exit) = "bjobs"
 # If the job is finished, it returns DONE/EXIT/MISSING. If the job is running or pending, it returns the corresponding
 # status. If there are multiple jobs with the same name running or pending, it returns a vector.
 # 
+# == example
+# \dontrun{
+# job_status_by_name("example")
+# }
 job_status_by_name = function(job_name, output_dir = bsub_opt$output_dir) {
 
     ln = run_cmd(qq("bjobs -J @{job_name} 2>&1"), print = FALSE)
@@ -613,6 +698,11 @@ job_status_by_name = function(job_name, output_dir = bsub_opt$output_dir) {
 # == value
 # If the job has been deleted from the database, it returns MISSING.
 # 
+# == example
+# \dontrun{
+# job_id = 1234567  # job ids can be get from `bjobs`
+# job_status_by_id(job_id)
+# }
 job_status_by_id = function(job_id) {
 
     ln = run_cmd(qq("bjobs -o \"jobid user stat\" @{job_id} 2>&1"), print = FALSE)
@@ -635,6 +725,14 @@ job_status_by_id = function(job_id) {
 #
 # == value
 # No value is returned.
+#
+# == example
+# \dontrun{
+# # simply run:
+# monitor
+# # or
+# monitor()
+# }
 monitor = function() {
     
     if(!on_submission_node()) {

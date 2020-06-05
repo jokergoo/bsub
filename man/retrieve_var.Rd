@@ -23,7 +23,12 @@ It retrieve the saved variable in \code{\link{bsub_chunk}} when \code{save_rds =
 The retrieved object.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+bsub_chunk(name = "example", save_var = TRUE,
+{
+    Sys.sleep(10)
+    1+1
+})
+retrieve_var("example")
+}
 }

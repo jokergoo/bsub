@@ -19,7 +19,10 @@ plot_dependency(job_id, job_tb = NULL)
 No value is returned.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+job1 = random_job()
+job2 = random_job()
+job3 = random_job(dependency = c(job1, job2))
+plot_dependency(job3)
+}
 }

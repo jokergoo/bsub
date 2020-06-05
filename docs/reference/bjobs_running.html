@@ -158,9 +158,12 @@
     <p>The same output format as <code><a href='bjobs.html'>bjobs</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># There is no example</span>
-<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>bjobs_running</span>  <span class='co'># this is the same as `bjobs_running()`</span>
+<span class='fu'>bjobs_running</span>() <span class='co'># all running jobs</span>
+<span class='fu'>bjobs_running</span>(<span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>50</span>) <span class='co'># last 50 running jobs</span>
+<span class='fu'>bjobs_running</span>(<span class='kw'>filter</span> <span class='kw'>=</span> <span class='st'>"example"</span>) <span class='co'># running jobs with name ".*example.*"</span>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

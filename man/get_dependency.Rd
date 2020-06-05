@@ -25,7 +25,7 @@ it returns a list of three elements:
 }
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+get_dependency()
+}
 }

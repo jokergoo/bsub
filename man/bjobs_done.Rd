@@ -22,7 +22,10 @@ You can directly type \code{bjobs_done} without parentheses which runs \code{\li
 The same output format as \code{\link{bjobs}}.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+bjobs_done  # this is the same as `bjobs_done()`
+bjobs_done() # all done jobs
+bjobs_done(max = 50) # last 50 done jobs
+bjobs_done(filter = "example") # done jobs with name ".*example.*"
+}
 }

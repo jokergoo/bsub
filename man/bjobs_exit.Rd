@@ -22,7 +22,10 @@ You can directly type \code{bjobs_exit} without parentheses which runs \code{\li
 The same output format as \code{\link{bjobs}}.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+bjobs_exit  # this is the same as `bjobs_exit()`
+bjobs_exit() # all exit jobs
+bjobs_exit(max = 50) # last 50 exit jobs
+bjobs_exit(filter = "example") # exit jobs with name ".*example.*"
+}
 }

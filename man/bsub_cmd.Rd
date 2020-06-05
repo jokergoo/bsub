@@ -46,5 +46,8 @@ Job ID.
 }
 }
 \examples{
-# examples are in the vignette.
+\dontrun{
+bsub_cmd("samtools sort ...", name = ..., memory = ..., core = ..., ...)
+}
+# more examples are in the vignette.
 }

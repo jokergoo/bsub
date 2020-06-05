@@ -13,6 +13,10 @@
 # -``id2name``: a named vector containing mapping from job IDs to job names.
 # -``id2stat``: a named vector containing mapping from job IDs to job status.
 #
+# == example
+# \dontrun{
+# get_dependency()
+# }
 get_dependency = function(job_tb = NULL) {
 
     if(is.null(job_tb)) job_tb = bjobs(status = "all", print = FALSE)
@@ -53,6 +57,13 @@ get_dependency = function(job_tb = NULL) {
 # == value
 # No value is returned.
 #
+# == example
+# \dontrun{
+# job1 = random_job()
+# job2 = random_job()
+# job3 = random_job(dependency = c(job1, job2))
+# plot_dependency(job3)
+# }
 plot_dependency = function(job_id, job_tb = NULL) {
 
     job_id = as.character(job_id)

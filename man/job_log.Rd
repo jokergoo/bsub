@@ -20,7 +20,15 @@ job_log(job_id, print = TRUE, n_line = 10)
 The log message as a vector.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+# a single job
+job_id = 1234567  # job ids can be get from `bjobs`
+job_log(job_id)
+# multiple jobs
+job_id = c(10000000, 10000001, 10000002) 
+job_log(job_id)  # by  default last 10 lines for each job are printed
+job_log(job_id, n_line = 20) # print last 20 lines for each job
+# logs for all running jobs
+job_log()
+}
 }

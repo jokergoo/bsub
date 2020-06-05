@@ -23,7 +23,7 @@ Note if you manually set working directory in your R code/script, the R dump fil
 A vector of file names.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+check_dump_files()
+}
 }

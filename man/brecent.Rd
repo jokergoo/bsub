@@ -1,10 +1,10 @@
 \name{brecent}
 \alias{brecent}
 \title{
-Recent jobs with status "all"
+Recent jobs from all status
 }
 \description{
-Recent jobs with status "all"
+Recent jobs from all status
 }
 \usage{
 brecent(max = 20, filter = NULL)
@@ -22,7 +22,10 @@ You can directly type \code{brecent} without parentheses which runs \code{\link{
 The same output format as \code{\link{bjobs}}.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+brecent  # this is the same as `brecent()`
+brecent() # last 20 jobs (from all status)
+brecent(max = 50) # last 50 jobs
+brecent(filter = "example") # last 20 jobs with name ".*example.*"
+}
 }

@@ -109,8 +109,12 @@ bsub_opt = set_opt(
         .value = function() .v$temp_dir,
         .validate = function(x) {
             if(!file.exists(x)) {
-                qqcat("create output_dir: @{x}\n")
-                dir.create(x, recursive = TRUE, showWarnings = FALSE)
+                answer = readline(qq("create output_dir: @{x}? [y|n] "))
+                if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
+                    dir.create(x, recursive = TRUE, showWarnings = FALSE)
+                } else {
+                    stop_wrap(qq("not allowed to create @{x}."))
+                }
             }
             TRUE
         },
@@ -198,8 +202,12 @@ bsub_opt = set_opt(
 
 check_temp_dir = function(x) {
     if(!file.exists(x)) {
-        qqcat("create temp_dir: @{x}\n")
-        dir.create(x, recursive = TRUE, showWarnings = FALSE)
+        answer = readline(qq("create temp_dir: @{x}? [y|n] "))
+        if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
+            dir.create(x, recursive = TRUE, showWarnings = FALSE)
+        } else {
+            stop_wrap(qq("not allowed to create @{x}."))
+        }
     } else {
         all_f = list.files(x, full.names = TRUE)
 
@@ -245,6 +253,32 @@ class(bconf) = "bconf"
 # No value is returned.
 print.bconf = function(x, ...) {
     cat(get_bconf_message(x), "\n")
+
+    flag = 0
+    msg = NULL
+    if(!file.exists(bsub_opt$temp_dir)) {
+        msg = c(msg, qq("!! The temp_dir (@{bsub_opt$temp_dir}) does not exist."))
+        flag = 1
+    }
+    if(bsub_opt$temp_dir != bsub_opt$output_dir) {
+        if(!file.exists(bsub_opt$output_dir)) {
+            msg = c(msg, qq("!! The output_dir (@{bsub_opt$output_dir}) does not exist."))
+            flag = 2
+        }
+    }
+    if(flag) {
+        if(flag == 1) {
+            msg = c(msg, "!! The directory can be created manually, or by setting a value to",
+                         "!! `bsub_opt$temp_dir`, or by the first call of `bsub_*()`.")
+        } else {
+            msg = c(msg, "!! The directory can be created manually, or by setting a value to",
+                         "!! `bsub_opt$output_dir`, or by the first call of `bsub_*()`.")
+        }
+
+        cat("\n")
+        cat(msg, sep = "\n")
+        cat("\n")
+    }
 }
 
 get_bconf_message = function(x, ...) {

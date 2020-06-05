@@ -14,7 +14,7 @@ bjobs(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE)
   \item{status}{Status of the jobs. Use "all" for all jobs.}
   \item{max}{Maximal number of recent jobs.}
   \item{filter}{Regular expression to filter on job names.}
-  \item{print}{Wether to print the table.}
+  \item{print}{Whether to print the table.}
 
 }
 \details{
@@ -36,7 +36,15 @@ A data frame with selected job summaries.
 }
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+bjobs # this is the same as bjobs()
+bjobs() # all running and pending jobs
+bjobs(status = "all") # all jobs
+bjobs(status = "RUN") # all running jobs, you can also use `bjobs_running`
+bjobs(status = "PEND") # all pending jobs, you can also use `bjobs_pending`
+bjobs(status = "DONE") # all done jobs, you can also use `bjobs_done`
+bjobs(status = "EXIT") # all exit jobs, you can also use `bjobs_exit`
+bjobs(status = "all", max = 20) # last 20 jobs
+bjobs(status = "DONE", filter = "example") # done jobs with name '.*example.*'
+}
 }

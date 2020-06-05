@@ -39,8 +39,13 @@
 # - `bsub_cmd`submits shell commands.
 #
 # == example
-# # examples are in the vignette.
-#
+# \dontrun{
+# bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
+# {
+#     Sys.sleep(5)
+# })
+# }
+# # more examples are in the vignette.
 bsub_chunk = function(code, 
     name = NULL,
     packages = bsub_opt$packages, 
@@ -108,12 +113,20 @@ bsub_chunk = function(code,
 
 
     if(!file.exists(temp_dir)) {
-        qqcat("create temp_dir: @{temp_dir}\n")
-        dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)
+        answer = readline(qq("create temp_dir: @{temp_dir}? [y|n] "))
+        if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
+            dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)
+        } else {
+            stop_wrap(qq("not allowed to create @{temp_dir}."))
+        }
     }
     if(!file.exists(output_dir)) {
-        qqcat("create output_dir: @{output_dir}\n")
-        dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+        answer = readline(qq("create output_dir: @{output_dir}? [y|n] "))
+        if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
+            dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+        } else {
+            stop_wrap(qq("not allowed to create @{output_dir}."))
+        }
     }
 
     temp_dir = normalizePath(temp_dir)
@@ -232,6 +245,15 @@ bsub_chunk = function(code,
 # == value
 # The retrieved object.
 #
+# == example
+# \dontrun{
+# bsub_chunk(name = "example", save_var = TRUE,
+# {
+#     Sys.sleep(10)
+#     1+1
+# })
+# retrieve_var("example")
+# }
 retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
     rds_file = qq("@{output_dir}/@{name}_returned_var.rds")
     out_file = qq("@{output_dir}/@{name}.out")
@@ -295,8 +317,12 @@ retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
 # - `bsub_cmd`submits shell commands.
 #
 # == example
-# # examples are in the vignette.
-#
+# \dontrun{
+# bsub_script("/path/of/foo.R", name = ..., memory = ..., core = ..., ...)
+# # with command-line arguments
+# bsub_script("/path/of/foo.R", argv = "--a 1 --b 3", ...)
+# }
+# # more examples are in the vignette.
 bsub_script = function(script, 
     argv = "", 
     name = NULL, 
@@ -345,12 +371,20 @@ bsub_script = function(script,
     }
 
     if(!file.exists(temp_dir)) {
-        qqcat("create temp_dir: @{temp_dir}\n")
-        dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)
+        answer = readline(qq("create temp_dir: @{temp_dir}? [y|n] "))
+        if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
+            dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)
+        } else {
+            stop_wrap(qq("not allowed to create @{temp_dir}."))
+        }
     }
     if(!file.exists(output_dir)) {
-        qqcat("create output_dir: @{output_dir}\n")
-        dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+        answer = readline(qq("create output_dir: @{output_dir}? [y|n] "))
+        if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
+            dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+        } else {
+            stop_wrap(qq("not allowed to create @{output_dir}."))
+        }
     }
     temp_dir = normalizePath(temp_dir)
     output_dir = normalizePath(output_dir)
@@ -399,8 +433,10 @@ bsub_script = function(script,
 # - `bsub_script` submits R scripts.
 #
 # == example
-# # examples are in the vignette.
-#
+# \dontrun{
+# bsub_cmd("samtools sort ...", name = ..., memory = ..., core = ..., ...)
+# }
+# # more examples are in the vignette.
 bsub_cmd = function(cmd, 
     name = NULL, 
     hour = 1, 
@@ -423,12 +459,20 @@ bsub_cmd = function(cmd,
     }
 
     if(!file.exists(temp_dir)) {
-        qqcat("create temp_dir: @{temp_dir}\n")
-        dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)
+        answer = readline(qq("create temp_dir: @{temp_dir}? [y|n] "))
+        if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
+            dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)
+        } else {
+            stop_wrap(qq("not allowed to create @{temp_dir}."))
+        }
     }
     if(!file.exists(output_dir)) {
-        qqcat("create output_dir: @{output_dir}\n")
-        dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+        answer = readline(qq("create output_dir: @{output_dir}? [y|n] "))
+        if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
+            dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+        } else {
+            stop_wrap(qq("not allowed to create @{output_dir}."))
+        }
     }
     temp_dir = normalizePath(temp_dir)
     output_dir = normalizePath(output_dir)
@@ -578,12 +622,30 @@ message_wrap = function (..., appendLF = TRUE) {
 stop_wrap = function (...) {
     x = paste0(...)
     x = paste(strwrap(x), collapse = "\n")
-    stop(x)
+    stop(x, call. = FALSE)
 }
 
+# == title
+# Submit a random job
+#
+# == param
+# -name Job name.
+# -... Pass to `bsub_chunk`.
+#
+# == details
+# It only submits ``Sys.sleep(30)``.
+#
+# == value
+# The job id.
+#
+# == example
+# \dontrun{
+# random_job()
+# random_job(name = "test")
+# }
 random_job = function(name = paste0("R_random_job_", digest::digest(runif(1), "crc32")), ...) {
     bsub_chunk({
-        Sys.sleep(30*60)
+        Sys.sleep(30)
     }, name = name, ...)
 }
 

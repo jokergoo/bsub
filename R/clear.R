@@ -10,6 +10,11 @@
 #
 # == value
 # No value is returned.
+#
+# == example
+# \dontrun{
+# clear_temp_dir()
+# }
 clear_temp_dir = function(ask = TRUE) {
     files = list.files(bsub_opt$temp_dir, full.names = TRUE)
     if(length(files) == 0) {
@@ -74,6 +79,11 @@ clear_temp_dir = function(ask = TRUE) {
 #
 # == value
 # A vector of file names.
+#
+# == example
+# \dontrun{
+# check_dump_files()
+# }
 check_dump_files = function(print = TRUE) {
     job_tb = bjobs(status = "all", print = FALSE)
     wd = job_tb$EXEC_CWD

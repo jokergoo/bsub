@@ -13,7 +13,10 @@ ssh_disconnect()
 No value is returned.
 }
 \examples{
-# There is no example
-NULL
-
+# Normally you don't need to manually run this function. The ssh is automatically
+# disconnected when the package is detached.
+# To manually disconnect ssh, run:
+\dontrun{
+ssh_disconnect()
+}
 }

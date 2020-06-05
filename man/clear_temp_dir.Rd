@@ -22,7 +22,7 @@ You better delete them after all jobs are done.
 No value is returned.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+clear_temp_dir()
+}
 }

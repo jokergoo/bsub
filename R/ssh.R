@@ -7,6 +7,14 @@
 #
 # == value
 # No value is returned.
+#
+# == example
+# # ssh is automatically connected. To manually connect ssh, run:
+# \dontrun{
+# ssh_connect()
+# }
+# # where the user name is the one you set in `bsub_opt$user` and
+# # the node is the one you set in `bsub_opt$login_node`.
 ssh_connect = function() {
 
 	if(!is.null(bsub_opt$ssh_session)) {
@@ -69,6 +77,14 @@ ssh_connect = function() {
 #
 # == value
 # No value is returned.
+#
+# == example
+# # Normally you don't need to manually run this function. The ssh is automatically
+# # disconnected when the package is detached.
+# # To manually disconnect ssh, run:
+# \dontrun{
+# ssh_disconnect()
+# }
 ssh_disconnect = function() {
 	if(!is.null(bsub_opt$ssh_session)) {
 		ssh::ssh_disconnect(bsub_opt$ssh_session)

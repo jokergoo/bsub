@@ -16,7 +16,10 @@ The monitor is implemented as a shiny app.
 No value is returned.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+# simply run:
+monitor
+# or
+monitor()
+}
 }

@@ -6,6 +6,10 @@ config_odcf = function(user = NULL, verbose = TRUE) {
                            "export LSF_ENVDIR=/opt/lsf/conf",
                            "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
 	if(!is.null(user)) bsub_opt$user = user
+	if(!file.exists("~/.bsub_temp")) {
+		dir.create("~/.bsub_temp", recursive = TRUE, showWarnings = FALSE)
+	}
+	bsub_opt$temp_dir = "~/.bsub_temp"
 
 	if(verbose) qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}.\n")
 	invisible(NULL)
@@ -15,7 +19,8 @@ config_odcf = function(user = NULL, verbose = TRUE) {
 config_sanger_farm3_head3 = function(user = NULL, group = NULL, verbose = TRUE) {
 	bsub_opt$call_Rscript = function(version) qq("Rscript")
 	bsub_opt$submission_node = c("farm3-head3")
-	
+	bsub_opt$temp_dir = "~/.bsub_temp"
+
 	# values for LSF_SERVERDIR and LSF_ENVDIR can be get by:
 	# echo $LSF_SERVERDIR
 	# echo $LSF_ENVDIR
@@ -42,7 +47,8 @@ config_sanger = function(user = NULL, ssh_key = "~/.ssh/id_rsa", verbose = TRUE)
 	bsub_opt$call_Rscript = function(version) qq("Rscript")
 	bsub_opt$login_node = "ssh.sanger.ac.uk"
 	bsub_opt$submission_node = NULL
-	
+	bsub_opt$temp_dir = "~/.bsub_temp"
+
 	# values for LSF_SERVERDIR and LSF_ENVDIR can be get by:
 	# echo $LSF_SERVERDIR
 	# echo $LSF_ENVDIR

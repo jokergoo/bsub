@@ -50,5 +50,10 @@ Job ID.
 }
 }
 \examples{
-# examples are in the vignette.
+\dontrun{
+bsub_script("/path/of/foo.R", name = ..., memory = ..., core = ..., ...)
+# with command-line arguments
+bsub_script("/path/of/foo.R", argv = "--a 1 --b 3", ...)
+}
+# more examples are in the vignette.
 }

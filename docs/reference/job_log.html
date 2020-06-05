@@ -159,9 +159,17 @@
     <p>The log message as a vector.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># There is no example</span>
-<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># a single job</span>
+<span class='no'>job_id</span> <span class='kw'>=</span> <span class='fl'>1234567</span>  <span class='co'># job ids can be get from `bjobs`</span>
+<span class='fu'>job_log</span>(<span class='no'>job_id</span>)
+<span class='co'># multiple jobs</span>
+<span class='no'>job_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10000000</span>, <span class='fl'>10000001</span>, <span class='fl'>10000002</span>)
+<span class='fu'>job_log</span>(<span class='no'>job_id</span>)  <span class='co'># by  default last 10 lines for each job are printed</span>
+<span class='fu'>job_log</span>(<span class='no'>job_id</span>, <span class='kw'>n_line</span> <span class='kw'>=</span> <span class='fl'>20</span>) <span class='co'># print last 20 lines for each job</span>
+<span class='co'># logs for all running jobs</span>
+<span class='fu'>job_log</span>()
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

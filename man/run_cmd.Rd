@@ -22,7 +22,8 @@ If current node is not the submission node, the command is executed via ssh.
 The output of the command
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+# run pwd on remote node
+run_cmd("pwd")
+}
 }

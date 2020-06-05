@@ -22,7 +22,10 @@ You can directly type \code{bjobs_pending} without parentheses which runs \code{
 The same output format as \code{\link{bjobs}}.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+bjobs_pending  # this is the same as `bjobs_pending()`
+bjobs_pending() # all pending jobs
+bjobs_pending(max = 50) # last 50 pending jobs
+bjobs_pending(filter = "example") # pending jobs with name ".*example.*"
+}
 }

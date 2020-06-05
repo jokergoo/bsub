@@ -18,7 +18,8 @@ job_status_by_id(job_id)
 If the job has been deleted from the database, it returns MISSING.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+job_id = 1234567  # job ids can be get from `bjobs`
+job_status_by_id(job_id)
+}
 }

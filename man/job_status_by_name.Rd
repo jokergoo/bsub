@@ -20,7 +20,7 @@ If the job is finished, it returns DONE/EXIT/MISSING. If the job is running or p
 status. If there are multiple jobs with the same name running or pending, it returns a vector.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+job_status_by_name("example")
+}
 }

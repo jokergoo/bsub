@@ -96,7 +96,7 @@
     
     
 <p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2020-05-30</p>
+<p><strong>Date</strong>: 2020-06-05</p>
 <hr>
 <p>For us, if we are outside of DKFZ network, we first connect to DKFZ network by VPN, then we only need one ssh connection to reach the submission node. However, in some other institutes, if you are outside of network of your institute, you might first need to connect to your institute’s server via ssh (server A), then on server A, you connect to the job submission server, again via ssh (server B), which results in two ssh connections.</p>
 <p>Of course, you cannot establish two nested ssh connections, but we can do some tricks on server A to run a pseudo <code>bjobs</code> which actually runs the real <code>bjobs</code> on server B. Maybe you have already guessed, we need to, on server A, run <code>bjobs</code> on server B via ssh without interactively entering the password.</p>
