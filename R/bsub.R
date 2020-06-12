@@ -547,7 +547,7 @@ bsub_submit = function(command,
 
     writeLines("########## temporary bash script ###############", con)
     
-    writeLines(qq("rm '@{pend}'\n"), con)  # remove the pend flag file
+    writeLines(qq("[ -f '@{pend}' ] && rm '@{pend}'\n"), con)  # remove the pend flag file
     writeLines(qq("touch '@{run}'\n"), con)  # add the running flag
     
     if(!identical(sh_head, "")) {

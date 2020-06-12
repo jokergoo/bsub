@@ -430,6 +430,16 @@ bkill = function(job_id, filter = NULL) {
         job_id = job_df$JOBID
     }
 
+    if(is.data.frame(job_id)) {
+        df = job_id
+        df = df[df$STAT %in% c("RUN", "PEND"), , drop = FALSE]
+        if(nrow(df)) {
+            job_id = df$JOBID
+        } else {
+            return(invisible(NULL))
+        }
+    }
+
     cmd = qq("bkill @{paste(job_id, collapse = ' ')} 2>&1")
 
     run_cmd(cmd, print = TRUE)
