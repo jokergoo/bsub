@@ -68,5 +68,4 @@ bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
     Sys.sleep(5)
 })
 }
-# more examples are in the vignette.
 }

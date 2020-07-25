@@ -70,6 +70,10 @@
 #
 bsub_opt = function(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FALSE) {}
 bsub_opt = set_opt(
+    ask = list(
+        .value = TRUE,
+        .visible = FALSE
+    ),
     packages = list(
         .class = "character"
     ),
@@ -98,7 +102,7 @@ bsub_opt = set_opt(
     temp_dir = list(
         .value = "~/.bsub_temp",
         .validate = function(x) {
-            check_temp_dir(x)
+            check_temp_dir(x, ask = .v$ask)
             TRUE
         },
         .filter = function(x) {
@@ -108,7 +112,7 @@ bsub_opt = set_opt(
     output_dir = list(
         .value = function() .v$temp_dir,
         .validate = function(x) {
-            if(!file.exists(x)) {
+            if(!file.exists(x) && .v$ask) {
                 answer = readline(qq("create output_dir: @{x}? [y|n] "))
                 if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
                     dir.create(x, recursive = TRUE, showWarnings = FALSE)
@@ -200,8 +204,8 @@ bsub_opt = set_opt(
     )
 )
 
-check_temp_dir = function(x) {
-    if(!file.exists(x)) {
+check_temp_dir = function(x, ask = TRUE) {
+    if(!file.exists(x) && ask) {
         answer = readline(qq("create temp_dir: @{x}? [y|n] "))
         if(answer %in% c("y", "Y", "yes", "Yes", "YES")) {
             dir.create(x, recursive = TRUE, showWarnings = FALSE)
@@ -212,7 +216,7 @@ check_temp_dir = function(x) {
         all_f = list.files(x, full.names = TRUE)
 
         if(length(all_f)) {
-            file_size = sum(file.info(all_f)[, "size"])
+            file_size = sum(file.info(all_f)[, "size"], na.rm = TRUE)
             if(file_size < 1024) {
                 fs = paste0(file_size, "Byte")
             } else if(file_size < 1024^2) {

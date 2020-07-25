@@ -124,7 +124,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
                 no_file_flag = TRUE
             } else {
                 txt = readLines(file, warn = FALSE)
-                txt = c(txt, paste0("\n", symbol$warning, qq(" job (@{job_id}) is still running.")))
+                txt = c(txt, paste0("\n", symbol$warning, qq(" job @{job_id} is still running.")))
                 if(print) cat(txt, sep = "\n")
                 return(invisible(txt))
             }
@@ -138,7 +138,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
                 no_file_flag = TRUE
             } else {
                 txt = ssh_exec(qq("cat @{ln}"))
-                txt = c(txt, paste0(symbol$warning, qq(" job (@{job_id}) is still running.")))
+                txt = c(txt, paste0(symbol$warning, qq(" job @{job_id} is still running.")))
                 if(print) cat(txt, sep = "\n")
                 return(invisible(txt))
             }
@@ -147,12 +147,12 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
         if(no_file_flag) {
             ln = run_cmd(qq("bpeek @{job_id}"), print = FALSE)[-1]
             if(length(ln) == 0) {
-                txt = qq("Cannot find output file for job (@{job_id}.")
+                txt = qq("Cannot find output file for job @{job_id}.")
                 if(print) cat(txt, sep = "\n")
                 return(invisible(txt))
             } else {
                 txt = ln
-                txt = c(txt, paste0(symbol$warning, qq("\n job (@{job_id}) is still running. "), symbol$warning))
+                txt = c(txt, paste0(symbol$warning, qq("\n job @{job_id} is still running. "), symbol$warning))
                 if(print) cat(txt, sep = "\n")
                 return(invisible(txt))
             }
@@ -184,7 +184,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
         }
 
         if(no_file_flag) {
-            txt = qq("Cannot find output file for job (@{job_id}.")
+            txt = qq("Cannot find output file for job @{job_id}.")
             if(print) cat(txt, sep = "\n")
             return(invisible(txt))
         }

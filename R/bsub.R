@@ -45,7 +45,6 @@
 #     Sys.sleep(5)
 # })
 # }
-# # more examples are in the vignette.
 bsub_chunk = function(code, 
     name = NULL,
     packages = bsub_opt$packages, 
@@ -322,7 +321,6 @@ retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
 # # with command-line arguments
 # bsub_script("/path/of/foo.R", argv = "--a 1 --b 3", ...)
 # }
-# # more examples are in the vignette.
 bsub_script = function(script, 
     argv = "", 
     name = NULL, 
@@ -436,7 +434,6 @@ bsub_script = function(script,
 # \dontrun{
 # bsub_cmd("samtools sort ...", name = ..., memory = ..., core = ..., ...)
 # }
-# # more examples are in the vignette.
 bsub_cmd = function(cmd, 
     name = NULL, 
     hour = 1, 

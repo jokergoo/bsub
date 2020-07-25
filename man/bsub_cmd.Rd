@@ -49,5 +49,4 @@ Job ID.
 \dontrun{
 bsub_cmd("samtools sort ...", name = ..., memory = ..., core = ..., ...)
 }
-# more examples are in the vignette.
 }
