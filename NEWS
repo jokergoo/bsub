@@ -1,4 +1,9 @@
 Changes in version 1.0.0
+* add vignettes
+
+--------------------------------------------
+
+Changes in version 1.0.0
 
 * reformat the messages.
 * diagram in the shiny app is resizable.

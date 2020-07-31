@@ -13,3 +13,5 @@
 .DS_Store
 
 revdep/
+
+sftp-config.json

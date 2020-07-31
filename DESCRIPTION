@@ -1,7 +1,7 @@
 Package: bsub
 Type: Package
 Title: Submitter and Monitor of the 'LSF Cluster'
-Version: 1.0.0
+Version: 1.0.1
 Date: 2020-07-25
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
@@ -28,6 +28,7 @@ biocViews: Software, Infrastructure
 Description: It submits R code/R scripts/shell commands to 'LSF cluster' 
   (<https://en.wikipedia.org/wiki/Platform_LSF>, the 'bsub' system) without 
   leaving R. There is also an interactive 'shiny' app for monitoring the job status.
+VignetteBuilder: knitr
 URL: https://github.com/jokergoo/bsub
 License: MIT + file LICENSE
 NeedsCompilation: no
