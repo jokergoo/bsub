@@ -319,7 +319,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         ow = getOption("width")
         options(width = sum(max_width) + 10)
         cat(strrep(symbol$line, sum(max_width)), "\n")
-        print(df2, row.names = FALSE, right = FALSE, max = Inf)
+        print(df2, row.names = FALSE, right = FALSE, max = 99999)
         if(nrow(df2) > 20) {
             for(i in seq_len(ncol(df2))) {
                 nm = colnames(df2)[i]
