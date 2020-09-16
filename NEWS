@@ -1,5 +1,11 @@
-Changes in version 1.0.0
+Changes in version 1.0.2
+* allow minites for submitting jobs
+
+--------------------------------------------
+
+Changes in version 1.0.1
 * add vignettes
+* set `max = Inf` in `print.data.frame()`
 
 --------------------------------------------
 

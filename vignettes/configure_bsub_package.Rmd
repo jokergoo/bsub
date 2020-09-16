@@ -21,8 +21,6 @@ be properly configured.
 If you have difficulties to configure **bsub** package for your cluster, please
 feel free to contact me. I am glad to help.
 
-You can find examples from https://github.com/jokergoo/bsub/blob/master/R/config.R.
-
 ### How to call Rscript command
 
 You need to configure how to call the `Rscript` command, especially when you
@@ -163,5 +161,5 @@ bsub_opt$parse_time = function(x) {
 }
 ```
 
-**bsub** package automatically recognizes several format of time strings.
+**bsub** package automatically recognizes several formats of time strings.
 

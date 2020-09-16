@@ -182,11 +182,11 @@ bsub_opt = set_opt(
     bsub_template = list(
         .value = function(name, hour, memory, core, output, group = NULL, ...) {
             if(identical(group, "") || identical(group, NULL)) {
-                cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'rusage[mem=@{round(memory*1024)}]'", 
+                cmd = qq("bsub -J '@{name}' -W '@{floor(hour)}:@{floor((hour-floor(hour))*60)}' -n @{core} -R 'rusage[mem=@{round(memory*1024)}]'", 
                          "     -o '@{output}'", 
                          "   ", sep = " \\\n")
             } else {
-                cmd = qq("bsub -J '@{name}' -W '@{hour}:00' -n @{core} -R 'rusage[mem=@{round(memory*1024)}]'",
+                cmd = qq("bsub -J '@{name}' -W '@{floor(hour)}:@{floor((hour-floor(hour))*60)}' -n @{core} -R 'rusage[mem=@{round(memory*1024)}]'",
                          "     -G @{bsub_opt$group} -o '@{output}'",
                          "   ", sep = " \\\n")
             }
