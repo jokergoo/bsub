@@ -17,10 +17,10 @@ ui = fluidPage(
         paste(readLines("format.js"), collapse = "\n")
     )),
     titlePanel("LSF Job Monitor"),
-    div(textOutput("info"), style = "background-color:#EEFFEE; padding:5px 5px; margin: 15px 0px 15px 0px; border: 1px solid green;"),
+    div(htmlOutput("info"), style = "background-color:#EEFFEE; padding:5px 5px; margin: 15px 0px 15px 0px; border: 1px solid green;"),
     p(actionButton("reload", "Manually reload"), "The monitor automatically reloads every 5 minutes."),
     hr(style = "border-top: 1px solid black;"),
-    div(id = "table_loading", p("Sumamry table is loading...", style = "font-size:20px")),
+    div(id = "table_loading", p("Summary table is loading...", style = "font-size:20px")),
     DT::dataTableOutput("mytable"),
     actionButton("kill", "Kill selected jobs"),
     # actionButton("unselect", "Unselect all jobs", onclick="$('tr.selected').removeClass('selected')"),
@@ -128,8 +128,11 @@ server <- function(input, output, session) {
 	    
 	    df = job_summary_df()
 	    tb = table(df$STAT)
-	    paste0(qq("User @{bsub_opt$user} has "), paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), qq(" within one week. Summary table was generated at @{Sys.time()}."))
-	})
+	    txt = paste0(qq("User <b>@{bsub_opt$user}</b> has "), paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), qq(" within one week. Summary table was generated at @{Sys.time()}."))
+	    txt = paste0(txt, " ", as.character(actionLink("job_stats", "See job stats", 
+                title = "Click to see the job statistics", "data-toggle" = "tooltip")))
+        HTML(txt)
+    })
     
 	observeEvent(input$select_link, {
 
@@ -250,6 +253,42 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$kill_job_cancel, {
+        removeModal()
+    })
+
+    observeEvent(input$job_stats, {
+
+        df = job_summary_df()
+
+        message(qq("[@{Sys.time()}] query global job statistics"))
+
+        output$job_barplot = renderPlot({
+            showNotification("Generating job barplot...", duration = 5)
+            message(qq("[@{Sys.time()}] Generating job barplot"))
+            bjobs_barplot(df = df)
+        })
+
+        output$job_timeline = renderPlot({
+            showNotification("Generating job timeline...", duration = 5)
+            message(qq("[@{Sys.time()}] Generating job timeline"))
+            bjobs_timeline(df = df)
+        })
+        
+        showModal(modalDialog(
+            title = qq("Job statistics"),
+            p(h4("Number of jobs per day")),
+            jqui_resizable(plotOutput("job_barplot", width = "600px", height = "400px")),
+            p(h4("Duration of jobs")),
+            jqui_resizable(plotOutput("job_timeline", width = "600px", height = "400px")),
+            footer = actionButton("close_job_stats", "Close"),
+            easyClose = TRUE,
+            size = "l"
+        ))
+    })
+
+    observeEvent(input$close_job_stats, {
+        output$job_barplot = NULL
+        output$job_timeline = NULL
         removeModal()
     })
 }

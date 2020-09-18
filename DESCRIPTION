@@ -23,7 +23,8 @@ Suggests: knitr,
           shinyjqui,
           igraph, 
           graph, 
-          Rgraphviz
+          Rgraphviz,
+          ggplot2
 biocViews: Software, Infrastructure
 Description: It submits R code/R scripts/shell commands to 'LSF cluster' 
   (<https://en.wikipedia.org/wiki/Platform_LSF>, the 'bsub' system) without 

@@ -70,6 +70,10 @@
 	if(!is.null(bsub_opt$ssh_session)) ssh_disconnect()
 }
 
+.onUnload = function(libpath) {
+	if(!is.null(bsub_opt$ssh_session)) ssh_disconnect()
+}
+
 if(identical(topenv(), .GlobalEnv)) {
 	if(grepl("odcf|w610", Sys.info()["nodename"])) {
 		config_odcf()

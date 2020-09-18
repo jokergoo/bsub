@@ -293,6 +293,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
     df$JOBID = as.numeric(df$JOBID)
     df = df[order(df$JOBID), , drop = FALSE]
     tb = table(df$STAT)
+    tb_today = table(df$STAT[as.numeric(difftime(Sys.time(), df$SUBMIT_TIME, units = "secs")) < 3600*24])
 
     recent = unlist(unname(tapply(df$JOBID, df$JOB_NAME, function(x) {
         structure(order(-x), names = x)
@@ -330,6 +331,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         }
         cat(strrep(symbol$line, sum(max_width)), "\n")
         cat(" ", paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week.\n", sep = "")
+        cat(" ", paste(qq("@{tb_today} @{names(tb_today)} job@{ifelse(tb_today == 1, '', 's')}", collapse = FALSE), collapse = ", "), " in the last 24 hours.\n", sep = "")
         cat(" You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.\n")
         cat(" Use `brecent` to retrieve recent jobs from all status.\n")
         options(width = ow)
@@ -348,6 +350,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         cat("\n")
         cat(strrep(symbol$line, 78), "\n")
         cat(" ", paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week.\n", sep = "")
+        cat(" ", paste(qq("@{tb_today} @{names(tb_today)} job@{ifelse(tb_today == 1, '', 's')}", collapse = FALSE), collapse = ", "), " in the last 24 hours.\n", sep = "")
         cat(" You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.\n")
         cat(" Use `brecent` to retrieve recent jobs from all status.\n")
         return(invisible(NULL))
@@ -405,6 +408,7 @@ format_difftime = function(x, add_unit = FALSE) {
     txt[t == 0] = "-"
     txt
 }
+
 
 # == title
 # Kill jobs
@@ -744,6 +748,19 @@ job_status_by_id = function(job_id) {
 # monitor()
 # }
 monitor = function() {
+
+    if(!requireNamespace("shiny", quietly = TRUE)) {
+        stop_wrap("You need to install 'shiny' package to use the monitor.")
+    }
+    if(!requireNamespace("DT", quietly = TRUE)) {
+        stop_wrap("You need to install 'DT' package to use the monitor.")
+    }
+    if(!requireNamespace("shinyjqui", quietly = TRUE)) {
+        stop_wrap("You need to install 'shinyjqui' package to use the monitor.")
+    }
+    if(!requireNamespace("ggplot2", quietly = TRUE)) {
+        stop_wrap("You need to install 'ggplot2' package to use the monitor.")
+    }
     
     if(!on_submission_node()) {
         ssh_validate()
@@ -767,4 +784,102 @@ monitor = function() {
 class(monitor) = "bjobs"
 
 
+STAT_COL = structure(names = c("RUN", "PEND", "DONE", "EXIT", "Others"), c("blue", "purple", "black", "red", "#EEEEEE"))
+
+# == title
+# Barplot of number of jobs
+# 
+# == param
+# -status Status of the jobs. Use "all" for all jobs.
+# -filter Regular expression to filter on job names.
+# -df Internally used.
+#
+# == details
+# It draws barplots of number of jobs per day.
+#
+bjobs_barplot = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NULL, df = NULL) {
+    if(is.null(df)) {
+        df = bjobs(status = status, filter = filter, print = FALSE)
+    } else {
+        df = df[df$STAT %in% status , , drop = FALSE]
+    }
+    df$STAT = as.character(df$STAT)
+    df$STAT[!df$STAT %in% status] = "Others"
+    df$STAT = factor(df$STAT, levels = intersect(c(status, "Others"), as.character(df$STAT)))
+
+    if(nrow(df) == 0) {
+        plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE, ann = FALSE)
+        text(0.5, 0.5, "No jobs found.")
+        return(invisible(NULL))
+    }
+
+    suppressWarnings(p <- ggplot2::ggplot(df, ggplot2::aes(x = as.Date(df$SUBMIT_TIME), fill = df$STAT)) + ggplot2::geom_bar(position=ggplot2::position_dodge()) +
+        ggplot2::xlab("Submitted time") + ggplot2::ylab("Number of jobs") + ggplot2::labs(fill = "Status")
+    )
+    p = p + ggplot2::scale_fill_manual(breaks = names(STAT_COL), values = STAT_COL)
+    tb = table(df$STAT)
+    tb =  tb[tb > 0]
+    p = p + ggplot2::ggtitle(paste0(paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week"))
+    print(p)
+}
+
+class(bjobs_barplot) = "bjobs"
+
+# == title
+# Timeline of jobs
+# 
+# == param
+# -status Status of the jobs. Use "all" for all jobs.
+# -filter Regular expression to filter on job names.
+# -df Internally used.
+#
+# == details
+# It draws segments of duration of jobs. In the plot, each segment represents
+# a job and the width of the segment correspond to its duration.
+#
+bjobs_timeline = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NULL, df = NULL) {
+    if(is.null(df)) {
+        df = bjobs(status = status, filter = filter, print = FALSE)
+    } else {
+        df = df[df$STAT %in% status, , drop = FALSE]
+    }
+    df$STAT = as.character(df$STAT)
+    df$STAT[!df$STAT %in% status] = "Others"
+    df$STAT = factor(df$STAT, levels = intersect(c(status, "Others"), as.character(df$STAT)))
+    
+    if(nrow(df) == 0) {
+        plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE, ann = FALSE)
+        text(0.5, 0.5, "No jobs found.")
+        return(invisible(NULL))
+    }
+
+    x1 = as.numeric(df$START_TIME)
+    x2 = as.numeric(df$FINISH_TIME)
+    y = runif(nrow(df))
+
+    xlim = c(min(x1, na.rm = TRUE), max(x2, na.rm = TRUE))
+    plot(NULL, xlim = xlim, ylim = c(0, 1), axes = FALSE, ann = FALSE)
+    segments(x1, y, x2, y, col = STAT_COL[as.character(df$STAT)])
+    at = unique(as.Date(c(df$START_TIME, df$FINISH_TIME)))
+    labels = as.character(at)
+    at = as.numeric(as.POSIXlt(at))
+    l = at >= xlim[1] & at <= xlim[2]
+    at = at[l]
+    labels = labels[l]
+    box()
+    axis(side = 1, at = at, labels = labels)
+    op = par("xpd")
+    par(xpd = NA)
+    col = STAT_COL[intersect(names(STAT_COL), as.character(df$STAT))]
+    legend(x = mean(par("usr")[1:2]), y = mean(par("usr")[4]), legend = names(col), 
+        col = col, lty = 1, ncol = length(col), xjust = 0.5, yjust = 0, cex = 0.6)
+
+    tb = table(df$STAT)
+    tb =  tb[tb > 0]
+    title(paste0(paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week"))
+
+    par(xpd = op)
+}
+
+class(bjobs_timeline) = "bjobs"
 

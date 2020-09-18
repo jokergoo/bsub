@@ -1,5 +1,6 @@
 Changes in version 1.0.2
 * allow minites for submitting jobs
+* add `bjobs_barplot` and `bjobs_timeline` functions
 
 --------------------------------------------
 
