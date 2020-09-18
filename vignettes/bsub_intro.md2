@@ -835,7 +835,7 @@ There are some helper functions which only list running/pending/done/failed jobs
 bjobs_barplot()
 ```
 
-<p><img width="600" alt="bjobs_barplot" src="bjobs_barplot.png"></p>
+<p><img width="700" alt="bjobs_barplot" src="bjobs_barplot.png"></p>
 
 
 `bjobs_timeline()` draws the duration of each job. In the plot, each segment represents
@@ -845,7 +845,7 @@ a job and the width corresponds to its duration.
 bjobs_timeline()
 ```
 
-<p><img width="600" alt="bjobs_timeline" src="bjobs_timeline.png"></p>
+<p><img width="700" alt="bjobs_timeline" src="bjobs_timeline.png"></p>
 
 
 
