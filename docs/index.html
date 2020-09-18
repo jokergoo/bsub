@@ -14,7 +14,7 @@
 <script src="pkgdown.js"></script><meta property="og:title" content="Submitter and Monitor of the LSF Cluster">
 <meta property="og:description" content="It submits R code/R scripts/shell commands to LSF cluster 
   (&lt;https://en.wikipedia.org/wiki/Platform_LSF&gt;, the bsub system) without 
-  leaving R. There is also an interactive Shiny app for monitoring the job status.">
+  leaving R. There is also an interactive shiny app for monitoring the job status.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
 <span class="co"># R code</span>
 <span class="fu"><a href="reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">memory</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">hour</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">core</span> <span class="kw">=</span> <span class="fl">4</span>,
 {
-    <span class="no">fit</span> <span class="kw">=</span> <span class="kw pkg">NMF</span><span class="kw ns">::</span><span class="fu">nmf</span>(<span class="no">...</span>)
+    <span class="no">fit</span> <span class="kw">=</span> <span class="kw pkg">NMF</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/NMF/man/nmf.html">nmf</a></span>(<span class="no">...</span>)
     <span class="co"># you better save `fit` into a permanent file</span>
     <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">fit</span>, <span class="kw">file</span> <span class="kw">=</span> <span class="st">"/path/of/fit.rds"</span>)
 })</pre></div>
@@ -179,6 +179,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=bsub">https://​cloud.r-project.org/​package=bsub</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/jokergoo/bsub/">https://​github.com/​jokergoo/​bsub/​</a>
 </li>
 </ul>

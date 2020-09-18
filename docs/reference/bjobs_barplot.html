@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Log for the running/finished/failed job — job_log • bsub</title>
+<title>Barplot of number of jobs — bjobs_barplot • bsub</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Log for the running/finished/failed job — job_log" />
-<meta property="og:description" content="Log for the running/finished/failed job" />
+<meta property="og:title" content="Barplot of number of jobs — bjobs_barplot" />
+<meta property="og:description" content="Barplot of number of jobs" />
 
 
 
@@ -126,50 +126,41 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Log for the running/finished/failed job</h1>
+    <h1>Barplot of number of jobs</h1>
     
-    <div class="hidden name"><code>job_log.Rd</code></div>
+    <div class="hidden name"><code>bjobs_barplot.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Log for the running/finished/failed job</p>
+    <p>Barplot of number of jobs</p>
     </div>
 
-    <pre class="usage"><span class='fu'>job_log</span>(<span class='no'>job_id</span>, <span class='kw'>print</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>n_line</span> <span class='kw'>=</span> <span class='fl'>10</span>)</pre>
+    <pre class="usage"><span class='fu'>bjobs_barplot</span>(<span class='kw'>status</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"RUN"</span>, <span class='st'>"EXIT"</span>, <span class='st'>"PEND"</span>, <span class='st'>"DONE"</span>), <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>df</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>job_id</th>
-      <td><p>The job id. It can be a single job or a vector of job ids.</p></td>
+      <th>status</th>
+      <td><p>Status of the jobs. Use "all" for all jobs.</p></td>
     </tr>
     <tr>
-      <th>print</th>
-      <td><p>Whether print the log message.</p></td>
+      <th>filter</th>
+      <td><p>Regular expression to filter on job names.</p></td>
     </tr>
     <tr>
-      <th>n_line</th>
-      <td><p>Number of last lines for each job to show when multiple jobs are queried.</p></td>
+      <th>df</th>
+      <td><p>Internally used.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The log message as a vector.</p>
+    <p>It draws barplots of number of jobs per day.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># a single job</span>
-<span class='no'>job_id</span> <span class='kw'>=</span> <span class='fl'>1234567</span>  <span class='co'># job ids can be get from `bjobs`</span>
-<span class='fu'>job_log</span>(<span class='no'>job_id</span>)
-<span class='co'># multiple jobs</span>
-<span class='no'>job_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10000000</span>, <span class='fl'>10000001</span>, <span class='fl'>10000002</span>)
-<span class='fu'>job_log</span>(<span class='no'>job_id</span>)  <span class='co'># by  default last 10 lines for each job are printed</span>
-<span class='fu'>job_log</span>(<span class='no'>job_id</span>, <span class='kw'>n_line</span> <span class='kw'>=</span> <span class='fl'>20</span>) <span class='co'># print last 20 lines for each job</span>
-<span class='co'># logs for all running jobs</span>
-<span class='fu'>job_log</span>()
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># There is no example</span>
+<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

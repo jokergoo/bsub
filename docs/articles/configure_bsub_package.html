@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@
 
       
 
-      </header><script src="configure_bsub_package_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
+      </header><script src="configure_bsub_package_files/header-attrs-2.3/header-attrs.js"></script><script src="configure_bsub_package_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Configure bsub package</h1>
@@ -96,11 +96,10 @@
     
     
 <p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2020-06-05</p>
+<p><strong>Date</strong>: 2020-09-18</p>
 <hr>
 <p>The <strong>bsub</strong> package is only broadly tested on DKFZ ODCF cluster and the default configurations work fine there. It is also possible for other clusters that use LSF system to use <strong>bsub</strong> package. The following global options should be properly configured.</p>
 <p>If you have difficulties to configure <strong>bsub</strong> package for your cluster, please feel free to contact me. I am glad to help.</p>
-<p>You can find examples from <a href="https://github.com/jokergoo/bsub/blob/master/R/config.R" class="uri">https://github.com/jokergoo/bsub/blob/master/R/config.R</a>.</p>
 <div id="how-to-call-rscript-command" class="section level3">
 <h3 class="hasAnchor">
 <a href="#how-to-call-rscript-command" class="anchor"></a>How to call Rscript command</h3>
@@ -178,7 +177,7 @@ echo $LSF_SERVERDIR</code></pre>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">bsub_opt</span>$<span class="no">parse_time</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) {
     <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXlt</a></span>(<span class="no">x</span>, <span class="kw">format</span> <span class="kw">=</span> <span class="st">"%b %d %H:%M:%S %Y"</span>)
 }</pre></body></html></div>
-<p><strong>bsub</strong> package automatically recognizes several format of time strings.</p>
+<p><strong>bsub</strong> package automatically recognizes several formats of time strings.</p>
 </div>
   </div>
 

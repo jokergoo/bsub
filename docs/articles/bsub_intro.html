@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@
 
       
 
-      </header><script src="bsub_intro_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
+      </header><script src="bsub_intro_files/header-attrs-2.3/header-attrs.js"></script><script src="bsub_intro_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Send R code/R scripts/shell commands to LSF cluster</h1>
@@ -96,7 +96,7 @@
     
     
 <p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2020-06-05</p>
+<p><strong>Date</strong>: 2020-09-18</p>
 <hr>
 <p>Load the library:</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">bsub</span>)</pre></body></html></div>
@@ -106,10 +106,10 @@
 <div id="send-r-code" class="section level2">
 <h2 class="hasAnchor">
 <a href="#send-r-code" class="anchor"></a>Send R code</h2>
-<p><code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> submits the R chunk. The code chunk should be embraced by <code>{...}</code>. For example, <code>NMF::nmf()</code> normally takes very long time to run. We submit the NMF analysis to the cluster and save the results as an RDS file.</p>
+<p><code><a href="../reference/bsub_chunk.html">bsub_chunk()</a></code> submits the R chunk. The code chunk should be embraced by <code>{...}</code>. For example, <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html">NMF::nmf()</a></code> normally takes very long time to run. We submit the NMF analysis to the cluster and save the results as an RDS file.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/bsub_chunk.html">bsub_chunk</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"example"</span>, <span class="kw">memory</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">hour</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">core</span> <span class="kw">=</span> <span class="fl">4</span>,
 {
-    <span class="no">fit</span> <span class="kw">=</span> <span class="kw pkg">NMF</span><span class="kw ns">::</span><span class="fu">nmf</span>(<span class="no">...</span>)
+    <span class="no">fit</span> <span class="kw">=</span> <span class="kw pkg">NMF</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/NMF/man/nmf.html">nmf</a></span>(<span class="no">...</span>)
     <span class="co"># you better save `fit` into a permanent file in an absolute path</span>
     <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">fit</span>, <span class="kw">file</span> <span class="kw">=</span> <span class="st">"/path/to/fit.rds"</span>)
 })</pre></body></html></div>
@@ -565,6 +565,14 @@ you code chunk here
 <li><code>bjobs_done</code></li>
 <li><code>bjobs_exit</code></li>
 </ul>
+<p><code><a href="../reference/bjobs_barplot.html">bjobs_barplot()</a></code> makes a barplot of numbers of jobs per day.</p>
+<div class="sourceCode" id="cb66"><html><body><pre class="r"><span class="fu"><a href="../reference/bjobs_barplot.html">bjobs_barplot</a></span>()</pre></body></html></div>
+<p>
+<img width="600" alt="bjobs_barplot" src="bjobs_barplot.png"></p>
+<p><code><a href="../reference/bjobs_timeline.html">bjobs_timeline()</a></code> draws the duration of each job. In the plot, each segment represents a job and the width corresponds to its duration.</p>
+<div class="sourceCode" id="cb67"><html><body><pre class="r"><span class="fu"><a href="../reference/bjobs_timeline.html">bjobs_timeline</a></span>()</pre></body></html></div>
+<p>
+<img width="600" alt="bjobs_timeline" src="bjobs_timeline.png"></p>
 </div>
 <div id="other-functions" class="section level2">
 <h2 class="hasAnchor">
@@ -584,7 +592,7 @@ you code chunk here
 <h2 class="hasAnchor">
 <a href="#global-parameters" class="anchor"></a>Global Parameters</h2>
 <p>Type <code>bsub_opt</code> gives you a list of global options. Values can be set by in a form of <code>bsub_opt$opt = value</code>. All the values can be reset by <code><a href="../reference/bsub_opt.html">bsub_opt(RESET = TRUE)</a></code>.</p>
-<div class="sourceCode" id="cb66"><html><body><pre class="r"><span class="no">bsub_opt</span></pre></body></html></div>
+<div class="sourceCode" id="cb68"><html><body><pre class="r"><span class="no">bsub_opt</span></pre></body></html></div>
 <pre><code>##  Option          Value                                                                                                                  
 ##  ---------------:---------------------------------------------------------------
 ##  packages        NULL                                                                                                                   
@@ -608,7 +616,7 @@ you code chunk here
 ##  parse_time      NULL                                                                                                                   
 ##  verbose         FALSE</code></pre>
 <p>Or a more readable text:</p>
-<div class="sourceCode" id="cb68"><html><body><pre class="r"><span class="no">bconf</span></pre></body></html></div>
+<div class="sourceCode" id="cb70"><html><body><pre class="r"><span class="no">bconf</span></pre></body></html></div>
 <pre><code>## Configurations for bsub:
 ##   * user for connecting submission node: guz
 ##   * submission node: odcf-worker01, odcf-cn34u03s10, odcf-cn34u03s12
@@ -623,7 +631,7 @@ you code chunk here
 <h2 class="hasAnchor">
 <a href="#interactive-job-monitor" class="anchor"></a>Interactive job monitor</h2>
 <p>Simply running <code><a href="../reference/monitor.html">monitor()</a></code> opens a shiny app where you can query and manage jobs.</p>
-<div class="sourceCode" id="cb70"><html><body><pre class="r"><span class="fu"><a href="../reference/monitor.html">monitor</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb72"><html><body><pre class="r"><span class="fu"><a href="../reference/monitor.html">monitor</a></span>()</pre></body></html></div>
 <p>Following are examples of the job monitor.</p>
 <p>The job summary table:</p>
 <p>
@@ -641,7 +649,7 @@ you code chunk here
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h2>
-<div class="sourceCode" id="cb71"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb73"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</pre></body></html></div>
 <pre><code>## R version 3.6.0 (2019-04-26)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: CentOS Linux 7 (Core)
