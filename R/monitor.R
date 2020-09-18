@@ -854,7 +854,9 @@ bjobs_timeline = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NU
     }
 
     x1 = as.numeric(df$START_TIME)
-    x2 = as.numeric(df$FINISH_TIME)
+    x2 = x1 + as.numeric(df$TIME_PASSED)
+    now = as.numeric(Sys.time())
+    x2[is.na(x2)] = now
     y = runif(nrow(df))
 
     xlim = c(min(x1, na.rm = TRUE), max(x2, na.rm = TRUE))
@@ -866,6 +868,8 @@ bjobs_timeline = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NU
     l = at >= xlim[1] & at <= xlim[2]
     at = at[l]
     labels = labels[l]
+    at = c(at, now)
+    labels = c(labels, "now")
     box()
     axis(side = 1, at = at, labels = labels)
     op = par("xpd")
