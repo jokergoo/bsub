@@ -22,4 +22,5 @@ It draws barplots of number of jobs per day.
 \examples{
 # There is no example
 NULL
+
 }

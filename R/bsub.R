@@ -13,6 +13,8 @@
 #       will be removed after the job is finished.
 # -variables A character vector of variable names that will be loaded before running the script. There is a special name ``_all_functions_``
 #       that saves all functions defined in the global environment.
+# -share A character vector of variables names for which the variables are shared between jobs. Note the temporary .RData files are not deleted
+#        automatically.
 # -working_dir The working directory.
 # -hour Running time of the job.
 # -memory Memory usage of the job. It is measured in GB.
@@ -50,6 +52,7 @@ bsub_chunk = function(code,
     packages = bsub_opt$packages, 
     image = bsub_opt$image,
     variables = character(),
+    share = character(),
     working_dir = bsub_opt$working_dir,
     hour = 1, 
     memory = 1, 
@@ -139,6 +142,12 @@ bsub_chunk = function(code,
         }
     }
 
+    if(length(share)) {
+        if(!inherits(share, "character")) {
+            stop_wrap("`share` must be a character vector (the names of the variables you want to import).")
+        }
+    }
+
     # if `image` is true, save all variables and all packages that are loaded
     if(identical(image, TRUE)) {
         variables = c(variables, ls(envir = .GlobalEnv, all.names = TRUE))
@@ -192,6 +201,17 @@ bsub_chunk = function(code,
     if(length(variables)) {
         save(list = unique(variables), envir = parent.frame(), file = qq("@{temp_dir}/@{name}_var.RData"))
         head = qq("@{head}\nload(\"@{temp_dir}/@{name}_var.RData\")\ninvisible(file.remove(\"@{temp_dir}/@{name}_var.RData\"))\n")
+    }
+
+    if(length(share)) {
+        for(i in seq_along(share)) {
+            share_hash = digest::digest(list(name = share[i], value = get(share[i], envir = parent.frame())))
+            share_file = qq("@{temp_dir}/@{name}_var_shared_@{share_hash}.RData")
+            if(!file.exists(share_file)) {
+                save(list = share[i], envir = parent.frame(), file = share_file)
+            }
+            head = qq("@{head}\nload(\"@{share_file}\")\n")
+        }
     }
 
     tmp = tempfile(paste0(name, "_"), fileext = ".R", tmpdir = temp_dir)

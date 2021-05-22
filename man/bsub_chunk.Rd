@@ -12,6 +12,7 @@ bsub_chunk(code,
     packages = bsub_opt$packages,
     image = bsub_opt$image,
     variables = character(),
+    share = character(),
     working_dir = bsub_opt$working_dir,
     hour = 1,
     memory = 1,
@@ -35,6 +36,7 @@ bsub_chunk(code,
   \item{packages}{A character vector with package names that will be loaded before running the script. There is a special name \code{_in_session_} that loads all the packages loaded in current R session.}
   \item{image}{A character vector of RData/rda files that will be loaded before running the script. When \code{image} is set to \code{TRUE}, all variables in \code{.GlobalEnv} will be saved into a temporary file and all attached packages will be recorded. The temporary files will be removed after the job is finished.}
   \item{variables}{A character vector of variable names that will be loaded before running the script. There is a special name \code{_all_functions_} that saves all functions defined in the global environment.}
+  \item{share}{A character vector of variables names for which the variables are shared between jobs. Note the temporary .RData files are not deleted automatically.}
   \item{working_dir}{The working directory.}
   \item{hour}{Running time of the job.}
   \item{memory}{Memory usage of the job. It is measured in GB.}

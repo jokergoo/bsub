@@ -269,6 +269,23 @@ bsub_chunk(name = "example", variables = "_all_functions_",
 })
 ```
 
+### R variables shared between jobs
+
+If multiple jobs use the same variables, they can be specified via `share` argument. In this case, the shared variables are only saved into
+temporary files once. Note these temporary are not deleted automatically since they do not know whether all jobs which reply on them are finished.
+Users need to manually delete them when all jobs are done.
+
+```{r, eval = FALSE}
+foo = 1
+for(i in 1:10) {
+    bsub_chunk(name = paste0("example", i), share = "foo",
+    { 
+        bar = foo
+        Sys.sleep(5)
+    })
+}
+```
+
 ### The workspace image
 
 If you have too many external variables that are used in the code chunk or

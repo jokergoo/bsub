@@ -23,4 +23,5 @@ a job and the width of the segment correspond to its duration.
 \examples{
 # There is no example
 NULL
+
 }
