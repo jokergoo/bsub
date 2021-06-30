@@ -239,6 +239,9 @@ check_temp_dir = function(x, ask = TRUE) {
 #
 # You simply type ``bconf`` (without the brackets) in the interactive R console.
 #
+# == value
+# A ``bconf`` object.
+#
 # == example
 # bconf
 bconf = function() {

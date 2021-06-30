@@ -16,9 +16,9 @@
 # -share A character vector of variables names for which the variables are shared between jobs. Note the temporary .RData files are not deleted
 #        automatically.
 # -working_dir The working directory.
-# -hour Running time of the job.
+# -hours Running time of the job.
 # -memory Memory usage of the job. It is measured in GB.
-# -core Number of cores.
+# -cores Number of cores.
 # -R_version R version.
 # -temp_dir Path of temporary folder where the temporary R/bash scripts will be put.
 # -output_dir Path of output folder where the output/flag files will be put.
@@ -42,7 +42,7 @@
 #
 # == example
 # \dontrun{
-# bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
+# bsub_chunk(name = "example", memory = 10, hours = 10, cores = 4,
 # {
 #     Sys.sleep(5)
 # })
@@ -54,9 +54,9 @@ bsub_chunk = function(code,
     variables = character(),
     share = character(),
     working_dir = bsub_opt$working_dir,
-    hour = 1, 
+    hours = 1, 
     memory = 1, 
-    core = 1,
+    cores = 1,
     R_version = bsub_opt$R_version,
     temp_dir = bsub_opt$temp_dir,
     output_dir = bsub_opt$output_dir,
@@ -238,9 +238,9 @@ bsub_chunk = function(code,
     
     bsub_submit(
         command = command, 
-        hour = hour,
+        hours = hours,
         memory = memory,
-        core = core,
+        cores = cores,
         name = name,
         output_dir = output_dir,
         temp_dir = temp_dir,
@@ -316,9 +316,9 @@ retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
 # -script The R script.
 # -argv A string of command-line arguments.
 # -name If name is not specified, an internal name calculated by `digest::digest` is automatically assigned. 
-# -hour Running time of the job.
+# -hours Running time of the job.
 # -memory Memory usage of the job. It is measured in GB.
-# -core Number of cores.
+# -cores Number of cores.
 # -R_version R version.
 # -temp_dir Path of temporary folder where the temporary R/bash scripts will be put.
 # -output_dir Path of output folder where the output/flag files will be put.
@@ -337,16 +337,16 @@ retrieve_var = function(name, output_dir = bsub_opt$output_dir, wait = 30) {
 #
 # == example
 # \dontrun{
-# bsub_script("/path/of/foo.R", name = ..., memory = ..., core = ..., ...)
+# bsub_script("/path/of/foo.R", name = ..., memory = ..., cores = ..., ...)
 # # with command-line arguments
 # bsub_script("/path/of/foo.R", argv = "--a 1 --b 3", ...)
 # }
 bsub_script = function(script, 
     argv = "", 
     name = NULL, 
-    hour = 1, 
+    hours = 1, 
     memory = 1, 
-    core = 1,
+    cores = 1,
     R_version = bsub_opt$R_version,
     temp_dir = bsub_opt$temp_dir,
     output_dir = bsub_opt$output_dir,
@@ -413,9 +413,9 @@ bsub_script = function(script,
 
     bsub_submit(
         command = command, 
-        hour = hour,
+        hours = hours,
         memory = memory,
-        core = core,
+        cores = cores,
         name = name,
         output_dir = output_dir,
         temp_dir = temp_dir,
@@ -432,9 +432,9 @@ bsub_script = function(script,
 # == param
 # -cmd A list of commands.
 # -name If name is not specified, an internal name calculated by `digest::digest` is automatically assigned. 
-# -hour Running time of the job.
+# -hours Running time of the job.
 # -memory Memory usage of the job. It is measured in GB.
-# -core Number of cores.
+# -cores Number of cores.
 # -temp_dir Path of temporary folder where the temporary R/bash scripts will be put.
 # -output_dir Path of output folder where the output/flag files will be put.
 # -dependency A vector of job IDs that current job depends on.
@@ -452,13 +452,13 @@ bsub_script = function(script,
 #
 # == example
 # \dontrun{
-# bsub_cmd("samtools sort ...", name = ..., memory = ..., core = ..., ...)
+# bsub_cmd("samtools sort ...", name = ..., memory = ..., cores = ..., ...)
 # }
 bsub_cmd = function(cmd, 
     name = NULL, 
-    hour = 1, 
+    hours = 1, 
     memory = 1, 
-    core = 1,
+    cores = 1,
     temp_dir = bsub_opt$temp_dir,
     output_dir = bsub_opt$output_dir,
     dependency = NULL,
@@ -500,9 +500,9 @@ bsub_cmd = function(cmd,
 
     bsub_submit(
         command = command, 
-        hour = hour,
+        hours = hours,
         memory = memory,
-        core = core,
+        cores = cores,
         name = name,
         output_dir = output_dir,
         temp_dir = temp_dir,
@@ -513,9 +513,9 @@ bsub_cmd = function(cmd,
 }
 
 bsub_submit = function(command,
-    hour,
+    hours,
     memory,
-    core,
+    cores,
     name,
     output_dir,
     temp_dir,
@@ -601,7 +601,7 @@ fi", con)
 
     system(qq("chmod 755 @{sh_file}"))
 
-    cmd = bsub_opt$bsub_template(name, hour, memory, core, output, bsub_opt$group)
+    cmd = bsub_opt$bsub_template(name, hours, memory, cores, output, bsub_opt$group)
     if(length(dependency)) {
         dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )
         cmd = qq("@{cmd} -w '@{dependency_str}'")
@@ -617,9 +617,9 @@ fi", con)
     job_tb = data.frame(
             job_id = job_id,
             job_name = name,
-            hour = hour,
+            hours = hours,
             memory = memory,
-            core = core,
+            cores = cores,
             submit_time = Sys.time(),
             output_dir = output_dir,
             temp_dir = temp_dir,

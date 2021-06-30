@@ -24,11 +24,12 @@ devtools::install_github('jokergoo/bsub', dependencies = 'Suggests')
 
 The online documentation is available at https://jokergoo.github.io/bsub/.
 
-There are four vignettes:
 
-- [Send R code/R scripts/shell commands to LSF cluster](https://jokergoo.github.io/bsub/articles/bsub_intro.html) 
-- [Configure bsub package for other LSF institutes](https://jokergoo.github.io/bsub/articles/configure_bsub_package.html)
-- [What if you need to establish two ssh connections to reach the submission node](https://jokergoo.github.io/bsub/articles/two_ssh.html)
+There are the following vignettes:
+
+- [Send R code/R scripts/shell commands to LSF cluster](https://jokergoo.github.io/bsub_vignettes/bsub_intro.html)
+- [Configure bsub package](https://jokergoo.github.io/bsub_vignettes/configure_bsub_package.html)
+- [What if you need to establish two ssh connections to reach the submission node](https://jokergoo.github.io/bsub_vignettes/two_ssh.html)
 
 ### Submit jobs
 
@@ -38,7 +39,7 @@ Directly submit R chunk:
 library(bsub)
 
 # R code
-bsub_chunk(name = "example", memory = 10, hour = 10, core = 4, 
+bsub_chunk(name = "example", memory = 10, hours = 10, cores = 4, 
 {
     fit = NMF::nmf(...)
     # you better save `fit` into a permanent file

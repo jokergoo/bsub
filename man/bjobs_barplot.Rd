@@ -19,8 +19,10 @@ bjobs_barplot(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NULL, df = NUL
 \details{
 It draws barplots of number of jobs per day.
 }
+\value{
+A \code{ggplot2} object.
+}
 \examples{
 # There is no example
 NULL
-
 }

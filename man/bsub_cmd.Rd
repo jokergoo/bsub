@@ -9,9 +9,9 @@ Submit shell commands
 \usage{
 bsub_cmd(cmd,
     name = NULL,
-    hour = 1,
+    hours = 1,
     memory = 1,
-    core = 1,
+    cores = 1,
     temp_dir = bsub_opt$temp_dir,
     output_dir = bsub_opt$output_dir,
     dependency = NULL,
@@ -24,9 +24,9 @@ bsub_cmd(cmd,
 
   \item{cmd}{A list of commands.}
   \item{name}{If name is not specified, an internal name calculated by \code{\link[digest]{digest}} is automatically assigned. }
-  \item{hour}{Running time of the job.}
+  \item{hours}{Running time of the job.}
   \item{memory}{Memory usage of the job. It is measured in GB.}
-  \item{core}{Number of cores.}
+  \item{cores}{Number of cores.}
   \item{temp_dir}{Path of temporary folder where the temporary R/bash scripts will be put.}
   \item{output_dir}{Path of output folder where the output/flag files will be put.}
   \item{dependency}{A vector of job IDs that current job depends on.}
@@ -47,6 +47,6 @@ Job ID.
 }
 \examples{
 \dontrun{
-bsub_cmd("samtools sort ...", name = ..., memory = ..., core = ..., ...)
+bsub_cmd("samtools sort ...", name = ..., memory = ..., cores = ..., ...)
 }
 }

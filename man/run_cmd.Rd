@@ -19,7 +19,7 @@ run_cmd(cmd, print = FALSE)
 If current node is not the submission node, the command is executed via ssh.
 }
 \value{
-The output of the command
+The output of the command.
 }
 \examples{
 \dontrun{

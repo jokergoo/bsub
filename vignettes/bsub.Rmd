@@ -1,0 +1,15 @@
+---
+title: "Send R code/R scripts/shell commands to LSF cluster"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Send R code/R scripts/shell commands to LSF cluster}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+There are the following vignettes:
+
+- [Send R code/R scripts/shell commands to LSF cluster](https://jokergoo.github.io/bsub_vignettes/bsub_intro.html)
+- [Configure bsub package](https://jokergoo.github.io/bsub_vignettes/configure_bsub_package.html)
+- [What if you need to establish two ssh connections to reach the submission node](https://jokergoo.github.io/bsub_vignettes/two_ssh.html)

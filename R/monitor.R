@@ -319,7 +319,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
                          nchar(colnames(df2)) + 1)
         ow = getOption("width")
         options(width = sum(max_width) + 10)
-        cat(strrep(symbol$line, sum(max_width)), "\n")
+        cat(strrep("=", sum(max_width)), "\n")
         print(df2, row.names = FALSE, right = FALSE, max = 99999)
         if(nrow(df2) > 20) {
             for(i in seq_len(ncol(df2))) {
@@ -329,7 +329,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
             }
             cat("\n")
         }
-        cat(strrep(symbol$line, sum(max_width)), "\n")
+        cat(strrep("=", sum(max_width)), "\n")
         cat(" ", paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week.\n", sep = "")
         cat(" ", paste(qq("@{tb_today} @{names(tb_today)} job@{ifelse(tb_today == 1, '', 's')}", collapse = FALSE), collapse = ", "), " in the last 24 hours.\n", sep = "")
         cat(" You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.\n")
@@ -348,7 +348,7 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         }
         qqcat("No job found (@{msg}).\n")
         cat("\n")
-        cat(strrep(symbol$line, 78), "\n")
+        cat(strrep("=", 78), "\n")
         cat(" ", paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week.\n", sep = "")
         cat(" ", paste(qq("@{tb_today} @{names(tb_today)} job@{ifelse(tb_today == 1, '', 's')}", collapse = FALSE), collapse = ", "), " in the last 24 hours.\n", sep = "")
         cat(" You can have more controls by `bjobs(status = ..., max = ..., filter = ...)`.\n")
@@ -460,7 +460,7 @@ bkill = function(job_id, filter = NULL) {
 # If current node is not the submission node, the command is executed via ssh.
 #
 # == value
-# The output of the command
+# The output of the command.
 #
 # == example
 # \dontrun{
@@ -797,6 +797,8 @@ STAT_COL = structure(names = c("RUN", "PEND", "DONE", "EXIT", "Others"), c("blue
 # == details
 # It draws barplots of number of jobs per day.
 #
+# == value
+# A ``ggplot2`` object.
 bjobs_barplot = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NULL, df = NULL) {
     if(is.null(df)) {
         df = bjobs(status = status, filter = filter, print = FALSE)
@@ -836,6 +838,9 @@ class(bjobs_barplot) = "bjobs"
 # == details
 # It draws segments of duration of jobs. In the plot, each segment represents
 # a job and the width of the segment correspond to its duration.
+#
+# == value
+# No value is returned.
 #
 bjobs_timeline = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NULL, df = NULL) {
     if(is.null(df)) {

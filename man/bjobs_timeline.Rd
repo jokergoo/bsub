@@ -20,8 +20,10 @@ bjobs_timeline(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NULL, df = NU
 It draws segments of duration of jobs. In the plot, each segment represents
 a job and the width of the segment correspond to its duration.
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL
-
 }

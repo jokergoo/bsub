@@ -1,9 +1,0 @@
-pandoc: 2.9.2.1
-pkgdown: 1.5.1
-pkgdown_sha: ~
-articles:
-  bsub_intro: bsub_intro.html
-  configure_bsub_package: configure_bsub_package.html
-  two_ssh: two_ssh.html
-last_built: 2020-09-18T10:34Z
-

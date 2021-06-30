@@ -15,6 +15,9 @@ This function is only for printing. Use \code{\link{bsub_opt}} to change configu
 
 You simply type \code{bconf} (without the brackets) in the interactive R console.
 }
+\value{
+A \code{bconf} object.
+}
 \examples{
 bconf
 }

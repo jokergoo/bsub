@@ -14,9 +14,9 @@ bsub_chunk(code,
     variables = character(),
     share = character(),
     working_dir = bsub_opt$working_dir,
-    hour = 1,
+    hours = 1,
     memory = 1,
-    core = 1,
+    cores = 1,
     R_version = bsub_opt$R_version,
     temp_dir = bsub_opt$temp_dir,
     output_dir = bsub_opt$output_dir,
@@ -38,9 +38,9 @@ bsub_chunk(code,
   \item{variables}{A character vector of variable names that will be loaded before running the script. There is a special name \code{_all_functions_} that saves all functions defined in the global environment.}
   \item{share}{A character vector of variables names for which the variables are shared between jobs. Note the temporary .RData files are not deleted automatically.}
   \item{working_dir}{The working directory.}
-  \item{hour}{Running time of the job.}
+  \item{hours}{Running time of the job.}
   \item{memory}{Memory usage of the job. It is measured in GB.}
-  \item{core}{Number of cores.}
+  \item{cores}{Number of cores.}
   \item{R_version}{R version.}
   \item{temp_dir}{Path of temporary folder where the temporary R/bash scripts will be put.}
   \item{output_dir}{Path of output folder where the output/flag files will be put.}
@@ -65,7 +65,7 @@ Job ID.
 }
 \examples{
 \dontrun{
-bsub_chunk(name = "example", memory = 10, hour = 10, core = 4,
+bsub_chunk(name = "example", memory = 10, hours = 10, cores = 4,
 {
     Sys.sleep(5)
 })
