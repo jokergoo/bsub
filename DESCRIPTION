@@ -25,7 +25,7 @@ Suggests: knitr,
           graph, 
           Rgraphviz,
           ggplot2,
-          rmarkdown
+          rmarkdown,
           markdown
 biocViews: Software, Infrastructure
 Description: It submits R code/R scripts/shell commands to 'LSF cluster' 
