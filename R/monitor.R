@@ -777,7 +777,7 @@ monitor = function() {
         suppressPackageStartupMessages(shiny::runApp("~/project/development/bsub/inst/app"))
     } else {
         if(bsub_opt$verbose) cat("run job monitor from local laptop.\n")
-        suppressPackageStartupMessages(shiny::runApp("~/project/bsub/inst/app"))
+        suppressPackageStartupMessages(shiny::runApp("~/project/development/bsub/inst/app"))
     }
 }
 

@@ -1,6 +1,6 @@
 # Submitter and Monitor of the LSF Cluster
 
-[![Build Status](https://travis-ci.org/jokergoo/bsub.svg)](https://travis-ci.org/jokergoo/bsub)
+[![R-CMD-check](https://github.com/jokergoo/bsub/workflows/R-CMD-check/badge.svg)](https://github.com/jokergoo/bsub/actions)
 [![CRAN](https://www.r-pkg.org/badges/version/bsub)](https://cran.r-project.org/web/packages/bsub/index.html)
 
 

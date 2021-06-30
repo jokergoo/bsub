@@ -1,6 +1,6 @@
 Changes in version 1.1.0
 
-* moved vignettes out of the pacakge.
+* move vignettes out of the package.
 * resubmit to CRAN.
 
 ------------------------------------------
