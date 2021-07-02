@@ -64,7 +64,7 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
           
       - name: Install libssh
-        if: runner.os == "Linux'
+        if: runner.os == 'Linux'
         run: |
           apt-get install -y libssh-dev
           
