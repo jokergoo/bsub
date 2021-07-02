@@ -65,7 +65,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages("https://cran.r-project.org/src/contrib/ssh_0.8.0.tar.gz", repo = NULL)
+          remotes::install_github("https://github.com/ropensci/ssh")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
