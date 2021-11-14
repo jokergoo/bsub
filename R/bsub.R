@@ -580,13 +580,13 @@ bsub_submit = function(command,
     writeLines(command, con)
 
     # test the command, 
-    writeLines("
+    writeLines(qq("
 if [ $? -ne 0 ]
 then
-    rm $run
+    rm '@{run}'
     echo Exit code is not equal to zero. There is an error.
     exit 666
-fi", con)
+fi"), con)
 
     writeLines(qq("rm '@{run}'\n"), con)
     writeLines(qq("touch '@{done}'\n"), con)
