@@ -280,6 +280,12 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
     df$SUBMIT_TIME = convert_to_POSIXlt(df$SUBMIT_TIME)
     df$START_TIME = convert_to_POSIXlt(df$START_TIME)
     df$FINISH_TIME = convert_to_POSIXlt(df$FINISH_TIME)
+
+    if(!is.null(bsub_opt$clear_history_timestamp)) {
+        l = df$FINISH_TIME > bsub_opt$clear_history_timestamp
+        df = df[l, , drop = FALSE]
+    }
+
     # running/pending jobs
     df$TIME_PASSED = difftime(Sys.time(), df$START_TIME, units = "hours")
     l = !(df$STAT %in% c("RUN", "PEND"))
@@ -892,3 +898,10 @@ bjobs_timeline = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NU
 
 class(bjobs_timeline) = "bjobs"
 
+
+# == title
+# Clear job history
+#
+clear_history = function() {
+    bsub_opt$clear_history_timestamp = Sys.time()
+}

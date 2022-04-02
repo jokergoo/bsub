@@ -201,6 +201,10 @@ bsub_opt = set_opt(
     verbose = list(
         .value = FALSE,
         .class = "logical"
+    ),
+    clear_history_timestamp = list(
+        .value = NULL,
+        .visible = FALSE
     )
 )
 

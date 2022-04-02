@@ -16,7 +16,8 @@ Imports: GlobalOptions (>= 0.1.1),
          crayon,
          methods, 
          grDevices, 
-         graphics
+         graphics,
+         codetools
 Suggests: knitr, 
           ssh, 
           DT (>= 0.13), 

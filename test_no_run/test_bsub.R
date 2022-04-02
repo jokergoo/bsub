@@ -15,3 +15,9 @@ job4 = bsub_chunk({
 	Sys.sleep(30)
 }, name = "job4", dependency = c(job3))
 
+
+
+a = 1
+bsub_chunk({
+	print(a)
+}, name = "job1")

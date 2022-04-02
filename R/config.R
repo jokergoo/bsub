@@ -1,7 +1,36 @@
 
+config_bsub = function() {
+	submission_node = readline(prompt = "What is the name of your submission node? ")
+	user = readline(prompt = "What is your user name on @{submission_node}? ")
+
+	bsub_opt$submission_node = submission_node
+	bsub_opt$user = user
+
+	# try to connect 
+	ssh_connect()
+
+	LSF_ENVDIR = ssh_exec("echo $LSF_ENVDIR")
+	LSF_SERVERDIR = ssh_exec("echo $LSF_SERVERDIR")
+
+	bsub_opt$ssh_envir = c("source /etc/profile",
+                           qq("export LSF_ENVDIR=@{LSF_ENVDIR}"),
+                           qq("export LSF_SERVERDIR=@{LSF_SERVERDIR}"))
+
+	temp_dir = readline(prompt = "What is the temp folder for xxx, ~/.bsub_temp [y] ")
+	if(tolower(temp_dir) %in%  c("y", "yes")) {
+		temp_dir = "~/.bsub_temp"
+	}
+	bsub_opt$temp_dir = temp_dir
+
+	cat("How would you call `Rscript`? The ")
+	call_Rscript = readline()
+
+}
+
+
 config_odcf = function(user = NULL, verbose = TRUE) {
 	bsub_opt$call_Rscript = function(version) qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript")
-	bsub_opt$submission_node = c("odcf-worker01", "odcf-cn34u03s10", "odcf-cn34u03s12")
+	bsub_opt$submission_node = c("odcf-worker01")
 	bsub_opt$ssh_envir = c("source /etc/profile",
                            "export LSF_ENVDIR=/opt/lsf/conf",
                            "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")

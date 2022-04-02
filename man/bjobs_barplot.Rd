@@ -25,4 +25,5 @@ A \code{ggplot2} object.
 \examples{
 # There is no example
 NULL
+
 }

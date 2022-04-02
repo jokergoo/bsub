@@ -1,3 +1,10 @@
+Changes in version 1.1.1
+
+* add `clear_history()`
+* use `codetools::findGlobals()` to automatically identify "global variables" used in the code block.
+
+-----------------------------------------
+
 Changes in version 1.1.0
 
 * move vignettes out of the package.
