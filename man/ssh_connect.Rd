@@ -7,7 +7,12 @@ Connect to submisstion via ssh
 Connect to submisstion via ssh
 }
 \usage{
-ssh_connect()
+ssh_connect(...)
+}
+\arguments{
+
+  \item{...}{Pass to \code{\link[ssh]{ssh_connect}}.}
+
 }
 \details{
 If ssh connection is lost, run this function to reconnect.

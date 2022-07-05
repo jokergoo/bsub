@@ -2,6 +2,9 @@
 # == title
 # Connect to submisstion via ssh
 #
+# == param
+# -... Pass to `ssh::ssh_connect`.
+#
 # == details
 # If ssh connection is lost, run this function to reconnect.
 #
@@ -15,7 +18,7 @@
 # }
 # # where the user name is the one you set in `bsub_opt$user` and
 # # the node is the one you set in `bsub_opt$login_node`.
-ssh_connect = function() {
+ssh_connect = function(...) {
 
 	if(!is.null(bsub_opt$ssh_session)) {
 		message("ssh is already connected.")
@@ -42,7 +45,7 @@ ssh_connect = function() {
 
 	for(i in seq_along(login_node)) {
 		message(qq("establish ssh connection to @{user}@@{login_node[i]}"))
-		oe = try(session <- ssh::ssh_connect(paste0(user, "@", login_node[i])))
+		oe = try(session <- ssh::ssh_connect(paste0(user, "@", login_node[i]), ...))
 
 		if(!inherits(oe, "try-error")) {
 			bsub_opt$ssh_session = session
@@ -50,7 +53,7 @@ ssh_connect = function() {
 		}
 
 		message(qq("establish ssh connection to @{user}@@{login_node[i]}, 2nd try"))
-		oe = try(session <- ssh::ssh_connect(paste0(user, "@", login_node[i])))
+		oe = try(session <- ssh::ssh_connect(paste0(user, "@", login_node[i]), ...))
 
 		if(!inherits(oe, "try-error")) {
 			bsub_opt$ssh_session = session
@@ -58,7 +61,7 @@ ssh_connect = function() {
 		}
 
 		message(qq("establish ssh connection to @{user}@@{login_node[i]}, 3rd try"))
-		oe = try(session <- ssh::ssh_connect(paste0(user, "@", login_node[i])))
+		oe = try(session <- ssh::ssh_connect(paste0(user, "@", login_node[i]), ...))
 
 		if(!inherits(oe, "try-error")) {
 			bsub_opt$ssh_session = session

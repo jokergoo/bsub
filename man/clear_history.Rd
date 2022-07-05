@@ -12,4 +12,5 @@ clear_history()
 \examples{
 # There is no example
 NULL
+
 }
