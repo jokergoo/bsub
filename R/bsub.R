@@ -106,6 +106,8 @@ bsub_chunk = function(code,
             variables = findGlobals(code_fun, merge = FALSE)$variables
 
             code = deparse(expr)
+        } else {
+            code = deparse(substitute(code))
         }
     }
     code = paste(code, collapse = "\n")
