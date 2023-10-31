@@ -345,3 +345,6 @@ get_bconf_message = function(x, ...) {
     return(paste(msg, collapse = "\n"))
 }
 
+
+STATUS_COL = c("RUN" = "darkgreen", "EXIT" = "#e41a1c", "PEND" = "#ff7f00", "DONE" = "#377eb8", "unknown" = "grey")
+

@@ -96,7 +96,7 @@ job_log = function(job_id, print = TRUE, n_line = 10) {
         if(print) cat(txt, sep = "\n")
         return(invisible(txt))
     } else if(status == "PEND") {
-        txt = qq("Job (@{job_id} is still pending.")
+        txt = qq("Job @{job_id} is still pending.")
         if(print) cat(txt, sep = "\n")
         return(invisible(txt))
     } else if(status == "RUN") {
@@ -266,7 +266,7 @@ convert_to_POSIXlt = function(x) {
 bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE) {
 
 
-    cmd = "bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time slots mem max_mem dependency exec_cwd delimiter=\",\"' 2>&1"
+    cmd = "bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time slots mem max_mem dependency exec_cwd combined_resreq delimiter=\",\"' 2>&1"
     ln = run_cmd(cmd, print = FALSE)
     
     # job done or exit
@@ -277,6 +277,11 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 
     df = read.csv(textConnection(paste(ln, collapse = "\n")), stringsAsFactors = FALSE)
     df$STAT = factor(df$STAT)
+
+    df$REQ_MEM = as.numeric(gsub("^.*mem=(.*?)\\].*$", "\\1", df$COMBINED_RESREQ))
+    df$REQ_MEM = round(df$REQ_MEM/1024, 1)
+    df$COMBINED_RESREQ = NULL
+
     df$SUBMIT_TIME = convert_to_POSIXlt(df$SUBMIT_TIME)
     df$START_TIME = convert_to_POSIXlt(df$START_TIME)
     df$FINISH_TIME = convert_to_POSIXlt(df$FINISH_TIME)
@@ -755,17 +760,11 @@ job_status_by_id = function(job_id) {
 # }
 monitor = function() {
 
-    if(!requireNamespace("shiny", quietly = TRUE)) {
-        stop_wrap("You need to install 'shiny' package to use the monitor.")
-    }
-    if(!requireNamespace("DT", quietly = TRUE)) {
-        stop_wrap("You need to install 'DT' package to use the monitor.")
-    }
-    if(!requireNamespace("shinyjqui", quietly = TRUE)) {
-        stop_wrap("You need to install 'shinyjqui' package to use the monitor.")
-    }
-    if(!requireNamespace("ggplot2", quietly = TRUE)) {
-        stop_wrap("You need to install 'ggplot2' package to use the monitor.")
+    pkgs = c("shiny", "DT", "shinyjqui", "ggplot2", "igraph", "Rgraphviz")
+    l = sapply(pkgs, requireNamespace, quietly = TRUE)
+
+    if(any(!l)) {
+        stop_wrap("You need to install '@{paste(pkgs[!l], collapse = ',')}' to use the monitor.")
     }
     
     if(!on_submission_node()) {
@@ -789,8 +788,6 @@ monitor = function() {
 
 class(monitor) = "bjobs"
 
-
-STAT_COL = structure(names = c("RUN", "PEND", "DONE", "EXIT", "Others"), c("blue", "purple", "black", "red", "#EEEEEE"))
 
 # == title
 # Barplot of number of jobs
@@ -824,7 +821,7 @@ bjobs_barplot = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NUL
     suppressWarnings(p <- ggplot2::ggplot(df, ggplot2::aes(x = as.Date(df$SUBMIT_TIME), fill = df$STAT)) + ggplot2::geom_bar(position=ggplot2::position_dodge()) +
         ggplot2::xlab("Submitted time") + ggplot2::ylab("Number of jobs") + ggplot2::labs(fill = "Status")
     )
-    p = p + ggplot2::scale_fill_manual(breaks = names(STAT_COL), values = STAT_COL)
+    p = p + ggplot2::scale_fill_manual(breaks = names(STATUS_COL), values = STATUS_COL)
     tb = table(df$STAT)
     tb =  tb[tb > 0]
     p = p + ggplot2::ggtitle(paste0(paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week"))
@@ -864,6 +861,8 @@ bjobs_timeline = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NU
         return(invisible(NULL))
     }
 
+    units(df$TIME_PASSED) = "secs"
+
     x1 = as.numeric(df$START_TIME)
     x2 = x1 + as.numeric(df$TIME_PASSED)
     now = as.numeric(Sys.time())
@@ -872,7 +871,7 @@ bjobs_timeline = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NU
 
     xlim = c(min(x1, na.rm = TRUE), max(x2, na.rm = TRUE))
     plot(NULL, xlim = xlim, ylim = c(0, 1), axes = FALSE, ann = FALSE)
-    segments(x1, y, x2, y, col = STAT_COL[as.character(df$STAT)])
+    segments(x1, y, x2, y, col = STATUS_COL[as.character(df$STAT)], lwd = 2)
     at = unique(as.Date(c(df$START_TIME, df$FINISH_TIME)))
     labels = as.character(at)
     at = as.numeric(as.POSIXlt(at))
@@ -885,9 +884,9 @@ bjobs_timeline = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NU
     axis(side = 1, at = at, labels = labels)
     op = par("xpd")
     par(xpd = NA)
-    col = STAT_COL[intersect(names(STAT_COL), as.character(df$STAT))]
+    col = STATUS_COL[intersect(names(STATUS_COL), as.character(df$STAT))]
     legend(x = mean(par("usr")[1:2]), y = mean(par("usr")[4]), legend = names(col), 
-        col = col, lty = 1, ncol = length(col), xjust = 0.5, yjust = 0, cex = 0.6)
+        col = col, lty = 1, lwd = 2, ncol = length(col), xjust = 0.5, yjust = 0, cex = 0.6)
 
     tb = table(df$STAT)
     tb =  tb[tb > 0]

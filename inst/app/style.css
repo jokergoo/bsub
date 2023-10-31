@@ -1,0 +1,59 @@
+body {
+    font-size: 1.3em;
+    width:1200px;
+    margin: auto;
+}
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 2px 4px;
+}
+.ui-resizable {
+    border: 1px grey solid;
+}
+.job_checkbox {
+    vertical-align: text-bottom;
+}
+
+.RUN {
+    background-color: darkgreen;
+    padding: 1px 4px;
+    border-radius: 4px;
+    color: white;
+}
+
+.DONE {
+    background-color: #377eb8;
+    padding: 1px 4px;
+    border-radius: 4px;
+    color: white;
+}
+
+.EXIT{
+    background-color: #e41a1c;
+    padding: 1px 4px;
+    border-radius: 4px;
+    color: white;
+}
+
+.PEND{
+    background-color: #ff7f00;
+    padding: 1px 4px;
+    border-radius: 4px;
+    color: white;
+}
+
+.unknown{
+    background-color: grey;
+    padding: 1px 4px;
+    border-radius: 4px;
+    color: white;
+}
+
+
+#info {
+    padding: 8px 8px;
+    background-color: #EEEEEE;
+    border-radius: 4px;
+    margin-bottom:10px;
+}
+
+

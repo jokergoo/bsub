@@ -99,7 +99,7 @@ config_sanger = function(user = NULL, ssh_key = "~/.ssh/id_rsa", verbose = TRUE)
 
 config_two_ssh = function(user = NULL) {
 	bsub_opt$call_Rscript = function(version) qq("module load gcc/7.2.0; module load java/1.8.0_131; module load R/@{version}; Rscript")
-	bsub_opt$login_node = "odcf-worker01"
+	bsub_opt$login_node = "odcf-worker02"
 	bsub_opt$submission_node = NULL
 	
 	# values for LSF_SERVERDIR and LSF_ENVDIR can be get by:
