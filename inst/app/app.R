@@ -19,10 +19,11 @@ ui = fluidPage(
     titlePanel("LSF Job Monitor"),
 
     htmlOutput("info"),
-    p(actionButton("reload", "Manually reload"), "The monitor automatically reloads every 5 minutes."),
+    p(actionButton("reload", "Manually reload"), HTML("The monitor is automatically reloaded in <span id='countdown'>5m 0s</span>.")),
+    tags$script(HTML("count_down('countdown');")),
     
     hr(style = "border-top: 1px solid black;"),
-    
+    checkboxGroupInput("status_select", label = "Select job status: ", choices = structure(names(STATUS_COL), names = names(STATUS_COL)), selected = names(STATUS_COL), inline = TRUE),
     div(id = "table_loading", p("Summary table is loading...", style = "font-size:20px")),
     DT::dataTableOutput("mytable"),
     HTML('<p><button id="kill" type="button" class="btn btn-default">Kill selected jobs</button></p>'),
@@ -33,13 +34,20 @@ ui = fluidPage(
 
 ENV = new.env()
 ENV$job_log = list()
+ENV$timestamp = Sys.time()
 
 server <- function(input, output, session) {
     
     autoInvalidate <- reactiveTimer(1000 * 60*5)  # every 5 min
     
     observe({
-        autoInvalidate()
+        t = autoInvalidate()
+
+        if(as.double(t - ENV$timestamp, units = "secs") > 10) {
+            message(qq("[@{format(Sys.time())}] Reloading the app."))
+            ENV$timestamp = t
+            session$reload() 
+        }
     })
         
     job_summary_df = reactive({
@@ -49,11 +57,16 @@ server <- function(input, output, session) {
         showNotification("Fetching job summary table...", duration = 1, type = "message")
         message(qq("[@{format(Sys.time())}] Fetching job summary table"))
         df = bjobs(print = FALSE, status = "all")
-        df[order(df$JOBID, decreasing = TRUE), , drop = FALSE]
+        if(!is.null(df)) {
+            df[order(df$JOBID, decreasing = TRUE), , drop = FALSE]
+        } else {
+            df
+        }
     })
-	
+
     observeEvent(input$reload, {
-        message(qq("[@{format(Sys.time())}] Manually reloading the app."))
+        ENV$timestamp = Sys.time()
+        message(qq("[@{format(Sys.time())}] Reloading the app."))
         session$reload()  
     })
 
@@ -62,12 +75,15 @@ server <- function(input, output, session) {
 	    autoInvalidate()
 	    
 		df = job_summary_df()
+        if(is.null(df)) {
+            return(datatable(data.frame(numeric(0))))
+        }
 		nr = nrow(df)
 
         job_dep = get_dependency(df)
         
 		showNotification("Formatting job summary table...", duration = 5, type = "message")
-		df2 = df[, c("JOBID", "STAT", "JOB_NAME", "SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM", "REQ_MEM")]
+		df2 = df[, c("JOBID", "STAT", "JOB_NAME", "QUEUE", "SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM", "REQ_MEM")]
 
 		df2$STAT = factor(df2$STAT)
         units(df2$TIME_PASSED) = "secs"; df2$TIME_PASSED = as.integer(as.numeric(df2$TIME_PASSED))
@@ -95,13 +111,19 @@ server <- function(input, output, session) {
         col_index_add = 0
         if(all(df2$dep == "")) {
             df2 = cbind(df2[, 1, drop = FALSE], df2[, -c(1, length(df2)), drop = FALSE])
-            colnames(df2) = c("Job ID", "Status", "Job name", "Submit time", "Time passed", "Time left", "Slots", "Memory", "Max memory", "Req memory")
+            colnames(df2) = c("Job ID", "Status", "Job name", "Queue", "Submit time", "T_passed", "T_left", "Slots", "Mem", "Max mem", "Req mem")
         } else {
             col_index_add = 1
             df2 = cbind(df2[, c(1, length(df2)), drop = FALSE], df2[, -c(1, length(df2)), drop = FALSE])
-            colnames(df2) = c("Job ID", "", "Status", "Job name", "Submit time", "Time passed", "Time left", "Slots", "Memory", "Max memory", "Req memory")
+            colnames(df2) = c("Job ID", "", "Status", "Job name", "Queue", "Submit time", "T_passed", "T_left", "Slots", "Mem", "Max mem", "Req mem")
 		}
         df2[, "Submit time"] = as.character(df2[, "Submit time"])
+
+        df2 = df2[df2$Status %in% input$status_select, , drop = FALSE]
+
+        if(nrow(df2) == 0) {
+            return(datatable(df2, escape = FALSE, rownames = FALSE))
+        }
         dt = datatable(df2, escape = FALSE, rownames = FALSE, selection = 'none',
             options = list(
                 pageLength = 25
@@ -114,8 +136,9 @@ table.on( 'draw', function () {
 
         dt %>% 
             formatDate(columns = "Submit time", method = "toLocaleString") %>%
-            bsub:::formatTimeDiff(columns = c("Time passed", "Time left")) %>%
-            bsub:::formatFileSize(columns = c("Memory", "Max memory", "Req memory"))
+            bsub:::formatTimeDiff(columns = c("T_passed", "T_left")) %>%
+            bsub:::formatNumber(columns = c("Slots")) %>%
+            bsub:::formatFileSize(columns = c("Mem", "Max mem", "Req mem"))
 
 	})
 	
@@ -125,7 +148,7 @@ table.on( 'draw', function () {
 	    
 	    df = job_summary_df()
 	    tb = table(df$STAT)
-	    txt = paste0(qq("User <b>@{bsub_opt$user}</b> has "), paste(qq("@{tb} <span class='@{names(tb)}'>@{names(tb)}</span> job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), qq(" within one week. Summary table was generated at @{format(Sys.time())}."))
+	    txt = paste0(qq("User <b>@{bsub_opt$user}</b> has "), paste(qq("<span class='@{names(tb)}'>@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}</span>", collapse = FALSE), collapse = ", "), qq(" within one week. Summary table was generated at @{format(Sys.time())}."))
 	    txt = paste0(txt, " ", as.character(actionLink("job_stats", "See job stats")))
         HTML(txt)
     })
@@ -162,16 +185,55 @@ table.on( 'draw', function () {
             HTML(html)
 	    })
 
+        output$job_env = renderUI({
+            log = run_cmd(qq("bjobs -env @{job_id}"))
+            names(log) = gsub("^(\\S+)=.*$", "\\1", log)
+
+            log = gsub("^(\\w+)", "<b>\\1</b>", log)
+            log = paste("<code>", log, "</code>")
+            
+            html = paste(log, collapse = "\n")
+            html = paste0("<pre>", html, "</pre>")
+             HTML(html)
+            
+        })
+
+        output$job_script = renderUI({
+            log = run_cmd(qq("bjobs -script @{job_id}"))
+            i1 = grep("^# LSBATCH: User input", log)
+            source = FALSE
+            if(log[i1+1] == "( cat <<_USER_\\SCRIPT_") {
+                i1 = i1 + 1
+                source = TRUE
+            }
+            if(source) {
+                i2 = which(log == "_USER_SCRIPT_")
+                log = log[seq(i1+1, i2-1)]
+            } else {
+                i2 = grep("^# LSBATCH: End user input", log)
+                log = log[seq(i1+1, i2-1-2)]
+            }
+            
+            log = paste("<code>", log, "</code>")
+            html = paste(log, collapse = "\n")
+            html = paste0("<pre>", html, "</pre>")
+            HTML(html)
+        })
+
 	    showModal(modalDialog(
 	        title = qq("Job log (@{job_id} <@{job_name}>)"),
             tags$p(HTML(qq("<a style='color:#337ab7;text-decoration:underline;cursor:pointer;' onclick='Shiny.onInputChange(\"select_dep\", 0);Shiny.onInputChange(\"select_dep\", @{job_id})'>Show job dependencies</a>"))),
-	        uiOutput("job_log"),
+	        tabsetPanel(type= "tabs",
+                tabPanel("Job log", uiOutput("job_log")),
+                tabPanel("Script", uiOutput("job_script")),
+                tabPanel("Env variables", uiOutput("job_env"))
+            ),
 	        footer = actionButton("close_job_log", "Close"),
 	        easyClose = FALSE,
 	        size = "l"
 	    ))
 
-        outputOptions(output, "job_log", suspendWhenHidden = TRUE)
+        outputOptions(output, "job_log", suspendWhenHidden = FALSE)
 	})
 
     observeEvent(input$select_dep, {
@@ -186,7 +248,7 @@ table.on( 'draw', function () {
         output$dependency_plot = renderGrViz({
             showNotification("Generating job dependency tree...", duration = 5)
             message(qq("[@{format(Sys.time())}] Generating job dependency tree '@{job_id} <@{job_name}> @{job_status}'"))
-            dot = dep_dot(job_id)
+            dot = job_dependency_dot(job_id, df)
             grViz(dot)
         })
         
@@ -205,7 +267,7 @@ table.on( 'draw', function () {
             size = "l"
         ))
 
-        outputOptions(output, "dependency_plot", suspendWhenHidden = TRUE)
+        outputOptions(output, "dependency_plot", suspendWhenHidden = FALSE)
 
     })
 
@@ -264,8 +326,9 @@ table.on( 'draw', function () {
         killing_job_id = input$killing_job_id
         showNotification(qq("Killing @{length(killing_job_id)} jobs..."), duration = 5)
         message(qq("[@{format(Sys.time())}] Killing jobs: @{paste(killing_job_id, collapse=', ')}"))
-        bkill(killing_job_id)
+        try(bkill(killing_job_id), silent = TRUE)
         removeModal()
+        showNotification(qq("Sleep 5s before reloading the app"), duration = 5)
         message(qq("[@{format(Sys.time())}] Sleep 5s before reloading the app"))
         Sys.sleep(5)
         session$reload()
@@ -322,7 +385,7 @@ modal_kill_nothing = modalDialog(
 
 reformat_log = function(log, status) {
     if(status == "EXIT") {
-        ind = grep("error|fail|Exited with exit code", log, ignore.case = TRUE)
+        ind = which(grepl("\\berror\\b|\\bfail|Exited with exit code", log, ignore.case = TRUE) & !grepl("^#", log))
         if(length(ind)) {
             log[ind] = paste0("<span style='color:#e41a1c;font-weight:bold;text-decoration:underline;'>", log[ind], "</span>")
         }
@@ -345,7 +408,7 @@ reformat_log = function(log, status) {
             log[ind] = paste0("<span style='color:#ff7f00;font-weight:bold;text-decoration:underline;'>", log[ind], "</span>")
         }
     }
-    log
+    paste("<code>", log, "</code>")
 }
 
 shinyApp(ui, server)

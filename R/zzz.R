@@ -19,7 +19,6 @@
 	msg = c(msg, "- view job summary: `bjobs`/`brecent`/`bjobs_running`/")
 	msg = c(msg, "                    `bjobs_pending`/`bjobs_done`/`bjobs_exit`")
 	msg = c(msg, "- view job log: `job_log()`")
-	msg = c(msg, "- remove temporary files : `clear_temp_dir()`/`check_dump_files()`")
 	msg = c(msg, "- interactive job monitor: `monitor()`")
 
 	msg = c(msg, "")
@@ -29,38 +28,6 @@
 	msg = c(msg, "applied on any computer.")
 
 	msg = c(msg, "==================================================================")
-
-	if(grepl("odcf|w610", Sys.info()["nodename"])) {
-		config_odcf(verbose = FALSE)
-		msg = c(msg, "")
-		msg = c(msg, qq("Configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}"))
-		msg = c(msg, "")
-
-		msg = c(msg, get_bconf_message(bconf))
-
-	} else {
-		flag = 0
-		if(!file.exists(bsub_opt$temp_dir)) {
-			msg = c(msg, qq("!! The temp_dir (@{bsub_opt$temp_dir}) does not exist."))
-			flag = 1
-		}
-		if(bsub_opt$temp_dir != bsub_opt$output_dir) {
-			if(!file.exists(bsub_opt$output_dir)) {
-				msg = c(msg, qq("!! The output_dir (@{bsub_opt$output_dir}) does not exist."))
-				flag = 2
-			}
-		}
-		if(flag) {
-			if(flag == 1) {
-				msg = c(msg, "!! The directory can be created manually, or by setting a value to",
-					         "!! `bsub_opt$temp_dir`, or by the first call of `bsub_*()`.")
-			} else {
-				msg = c(msg, "!! The directory can be created manually, or by setting a value to",
-					         "!! `bsub_opt$output_dir`, or by the first call of `bsub_*()`.")
-			}
-		}
-	}
-	
 
 	packageStartupMessage(paste(msg, collapse = "\n"))
 }

@@ -16,7 +16,7 @@ config_bsub = function() {
                            qq("export LSF_ENVDIR=@{LSF_ENVDIR}"),
                            qq("export LSF_SERVERDIR=@{LSF_SERVERDIR}"))
 
-	temp_dir = readline(prompt = "What is the temp folder for xxx, ~/.bsub_temp [y] ")
+	temp_dir = readline(prompt = "What is the temp folder, ~/.bsub_temp [y] ")
 	if(tolower(temp_dir) %in%  c("y", "yes")) {
 		temp_dir = "~/.bsub_temp"
 	}

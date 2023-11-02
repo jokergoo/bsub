@@ -1,24 +1,45 @@
-# == title
-# Clear temporary dir
-#
-# == param
-# -ask Whether promote.
-#
-# == details
-# The temporary files might be used by the running/pending jobs. Deleting them might affect some of the jobs.
-# You better delete them after all jobs are done.
-#
-# == value
-# No value is returned.
-#
-# == example
-# \dontrun{
-# clear_temp_dir()
-# }
-clear_temp_dir = function(ask = TRUE) {
-    files = list.files(bsub_opt$temp_dir, full.names = TRUE)
+#' Clear temporary dir
+#' 
+#' @param ask Whether to promote.
+#'
+#' @details
+#' The temporary files might be used by the running/pending jobs. Deleting them might affect some of the jobs.
+#' You better delete them after all jobs are done.
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' list_temp_files()
+#' }
+#' 
+list_temp_files = function() {
+
+    if(under_same_file_system()) {
+        stop("Temporary files can only be detected on the same file system as submission nodes.")
+    }
+
+    attached_vars = job_attached_vars_by_id()
+    temp_dir = attached_vars$temp_dir
+
+    files = unlist(lapply(temp_dir, function(x) {
+        list.files(x, full.names = TRUE)
+    }))
+
+    files
+}
+
+#' @rdname list_temp_files
+#' @export
+remove_temp_files = function(ask = TRUE) {
+
+    if(under_same_file_system()) {
+        stop("Temporary files can only be detected on the same file system as submission nodes.")
+    }
+
+    files = list_temp_files()
+
     if(length(files) == 0) {
-        if(ask) qqcat("'@{bsub_opt$temp_dir}' is clear.\n")
+        if(ask) qqcat("All temporary directories are empty.\n")
         return(invisible(NULL))
     }
     if(!ask) {
@@ -32,7 +53,7 @@ clear_temp_dir = function(ask = TRUE) {
     tb = table(file_types)
     job_tb = bjobs(status = "all", print = FALSE)
     if(any(job_tb$JOB_STAT %in% c("RUN", "PEND"))) {
-        cat("There are still running/pending jobs. Deleting the temporary files might affect some of the jobs.\n")
+        cat("There are still running/pending jobs. Deleting temporary files might affect some of the jobs.\n")
     }
     cat(qq("There @{ifelse(length(files) > 1, 'are', 'is')} "), qq("@{tb} .@{names(tb)} file@{ifelse(tb > 1, 's', '')}, "), "delete all? [y|n|s] ", sep = "")
     while(1) {
@@ -66,25 +87,27 @@ clear_temp_dir = function(ask = TRUE) {
     return(invisible(NULL))
 }
 
-# == title
-# Check whether there are dump files
-#
-# == param
-# -print Whether to print messages.
-#
-# == details
-# For the failed jobs, LSF cluster might generate a core dump file and R might generate a .RDataTmp file.
-#
-# Note if you manually set working directory in your R code/script, the R dump file can be not caught.
-#
-# == value
-# A vector of file names.
-#
-# == example
-# \dontrun{
-# check_dump_files()
-# }
-check_dump_files = function(print = TRUE) {
+#' Check whether there are dump files
+#' 
+#' @param print Whether to print messages.
+#'
+#' @details
+#' For the failed jobs, LSF cluster might generate a core dump file and R might generate a .RDataTmp file.
+#'
+#' Note if you manually set working directory in your R code/script, the R dump file can be not caught.
+#'
+#' @returns A vector of file names.
+#' @export
+#' @examples
+#' \dontrun{
+#' list_dump_files()
+#' }
+list_dump_files = function(print = TRUE) {
+
+    if(under_same_file_system()) {
+        stop("Dump files can only be detected on the same file system as submission nodes.")
+    }
+
     job_tb = bjobs(status = "all", print = FALSE)
     wd = job_tb$EXEC_CWD
     wd = wd[wd != "-"]
@@ -99,15 +122,6 @@ check_dump_files = function(print = TRUE) {
         dump_files = c(dump_files, list.files(path = w, pattern = "^\\.RDataTmp", all.files = TRUE, full.names = TRUE))
     }
 
-    if(print) {
-        if(length(dump_files)) {
-            qqcat("found @{length(dump_files)} dump files:\n")
-            qqcat("  @{dump_files}\n")
-        } else {
-            cat("no dump file found\n")
-        }
-    }
-
-    return(invisible(dump_files))
+    return(dump_files)
 }
 

@@ -1,6 +1,6 @@
 body {
     font-size: 1.3em;
-    width:1200px;
+    width:1400px;
     margin: auto;
 }
 table.dataTable tbody th, table.dataTable tbody td {
@@ -55,5 +55,22 @@ table.dataTable tbody th, table.dataTable tbody td {
     border-radius: 4px;
     margin-bottom:10px;
 }
+
+pre {
+    counter-reset: line-numbering;
+}
+
+code:before {
+    content: counter(line-numbering);
+    counter-increment: line-numbering;
+    padding-right: 1em;
+    width: 1.5em;
+    text-align: right;
+    opacity: 0.5;
+}
+#mytable tr td.dt-right:first-child {
+    width: 80px;
+}
+
 
 

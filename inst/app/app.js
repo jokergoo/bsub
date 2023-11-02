@@ -43,6 +43,12 @@ DTWidget.formatTimeDiff = function(data) {
 	return format_time_diff(d);
 }
 
+DTWidget.formatNumber = function(data) {
+	var d = parseFloat(data);
+	if (isNaN(d)) return "";
+
+	return d;
+}
 
 dt_bind_events = function() {
 	var styles = {
@@ -82,6 +88,9 @@ dt_bind_events = function() {
     	$(this).html("<span class='" + status + "'>" + status + "</span");
     })
 
+    $('.dataTable tbody tr :nth-child(9)').addClass("dt-right");
+    $('.dataTable thead tr :nth-child(9)').addClass("dt-right");
+
     var k = $('.dataTable tbody tr :nth-child(3)').filter(function() {
     	var status = $(this).text();
     	return status == "RUN" || status == "PEND"
@@ -115,10 +124,10 @@ gviz_add_events = function() {
 		ellipse.attr("fill", ellipse.attr("stroke") + "40");
 	}).on("mouseleave", function(e) {
 		ellipse = $(this).find("ellipse");
-		ellipse.attr("fill", "none");
+		ellipse.attr("fill", ellipse.attr("stroke") + "80");
 	})
 
-	$("#dep_info").hide();
+	$("#dep_info").remove();
 	
 }
 
@@ -138,4 +147,29 @@ $(function() {
 		Shiny.onInputChange('kill_job_id', kill_job_id);
 	})
 });
+
+count_down = function(id) {
+	var countDownDate = new Date().getTime() + 5*60*1000;
+
+	var x= setInterval(function() {
+		var now = new Date().getTime();
+
+		// Find the distance between now and the count down date
+		var distance = countDownDate - now;
+
+		// Time calculations for days, hours, minutes and seconds
+		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+		// Display the result in the element with id="demo"
+		document.getElementById(id).innerHTML = minutes + "m " + seconds + "s ";
+
+		// If the count down is finished, write some text
+		if (distance < 0) {
+			clearInterval(x);
+			document.getElementById(id).innerHTML = "done";
+		}
+		$("#"+id).text()
+	}, 1000)
+}
 
