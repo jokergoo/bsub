@@ -42,7 +42,7 @@
 #' @export
 #' @importFrom codetools findGlobals
 #' @importFrom utils sessionInfo
-#' @importFrom crayon cyan
+#' @import crayon
 #' @rdname bsub
 #' @examples
 #' \dontrun{
@@ -79,10 +79,11 @@ bsub_chunk = function(code,
     start = NULL,
     end = NULL,
     save_var = FALSE,
-    sh_head = bsub_opt$sh_head) {
+    sh_head = bsub_opt$sh_head,
+    ask = TRUE) {
 
     if(!under_same_file_system()) {
-        stop("Job can only be sumitted on submission nodes.")
+        stop("Job can only be sumitted on the same file system as submission nodes.")
     }
     
     if(bsub_opt$ignore) return(invisible(NULL))
@@ -119,11 +120,33 @@ bsub_chunk = function(code,
             expr = substitute(code)
             code_fun = function() {}
             body(code_fun) = expr
-            variables = findGlobals(code_fun, merge = FALSE)$variables
+            gl = findGlobals(code_fun, merge = FALSE)
+            variables = gl$variables
 
             if(length(variables)) {
-                message_wrap(qq("There are variables (@{paste(variables, collapse = ', ')}) not defined in the code chunk. Automatically use the ones from global environment."))
+                message_wrap(qq("There are variables (@{paste(variables, collapse = ', ')}) not defined in the code chunk. Automatically use the ones from global environment. Note this is approximate."))
             }
+
+            if(length(packages) == 0 && !identical(image, TRUE)) {
+                functions = gl$functions
+                for(f in functions) {
+                    p = find(f)
+                    if(length(p)) {
+                        if(grep("package:", p)) {
+                            packages = c(packages, p)
+                        } else if(p == ".GlobalEnv") {
+                            variables = c(variables, f)
+                        }
+                    }
+                }
+                packages = gsub("package:", "", packages)
+                packages = unique(package)
+                packages = setdiff(packages, c("base", "stats", "graphics", "grDevices", "utils", "datasets", "methods"))
+                if(length(packages)) {
+                    message_wrap(qq("There are packages (@{paste(packages, collapse = ', ')}) not specified in the code chunk. Automatically detech them. Note this is approximate."))
+                }
+            }
+
             code = deparse(expr)
         } else {
             code = deparse(substitute(code))
@@ -138,8 +161,8 @@ bsub_chunk = function(code,
         name = qq(name)
     }
 
-    t = balancePOSIXlt(as.POSIXlt(Sys.time()))
-    t = as.numeric(t)
+    t = as.POSIXlt(Sys.time())
+    t = as.numeric(t) + t$sec - floor(t$sec)
     t = gsub("\\.", "_", t)
     name_uid = paste0(name, "_", t)
 
@@ -214,7 +237,7 @@ bsub_chunk = function(code,
     head = "############## temporary R script ##############"
     tail = ""
     for(p in unique(packages)) {
-        head = qq("@{head}\nlibrary(@{p})\n")
+        head = c(head, qq("library(@{p})"))
     }
 
     # if all image files do not exist, write current session to image[1]
@@ -233,13 +256,14 @@ bsub_chunk = function(code,
 
         for(f in image) {
             f = normalizePath(f)
-            head = qq("@{head}\nload(\"@{f}\")\n")
+            head = c(head, qq("load(\"@{f}\")"))
         }
     }
 
     if(length(variables)) {
         save(list = unique(variables), envir = parent.frame(), file = qq("@{temp_dir}/@{name_uid}_var.RData"))
-        head = qq("@{head}\nload(\"@{temp_dir}/@{name_uid}_var.RData\")\ninvisible(file.remove(\"@{temp_dir}/@{name_uid}_var.RData\"))\n")
+        head = c(head, qq("load(\"@{temp_dir}/@{name_uid}_var.RData\")"))
+        tail = c(tail, qq("invisible(file.remove(\"@{temp_dir}/@{name_uid}_var.RData\"))"))
     }
 
     if(length(share)) {
@@ -249,15 +273,15 @@ bsub_chunk = function(code,
             if(!file.exists(share_file)) {
                 save(list = share[i], envir = parent.frame(), file = share_file)
             }
-            head = qq("@{head}\nload(\"@{share_file}\")\n")
+            head = c(head, qq("load(\"@{share_file}\")"))
         }
     }
 
     tmp = tempfile(paste0(name_uid, "_"), fileext = ".R", tmpdir = temp_dir)
     if(bsub_opt$debug) {  # print R code to out file
-        head = qq("@{head}\ncat(readLines(\"@{tmp}\"), sep = \"\\n\")\n\n")
+        head = c(head, qq("cat(readLines(\"@{tmp}\"), sep = \"\\n\")"))
     }
-    head = qq("@{head}\ninvisible(file.remove(\"@{tmp}\"))\n\n")  # the R script is already loaded in memory, the temp R script can be deleted
+    tail = c(tail, "invisible(file.remove(\"@{tmp}\"))\n\n")  # the R script is already loaded in memory, the temp R script can be deleted
 
     if(save_var) {
         tail = c(tail, qq("saveRDS(.Last.value, file = '@{output_dir}/@{name_uid}_returned_var.rds')"))
@@ -271,7 +295,11 @@ bsub_chunk = function(code,
         }
         head = c(head, qq("setwd('@{working_dir}')\n\n"))
     }
-    writeLines(c(head, code, tail), con = tmp)
+    writeLines(c(head, 
+                 "#### R chunk start ####",
+                 code, 
+                 "#### R chunk end ####",
+                 tail), con = tmp)
 
     command = qq("@{bsub_opt$call_Rscript(R_version)} '@{tmp}';")
     
@@ -311,8 +339,8 @@ bsub_script = function(script,
     ask = TRUE,
     ...) {
 
-    if(!on_submission_node()) {
-        stop("Job can only be sumitted on submission nodes.")
+    if(!under_same_file_system()) {
+        stop("Job can only be sumitted on the same file system as submission nodes.")
     }
     
     if(bsub_opt$ignore) return(invisible(NULL))
@@ -347,8 +375,8 @@ bsub_script = function(script,
         name = qq(name)
     }
 
-    t = balancePOSIXlt(as.POSIXlt(Sys.time()))
-    t = as.numeric(t)
+    t = as.POSIXlt(Sys.time())
+    t = as.numeric(t) + t$sec - floor(t$sec)
     t = gsub("\\.", "_", t)
     name_uid = paste0(name, "_", t)
 
@@ -402,9 +430,12 @@ bsub_script = function(script,
 
 
 #' @param cmd A single-line command.
+#' @param sh Path of the bash script.
+#' @param env_var Environment variables. It should be a named vector. Note environment variables can also be directly set in `sh_head`.
 #' @rdname bsub
 #' @export
 bsub_cmd = function(cmd, 
+    sh = NULL,
     name = NULL, 
     hours = 1, 
     memory = 1, 
@@ -414,15 +445,24 @@ bsub_cmd = function(cmd,
     dependency = NULL,
     enforce = bsub_opt$enforce, 
     local = bsub_opt$local,
+    env_var = NULL,
     sh_head = bsub_opt$sh_head,
     ask = TRUE,
     ...) {
 
     if(!under_same_file_system()) {
-        stop("Job can only be sumitted on submission nodes.")
+        stop("Job can only be sumitted on the same file system as submission nodes.")
     }
     
     if(bsub_opt$ignore) return(invisible(NULL))
+
+    if(!is.null(sh)) {
+        if(!file.exists(sh)) {
+            stop_wrap(qq("Cannot find the bash script: @{sh}"))
+        }
+
+        cmd = readLines(sh)
+    }
 
     if(is.null(name)) {
         name = paste0("cmd_", digest::digest(cmd, "crc32"))
@@ -430,8 +470,8 @@ bsub_cmd = function(cmd,
         name = qq(name)
     }
 
-    t = balancePOSIXlt(as.POSIXlt(Sys.time()))
-    t = as.numeric(t)
+    t = as.POSIXlt(Sys.time())
+    t = as.numeric(t) + t$sec - floor(t$sec)
     t = gsub("\\.", "_", t)
     name_uid = paste0(name, "_", t)
 
@@ -467,6 +507,12 @@ bsub_cmd = function(cmd,
     cat(cyan(qq("- job: '@{magenta(name)}' from a list of commands\n")))
     
     command = paste(cmd, collapse = "\n")
+
+    if(!is.null(env_var)) {
+        for(env_nm in names(env_var)) {
+            sh_head = paste0(sh_head, "\n", env_nm, "=", env_var[env_nm])
+        }
+    }
 
     bsub_submit(
         command = command, 
@@ -543,16 +589,15 @@ bsub_submit = function(command,
     writeLines(qq("touch '@{run}'\n"), con)  # add the running flag
     
     if(!identical(sh_head, "")) {
+        writeLines("##### sh_head start #####", con)
         writeLines(sh_head, con)
-        writeLines("\n", con)
+        writeLines("##### sh_head end #####\n\n", con)
     }
-    if(bsub_opt$debug) {
-        writeLines(qq("cat '@{sh_file}'\n"), con)
-    }
-    writeLines(qq("rm '@{sh_file}'\n"), con)
 
     # wrap command with eval
+    writeLines("##### commands start #####", con)
     writeLines(command, con)
+    writeLines("##### commands end #####\n\n", con)
 
     # test the command, 
     writeLines(qq("
@@ -571,23 +616,32 @@ fi"), con)
         cmd = qq("bash @{sh_file}")
         cat(cmd, "\n")
         system(cmd)
+        file.remove(sh_file)
         return(invisible(NULL))
     }
 
     system(qq("chmod 755 @{sh_file}"))
 
     cmd = bsub_opt$bsub_template(name, hours, memory, cores, output, bsub_opt$group)
-    # add values of name_uid and temp_dir to `bjobs` in job description
-    cmd = qq("@{cmd} -env 'all,R_BSUB_NAME_UID=@{name_uid};R_BSUB_TEMP_DIR=@{temp_dir}' -Jd 'R_BSUB_NAME_UID=@{name_uid};R_BSUB_TEMP_DIR=@{temp_dir}'")
     if(length(dependency)) {
         dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )
-        cmd = qq("@{cmd} -w '@{dependency_str}'")
+        cmd = qq("@{cmd} \\\n -w '@{dependency_str}' \\\n")
     }
-    cmd = qq("@{cmd} '@{sh_file}'")
+    cmd = qq("@{cmd} < '@{sh_file}'")
     cat(silver(cmd), "\n")
+
+    cmd = bsub_opt$bsub_template(name, hours, memory, cores, output, bsub_opt$group)
+    # add values of name_uid and temp_dir to `bjobs` in job description
+    cmd = qq("@{cmd} -env 'all,R_BSUB_NAME_UID=@{name_uid},R_BSUB_TEMP_DIR=@{temp_dir}' -Jd 'R_BSUB_NAME_UID=@{name_uid},R_BSUB_TEMP_DIR=@{temp_dir}'")
+    if(length(dependency)) {
+        dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )
+        cmd = qq("@{cmd} \\\n -w '@{dependency_str}' \\\n")
+    }
+    cmd = qq("@{cmd} < '@{sh_file}'")
 
     file.create(pend)
     txt = run_cmd(cmd, print = FALSE)
+    file.remove(sh_file)
 
     job_id = gsub("^.*<(\\d+)>.*$", "\\1", txt)
 
@@ -598,8 +652,10 @@ fi"), con)
 #' Submit a random job
 #' 
 #' @param name Job name.
-#' @param sleep The random job simply runs [`Sys.sleep()`]. This argument controls the number of seconds to sleep.
 #' @param ... Pass to [`bsub_chunk()`].
+#' 
+#' @details
+#' It simply runs `Sys.sleep(30)` in the job.
 #' 
 #' @export
 #' @importFrom stats runif
@@ -607,15 +663,13 @@ fi"), con)
 #' @examples
 #' \dontrun{
 #' random_job()
-#' random_job(name = "test", sleep = 600) # 10 min
 #' }
-random_job = function(name, sleep = 30, ...) {
+random_job = function(name, ...) {
     if(missing(name)) {
         name = paste0("R_random_job_", digest::digest(runif(1), "crc32"))
     }
-    sleep = sleep
     bsub_chunk({
-        Sys.sleep(sleep)
+        Sys.sleep(30)
     }, name = name, ...)
 }
 

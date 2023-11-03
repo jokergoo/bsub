@@ -39,3 +39,6 @@ bsub_chunk(name = "load_cola",
 })
 
 
+bsub_cmd("ls", name = "ls")
+
+

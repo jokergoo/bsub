@@ -64,9 +64,11 @@ dt_bind_events = function() {
     }).css(styles);
 
     $('.dataTable tbody tr :nth-child(2)').on('click', function(event) {
-    	var job_id = $(this).siblings().slice(0, 1).text();
-        Shiny.onInputChange('select_dep', 0);
-        Shiny.onInputChange('select_dep', job_id);
+    	if($(this).text() != "") {
+	    	var job_id = $(this).siblings().slice(0, 1).text();
+	        Shiny.onInputChange('select_dep', 0);
+	        Shiny.onInputChange('select_dep', job_id);
+	    }
     }).css(styles);
 
     $('.dataTable tbody tr :nth-child(3)').on('click', function(event) {
@@ -148,28 +150,34 @@ $(function() {
 	})
 });
 
-count_down = function(id) {
-	var countDownDate = new Date().getTime() + 5*60*1000;
+// count_down = function(id) {
+// 	var countDownDate = new Date().getTime() + 5*60*1000;
 
-	var x= setInterval(function() {
-		var now = new Date().getTime();
+// 	var x= setInterval(function() {
+// 		var now = new Date().getTime();
 
-		// Find the distance between now and the count down date
-		var distance = countDownDate - now;
+// 		// Find the distance between now and the count down date
+// 		var distance = countDownDate - now;
 
-		// Time calculations for days, hours, minutes and seconds
-		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+// 		// Time calculations for days, hours, minutes and seconds
+// 		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+// 		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-		// Display the result in the element with id="demo"
-		document.getElementById(id).innerHTML = minutes + "m " + seconds + "s ";
+// 		// Display the result in the element with id="demo"
+// 		document.getElementById(id).innerHTML = minutes + "m " + seconds + "s ";
 
-		// If the count down is finished, write some text
-		if (distance < 0) {
-			clearInterval(x);
-			document.getElementById(id).innerHTML = "done";
-		}
-		$("#"+id).text()
-	}, 1000)
+// 		// If the count down is finished, write some text
+// 		if (distance < 0) {
+// 			clearInterval(x);
+// 			document.getElementById(id).innerHTML = "done";
+// 		}
+// 		$("#"+id).text()
+// 	}, 1000)
+// }
+
+
+rerun_pipeline = function(job_id) {
+	Shiny.setInputValue('rerun_pipeline', Math.random());
+	Shiny.setInputValue("rerun_pipeline_job_id", job_id);
+	return false;
 }
-

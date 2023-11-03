@@ -72,5 +72,7 @@ code:before {
     width: 80px;
 }
 
-
+.modal-content {
+    width: 900px;
+}
 

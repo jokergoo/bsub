@@ -14,25 +14,26 @@
 #' 
 list_temp_files = function() {
 
-    if(under_same_file_system()) {
+    if(!under_same_file_system()) {
         stop("Temporary files can only be detected on the same file system as submission nodes.")
     }
 
     attached_vars = job_attached_vars_by_id()
     temp_dir = attached_vars$temp_dir
+    temp_dir = temp_dir[!is.na(temp_dir)]
 
     files = unlist(lapply(temp_dir, function(x) {
         list.files(x, full.names = TRUE)
     }))
 
-    files
+    unname(files)
 }
 
 #' @rdname list_temp_files
 #' @export
 remove_temp_files = function(ask = TRUE) {
 
-    if(under_same_file_system()) {
+    if(!under_same_file_system()) {
         stop("Temporary files can only be detected on the same file system as submission nodes.")
     }
 
@@ -104,7 +105,7 @@ remove_temp_files = function(ask = TRUE) {
 #' }
 list_dump_files = function(print = TRUE) {
 
-    if(under_same_file_system()) {
+    if(!under_same_file_system()) {
         stop("Dump files can only be detected on the same file system as submission nodes.")
     }
 

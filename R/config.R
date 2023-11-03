@@ -1,4 +1,8 @@
 
+#' Configure bsub global options
+#' 
+#' @details
+#' It sets the submission nodes, user name and how to call `Rscript`.
 config_bsub = function() {
 	submission_node = readline(prompt = "What is the name of your submission node? ")
 	user = readline(prompt = "What is your user name on @{submission_node}? ")
@@ -7,6 +11,7 @@ config_bsub = function() {
 	bsub_opt$user = user
 
 	# try to connect 
+	ssh_disconnect()
 	ssh_connect()
 
 	LSF_ENVDIR = ssh_exec("echo $LSF_ENVDIR")
@@ -16,15 +21,12 @@ config_bsub = function() {
                            qq("export LSF_ENVDIR=@{LSF_ENVDIR}"),
                            qq("export LSF_SERVERDIR=@{LSF_SERVERDIR}"))
 
-	temp_dir = readline(prompt = "What is the temp folder, ~/.bsub_temp [y] ")
-	if(tolower(temp_dir) %in%  c("y", "yes")) {
-		temp_dir = "~/.bsub_temp"
-	}
-	bsub_opt$temp_dir = temp_dir
+	call_Rscript = readline(prompt = "How is `Rscript` called, taking {version} as the variable for version? ")
+	bsub_opt$call_Rscript = function(version) qq(call_Rscript, code.pattern = "\\{CODE\\}")
 
-	cat("How would you call `Rscript`? The ")
-	call_Rscript = readline()
-
+	if(verbose) qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}.\n")
+	
+	invisible(NULL)
 }
 
 
@@ -39,6 +41,8 @@ config_odcf = function(user = NULL, verbose = TRUE) {
 		dir.create("~/.bsub_temp", recursive = TRUE, showWarnings = FALSE)
 	}
 	bsub_opt$temp_dir = "~/.bsub_temp"
+
+	ssh_disconnect()
 
 	if(verbose) qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}.\n")
 	invisible(NULL)
@@ -67,6 +71,9 @@ config_sanger_farm3_head3 = function(user = NULL, group = NULL, verbose = TRUE) 
 			qq("bsub -J '@{name}' -W '@{hours}:00' -n @{cores} -R 'select[mem>@{round(memory*1024)}] rusage[mem=@{round(memory*1024)}]' -M@{round(memory*1024)} -G @{group} -o '@{output}'")
 		}
 	}
+
+	ssh_disconnect()
+
 	if(verbose) qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}.\n")
 	invisible(NULL)
 }
@@ -92,6 +99,8 @@ config_sanger = function(user = NULL, ssh_key = "~/.ssh/id_rsa", verbose = TRUE)
 		qq("alias bkill=\"ssh -i @{ssh_key} @{bsub_opt$user}@farm3-head3 '@{ssh_envir};bkill'\"")
 	)
 
+	ssh_disconnect()
+
 	if(verbose) qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$login_node, collapse = ', ')}.\n")
 	invisible(NULL)
 }
@@ -115,6 +124,8 @@ config_two_ssh = function(user = NULL) {
 		qq("alias bparam=\"ssh -i ~/.ssh/id_rsa_dkfz_heidelberg @{bsub_opt$user}@odcf-cn34u03s12 '@{ssh_envir};bparam'\""),
 		qq("alias bkill=\"ssh -i ~/.ssh/id_rsa_dkfz_heidelberg @{bsub_opt$user}@odcf-cn34u03s12 '@{ssh_envir};bkill'\"")
 	)
+
+	ssh_disconnect()
 
 	qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$login_node, collapse = ', ')}.\n")
 	invisible(NULL)

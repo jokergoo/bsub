@@ -27,7 +27,8 @@ bsub_chunk(
   start = NULL,
   end = NULL,
   save_var = FALSE,
-  sh_head = bsub_opt$sh_head
+  sh_head = bsub_opt$sh_head,
+  ask = TRUE
 )
 
 bsub_script(
@@ -50,6 +51,7 @@ bsub_script(
 
 bsub_cmd(
   cmd,
+  sh = NULL,
   name = NULL,
   hours = 1,
   memory = 1,
@@ -59,6 +61,7 @@ bsub_cmd(
   dependency = NULL,
   enforce = bsub_opt$enforce,
   local = bsub_opt$local,
+  env_var = NULL,
   sh_head = bsub_opt$sh_head,
   ask = TRUE,
   ...
@@ -116,13 +119,17 @@ can be retrieved by [`retrieve_var()`].}
 
 \item{sh_head}{Commands that are written as head of the sh script.}
 
-\item{argv}{A string of command-line arguments.}
-
 \item{ask}{Whether to promote.}
+
+\item{argv}{A string of command-line arguments.}
 
 \item{...}{Command-line arguments can also be specified as name-value pairs.}
 
 \item{cmd}{A single-line command.}
+
+\item{sh}{Path of the bash script.}
+
+\item{env_var}{Environment variables. It should be a named vector. Note environment variables can also be directly set in `sh_head`.}
 }
 \value{
 A job ID.

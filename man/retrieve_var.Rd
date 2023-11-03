@@ -24,11 +24,11 @@ It retrieve the saved variable in `bsub_chunk()` when ``save_rds = TRUE`` is set
 }
 \examples{
 \dontrun{
-bsub_chunk(name = "example", save_var = TRUE,
+job_id = bsub_chunk(name = "example", save_var = TRUE,
 {
     Sys.sleep(10)
     1+1
 })
-retrieve_var("example")
+retrieve_var(job_id)
 }
 }

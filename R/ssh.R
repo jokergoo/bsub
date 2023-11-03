@@ -17,7 +17,7 @@
 ssh_connect = function(...) {
 
 	if(!is.null(bsub_opt$ssh_session)) {
-		if(ssh::ssh_session_info(session)$connected) {
+		if(ssh::ssh_session_info(bsub_opt$ssh_session)$connected) {
 			message("ssh is already connected.")
 			return(invisible(NULL))
 		}

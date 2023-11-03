@@ -51,7 +51,7 @@ job_output_file_by_id = function(job_id) {
         job_id = ""
     }
 
-    ln = run_cmd(qq("bjobs -a -o \"jobid output_file\" @{job_id} 2>&1"), print = FALSE)
+    ln = run_cmd(qq("bjobs -a -o 'jobid output_file delimiter=\",\"' @{job_id} 2>&1"), print = FALSE)
 
     if(length(ln) == 1) {
         return(NA)
@@ -82,7 +82,7 @@ job_attached_vars_by_id = function(job_id) {
         job_id = ""
     }
 
-    ln = run_cmd(qq("bjobs -a -o 'jobid job_description' @{job_id} 2>&1"), print = FALSE)
+    ln = run_cmd(qq("bjobs -a -o 'job_description delimiter=\",\"' @{job_id} 2>&1"), print = FALSE)
 
     if(length(ln) == 1) {
         return(NA)
@@ -93,19 +93,20 @@ job_attached_vars_by_id = function(job_id) {
 
     jid = sapply(lt, function(x) x[1])
     jd = sapply(lt, function(x) x[2])
+    jd[jd == "-"] = NA
 
-    name_uid = gsub("^.*R_BSUB_NAME_UID=(.*)?;.*$", "\\1", jd)
+    name_uid = gsub("^.*R_BSUB_NAME_UID=(.*),?.*$", "\\1", jid)
     temp_dir = gsub("^.*R_BSUB_TEMP_DIR=(.*)$", "\\1", jd)
 
-    names(name_uid) = jid
-    names(temp_dir) = jid
+    names(name_uid) = job_id
+    names(temp_dir) = job_id
 
     list(name_uid = name_uid, temp_dir = temp_dir)
 }
 
 job_attached_vars_by_name = function(job_name) {
 
-    ln = run_cmd(qq("bjobs -a -o 'jobid job_description' -J @{job_name} 2>&1"), print = FALSE)
+    ln = run_cmd(qq("bjobs -a -o 'job_description delimiter=\",\"' -J @{job_name} 2>&1"), print = FALSE)
 
     if(length(ln) == 1) {
         return(NA)
@@ -116,12 +117,13 @@ job_attached_vars_by_name = function(job_name) {
 
     jid = sapply(lt, function(x) x[1])
     jd = sapply(lt, function(x) x[2])
+    jd[jd == "-"] = NA
 
-    name_uid = gsub("^.*R_BSUB_NAME_UID=(.*)?;.*$", "\\1", jd)
+    name_uid = gsub("^.*R_BSUB_NAME_UID=(.*),?.*$", "\\1", jid)
     temp_dir = gsub("^.*R_BSUB_TEMP_DIR=(.*)$", "\\1", jd)
 
-    names(name_uid) = jid
-    names(temp_dir) = jid
+    names(name_uid) = job_id
+    names(temp_dir) = job_id
 
     list(name_uid = name_uid, temp_dir = temp_dir)
 }
@@ -139,12 +141,12 @@ job_attached_vars_by_name = function(job_name) {
 #'
 #' @examples
 #' \dontrun{
-#' bsub_chunk(name = "example", save_var = TRUE,
+#' job_id = bsub_chunk(name = "example", save_var = TRUE,
 #' {
 #'     Sys.sleep(10)
 #'     1+1
 #' })
-#' retrieve_var("example")
+#' retrieve_var(job_id)
 #' }
 retrieve_var = function(job_id, job_name = NULL, wait = 30) {
 

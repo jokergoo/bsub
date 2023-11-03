@@ -10,7 +10,13 @@
 \alias{bjobs_exit}
 \title{Summary of jobs}
 \usage{
-bjobs(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE)
+bjobs(
+  status = c("RUN", "PEND"),
+  max = Inf,
+  filter = NULL,
+  print = TRUE,
+  job_id = NULL
+)
 
 bjobs_raw(fields = "jobid stat job_name queue")
 
@@ -32,6 +38,8 @@ bjobs_exit(max = Inf, filter = NULL)
 \item{filter}{Regular expression on job names.}
 
 \item{print}{Whether to print the table.}
+
+\item{job_id}{A single job ID, internally used.}
 
 \item{fields}{Supported output fields, check \url{https://www.ibm.com/docs/en/spectrum-lsf/10.1.0?topic=information-customize-job-output}.}
 }

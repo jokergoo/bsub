@@ -49,7 +49,7 @@ job_dependency_all = function(job_tb = NULL) {
     }
     
     dep = lapply(strsplit(job_tb2$DEPENDENCY, " && "), function(x) {
-        gsub("^done\\( (\\d+) \\)$", "\\1", x)
+        gsub(" ", "", gsub("^done\\( (\\d+) \\)$", "\\1", x))
     })
 
     n = sapply(dep, length)
@@ -68,7 +68,7 @@ job_dependency_igraph = function(job_id, job_tb = NULL) {
     job_dep = job_dependency_all(job_tb = job_tb)
 
     if(!job_id %in% job_dep$dep_mat) {
-        g = graph_from_literal(job_id)
+        g = induced_subgraph( make_graph(c(job_id, "foo")), vids = 1)
     } else {
 
         g = graph.edgelist(job_dep$dep_mat)

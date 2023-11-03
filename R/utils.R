@@ -27,9 +27,10 @@ under_same_file_system = function() {
         return(TRUE)
     }
 
-    f = tempfile()
+    f = tempfile(tmpdir = normalizePath("~"))
     f = paste0(f, sample(10000000, 1))
     file.create(f)
+    on.exit(file.remove(f))
 
     # now check the submission node
     oe = try(ln <- run_cmd(qq("ls @{f}")), silent = TRUE)

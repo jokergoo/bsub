@@ -11,11 +11,11 @@
 #' }
 monitor = function() {
 
-    pkgs = c("shiny", "DT", "shinyjqui", "ggplot2", "igraph", "Rgraphviz")
+    pkgs = c("shiny", "DT", "shinyjqui", "ggplot2", "igraph", "DiagrammeR")
     l = sapply(pkgs, requireNamespace, quietly = TRUE)
 
     if(any(!l)) {
-        stop_wrap("You need to install '@{paste(pkgs[!l], collapse = ',')}' to use the monitor.")
+        stop_wrap(qq("You need to install '@{paste(pkgs[!l], collapse = ', ')}' to use the monitor."))
     }
     
     if(!on_submission_node()) {

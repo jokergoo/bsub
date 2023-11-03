@@ -5,6 +5,7 @@
 #' @param max Maximal number of recent jobs.
 #' @param filter Regular expression on job names.
 #' @param print Whether to print the table.
+#' @param job_id A single job ID, internally used.
 #'
 #' @details
 #' There is an additional column "RECENT" which is the order
@@ -33,9 +34,13 @@
 #' bjobs(status = "all", max = 20) # last 20 jobs
 #' bjobs(status = "DONE", filter = "example") # done jobs with name '.*example.*'
 #' }
-bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE) {
+bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE, job_id = NULL) {
 
-    cmd = "bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time slots mem max_mem dependency exec_cwd combined_resreq delimiter=\",\"' 2>&1"
+    if(is.null(job_id)) {
+        cmd = "bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time runtimelimit slots mem max_mem dependency exec_cwd combined_resreq delimiter=\",\"' 2>&1"
+    } else {
+        cmd = qq("bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time runtimelimit slots mem max_mem dependency exec_cwd combined_resreq delimiter=\",\"' @{job_id} 2>&1")
+    }
     ln = run_cmd(cmd, print = FALSE)
     
     if(length(ln) == 1) {
@@ -48,14 +53,13 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 
     df$REQ_MEM = as.numeric(gsub("^.*mem=(.*?)\\].*$", "\\1", df$COMBINED_RESREQ))
     df$REQ_MEM = round(df$REQ_MEM/1024, 1)
-    df$COMBINED_RESREQ = NULL
 
     df$SUBMIT_TIME = convert_to_POSIXlt(df$SUBMIT_TIME)
     df$START_TIME = convert_to_POSIXlt(df$START_TIME)
     df$FINISH_TIME = convert_to_POSIXlt(df$FINISH_TIME)
 
-    if(!is.null(bsub_opt$clear_history_timestamp)) {
-        l = df$FINISH_TIME > bsub_opt$clear_history_timestamp
+    if(!is.null(bsub_opt$history_timestamp)) {
+        l = df$FINISH_TIME > bsub_opt$history_timestamp
         df = df[l, , drop = FALSE]
     }
 
@@ -164,8 +168,8 @@ bjobs_raw = function(fields = "jobid stat job_name queue") {
 #' @details
 #' It sets a timestamp to only show jobs after it.
 #' @export
-bjobs_clear_history = function() {
-    bsub_opt$clear_history_timestamp = Sys.time()
+bjobs_reset_timestamp = function() {
+    bsub_opt$history_timestamp = Sys.time()
 }
 
 
