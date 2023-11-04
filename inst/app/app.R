@@ -2,13 +2,15 @@
 suppressPackageStartupMessages(library(DT))
 suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(GetoptLong))
-suppressPackageStartupMessages(library(shinyjqui))
 suppressPackageStartupMessages(library(DiagrammeR))
 suppressPackageStartupMessages(library(igraph))
+suppressPackageStartupMessages(library(shinyjs))
 
 STATUS_COL = bsub:::STATUS_COL
 
 ui = fluidPage(
+    shinyjs::useShinyjs(),
+
     tags$style(HTML(
         paste(readLines("style.css"), collapse = "\n")
     )),
@@ -223,9 +225,14 @@ table.on( 'draw', function () {
 	    showModal(modalDialog(
 	        title = qq("Job log (@{job_id} <@{job_name}>, @{job_status})"),
             if(job_status %in% c("EXIT", "unknown")) {
-                tags$p(HTML(qq("<a style='color:#337ab7;text-decoration:underline;cursor:pointer;' onclick='Shiny.onInputChange(\"select_dep\", 0);Shiny.onInputChange(\"select_dep\", @{job_id})'>Show job dependencies</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style='color:#337ab7;text-decoration:underline;cursor:pointer;' onclick='rerun_pipeline(\"@{job_id}\")'>Click here to rerun the pipeline (DONE jobs will be skipped).</a>")))
+                tags$p(HTML(qq("<a style='color:#337ab7;text-decoration:underline;cursor:pointer;' onclick='Shiny.onInputChange(\"select_dep\", 0);Shiny.onInputChange(\"select_dep\", @{job_id})'>Show job dependencies</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style='color:#337ab7;text-decoration:underline;cursor:pointer;' onclick='$(\"#rerun_pipeline_output\").show();rerun_pipeline(\"@{job_id}\")'>Click here to rerun the pipeline (DONE jobs will be skipped).</a>")))
             } else {
                 tags$p(HTML(qq("<a style='color:#337ab7;text-decoration:underline;cursor:pointer;' onclick='Shiny.onInputChange(\"select_dep\", 0);Shiny.onInputChange(\"select_dep\", @{job_id})'>Show job dependencies</a>")))
+            },
+            if(job_status %in% c("EXIT", "unknown")) {
+                HTML("<pre class='shiny-text-output noplaceholder' id='rerun_pipeline_output' style='display:hidden'></pre>")
+            } else {
+                NULL
             },
 	        tabsetPanel(type= "tabs",
                 tabPanel("Job log", uiOutput("job_log")),
@@ -274,7 +281,8 @@ table.on( 'draw', function () {
         
         showModal(modalDialog(
             title = qq("Job dependency (@{job_id} <@{job_name}>)"),
-            if(rerunable) tags$p(HTML(qq("<a style='color:#337ab7;text-decoration:underline;cursor:pointer;' onclick='rerun_pipeline(\"@{job_id}\")'>Some jobs are failed, click here to rerun the pipeline (DONE jobs will be skipped).</a>"))) else NULL,
+            if(rerunable) tags$p(HTML(qq("<a style='color:#337ab7;text-decoration:underline;cursor:pointer;' onclick='$(\"#rerun_pipeline_output\").show();rerun_pipeline(\"@{job_id}\")'>Some jobs are failed, click here to rerun the pipeline (DONE jobs will be skipped).</a>"))) else NULL,
+            if(rerunable) HTML("<pre class='shiny-text-output noplaceholder' id='rerun_pipeline_output' style='display:hidden'></pre>") else NULL,
             HTML("<p id='dep_info'>If you cannot click on the nodes, move your mouse outside of the diagram and then move in.</p>"),
             grVizOutput("dependency_plot", width = "868px", height = "600px"),
             tags$script("
@@ -330,9 +338,10 @@ table.on( 'draw', function () {
                 showModal(modalDialog(
                     title = "Kill jobs",
                     checkboxGroupInput("killing_job_id", "Kill following jobs?", m[m %in% killing_job_id], selected = killing_job_id),
+                    HTML("<pre class='shiny-text-output noplaceholder' id='kill_job_output' style='display:hidden'></pre>"),
                     footer = list(
                         actionButton("kill_job_cancel", "Cancel"),
-                        actionButton("kill_job_confirm", "Kill them!")
+                        HTML('<button id="kill_job_confirm" type="button" class="btn btn-default action-button">Kill</button>')
                     )
                 ))
             }
@@ -345,14 +354,18 @@ table.on( 'draw', function () {
     
     observeEvent(input$kill_job_confirm, {
         killing_job_id = input$killing_job_id
-        for(id in killing_job_id) {
-            showNotification(qq("Kill job @{id}..."), duration = 2)
-            message(qq("[@{format(Sys.time())}] Kill job @{id}"))
-            try(bkill(id), silent = TRUE)
-        }
-        removeModal()
-        showNotification(qq("Reload the app"), duration = 5)
-        Sys.sleep(1)
+
+        showNotification(qq("Kill jobs"), duration = 5)
+        withCallingHandlers({
+                shinyjs::html("kill_job_output", "")
+                for(id in killing_job_id) {
+                    message(qq("Kill job @{id}"))
+                    try(bkill(id), silent = TRUE)
+                }
+                message("Reload the app...")
+            }, message = function(m) {
+                shinyjs::html(id = "kill_job_output", html = m$message, add = TRUE)
+            })
         session$reload()
     })
     
@@ -399,6 +412,19 @@ table.on( 'draw', function () {
     observeEvent(input$rerun_pipeline, {
         job_id = input$rerun_pipeline_job_id
         showNotification(qq("rerun pipeline by @{job_id}..."), duration = 5)
+
+        withCallingHandlers({
+                shinyjs::html("rerun_pipeline_output", "")
+                # pipeline_rerun(job_id)
+                message(qq("rerun @{job_id}"))
+                message("Reload the app...")
+            },
+            message = function(m) {
+                shinyjs::html(id = "rerun_pipeline_output", html = m$message, add = TRUE)
+            }
+        )
+
+        session$reload()
     })
 }
 

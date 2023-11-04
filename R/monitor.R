@@ -11,7 +11,7 @@
 #' }
 monitor = function() {
 
-    pkgs = c("shiny", "DT", "shinyjqui", "ggplot2", "igraph", "DiagrammeR")
+    pkgs = c("shiny", "DT", "shinyjs", "ggplot2", "igraph", "DiagrammeR")
     l = sapply(pkgs, requireNamespace, quietly = TRUE)
 
     if(any(!l)) {
