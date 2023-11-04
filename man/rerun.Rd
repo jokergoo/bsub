@@ -3,23 +3,29 @@
 \name{job_rerun}
 \alias{job_rerun}
 \alias{pipeline_rerun}
-\title{Rerun a job}
+\title{Rerun jobs}
 \usage{
 job_rerun(job_id, dependency = character(0), verbose = TRUE, job_tb = NULL)
 
 pipeline_rerun(job_id, skip_done = TRUE, verbose = TRUE)
 }
 \arguments{
-\item{job_id}{A single job ID. In `pipeline_rerun()`, it is the job ID of any one job in the pipeline.}
+\item{job_id}{A single job ID. In \code{pipeline_rerun()}, it is the job ID of any one job in the pipeline.}
 
 \item{dependency}{A vector of job IDs that current job depends on.}
 
 \item{verbose}{Whether to print messages.}
 
-\item{job_tb}{The data frame returned from [`bjobs()`], internally used.}
+\item{job_tb}{The data frame returned from \code{\link[=bjobs]{bjobs()}}, internally used.}
 
 \item{skip_done}{Whether to skip done jobs.}
 }
+\value{
+\code{job_rerun()} returns the job IDs. \code{pipeline_rerun()} returns \code{NULL}.
+}
 \description{
-Rerun a job
+Rerun jobs
+}
+\details{
+In \code{pipeline_rerun()}, the full set of jobs can be captured by one job in the pipeline.
 }

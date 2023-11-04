@@ -4,11 +4,14 @@
 \alias{config_bsub}
 \title{Configure bsub global options}
 \usage{
-config_bsub()
+config_bsub(verbose = TRUE)
+}
+\arguments{
+\item{verbose}{Whether to print messages.}
 }
 \description{
 Configure bsub global options
 }
 \details{
-It sets the submission nodes, user name and how to call `Rscript`.
+It sets the submission nodes, user name and how to call \code{Rscript}.
 }

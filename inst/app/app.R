@@ -22,6 +22,7 @@ ui = fluidPage(
 
     htmlOutput("info"),
     actionButton("reload", "Manually reload"),
+
     # tags$script(HTML("count_down('countdown');")),
     
     hr(style = "border-top: 1px solid black;"),
@@ -52,17 +53,17 @@ server <- function(input, output, session) {
     #     }
     # })
         
-    job_summary_df = reactive({
+    job_summary_table = reactive({
         
         # autoInvalidate()
         
         showNotification("Fetching job summary table...", duration = 1, type = "message")
         message(qq("[@{format(Sys.time())}] Fetching job summary table"))
-        df = bjobs(print = FALSE, status = "all")
-        if(!is.null(df)) {
-            df[order(df$JOBID, decreasing = TRUE), , drop = FALSE]
+        job_tb = bjobs(print = FALSE, status = "all")
+        if(!is.null(job_tb)) {
+            job_tb[order(job_tb$JOBID, decreasing = TRUE), , drop = FALSE]
         } else {
-            df
+            job_tb
         }
     })
 
@@ -76,57 +77,57 @@ server <- function(input, output, session) {
 	    
 	    # autoInvalidate()
 	    
-		df = job_summary_df()
-        if(is.null(df)) {
+		job_tb = job_summary_table()
+        if(is.null(job_tb)) {
             return(datatable(data.frame(numeric(0))))
         }
-		nr = nrow(df)
+		nr = nrow(job_tb)
 
-        job_dep = job_dependency_all(df)
+        job_dep = job_dependency_all(job_tb)
         
 		showNotification("Formatting job summary table...", duration = 5, type = "message")
-		df2 = df[, c("JOBID", "STAT", "JOB_NAME", "QUEUE", "SUBMIT_TIME", "TIME_PASSED", "RUNTIMELIMIT", "SLOTS", "MEM", "MAX_MEM", "REQ_MEM")]
+		job_tb2 = job_tb[, c("JOBID", "STAT", "JOB_NAME", "QUEUE", "SUBMIT_TIME", "TIME_PASSED", "RUNTIMELIMIT", "NREQ_SLOT", "MEM", "MAX_MEM", "REQ_MEM")]
 
-		df2$STAT = factor(df2$STAT)
-        units(df2$TIME_PASSED) = "secs"; df2$TIME_PASSED = as.integer(as.numeric(df2$TIME_PASSED))
-        df2$RUNTIMELIMIT = df2$RUNTIMELIMIT*60
-        df2$MAX_MEM = bsub:::convert_to_byte(df2$MAX_MEM)
-        df2$MEM = bsub:::convert_to_byte(df2$MEM)
-        df2$REQ_MEM = df2$REQ_MEM*1024*1024
+		job_tb2$STAT = factor(job_tb2$STAT)
+        units(job_tb2$TIME_PASSED) = "secs"; job_tb2$TIME_PASSED = as.integer(as.numeric(job_tb2$TIME_PASSED))
+        job_tb2$RUNTIMELIMIT = job_tb2$RUNTIMELIMIT*60
+        job_tb2$MAX_MEM = bsub:::convert_to_byte(job_tb2$MAX_MEM)
+        job_tb2$MEM = bsub:::convert_to_byte(job_tb2$MEM)
+        job_tb2$REQ_MEM = job_tb2$REQ_MEM*1024*1024
 
-        l = nchar(df2$JOB_NAME) > 50
+        l = nchar(job_tb2$JOB_NAME) > 50
         if(any(l)) {
-            foo = substr(df2$JOB_NAME[l], 1, 48)
+            foo = substr(job_tb2$JOB_NAME[l], 1, 48)
             foo = paste(foo, "..", sep = "")
-            df2$JOB_NAME[l] = foo
+            job_tb2$JOB_NAME[l] = foo
         }
         
-        df2$dep = ""
+        job_tb2$dep = ""
 
         ## add the dependency table
-        if(any(df2$JOBID %in% names(job_dep$id2name))) {
-            for(i in which(df2$JOBID %in% job_dep$dep_mat)) {
-                df2$dep[i] = "Dep"
+        if(any(job_tb2$JOBID %in% names(job_dep$id2name))) {
+            for(i in which(job_tb2$JOBID %in% job_dep$dep_mat)) {
+                job_tb2$dep[i] = "Dep"
             }
         }
 
         col_index_add = 0
-        if(all(df2$dep == "")) {
-            df2 = cbind(df2[, 1, drop = FALSE], df2[, -c(1, length(df2)), drop = FALSE])
-            colnames(df2) = c("Job ID", "Status", "Job name", "Queue", "Submit time", "Passed time", "Req time", "Slots", "Mem", "Max mem", "Req mem")
+        if(all(job_tb2$dep == "")) {
+            job_tb2 = cbind(job_tb2[, 1, drop = FALSE], job_tb2[, -c(1, length(job_tb2)), drop = FALSE])
+            colnames(job_tb2) = c("Job ID", "Status", "Job name", "Queue", "Submit time", "Passed time", "Req time", "Slots", "Mem", "Max mem", "Req mem")
         } else {
             col_index_add = 1
-            df2 = cbind(df2[, c(1, length(df2)), drop = FALSE], df2[, -c(1, length(df2)), drop = FALSE])
-            colnames(df2) = c("Job ID", "", "Status", "Job name", "Queue", "Submit time", "Passed time", "Req time", "Slots", "Mem", "Max mem", "Req mem")
+            job_tb2 = cbind(job_tb2[, c(1, length(job_tb2)), drop = FALSE], job_tb2[, -c(1, length(job_tb2)), drop = FALSE])
+            colnames(job_tb2) = c("Job ID", "", "Status", "Job name", "Queue", "Submit time", "Passed time", "Req time", "Slots", "Mem", "Max mem", "Req mem")
 		}
-        df2[, "Submit time"] = as.character(df2[, "Submit time"])
+        job_tb2[, "Submit time"] = as.character(job_tb2[, "Submit time"])
 
-        df2 = df2[df2$Status %in% input$status_select, , drop = FALSE]
+        job_tb2 = job_tb2[job_tb2$Status %in% input$status_select, , drop = FALSE]
 
-        if(nrow(df2) == 0) {
-            return(datatable(df2, escape = FALSE, rownames = FALSE))
+        if(nrow(job_tb2) == 0) {
+            return(datatable(job_tb2, escape = FALSE, rownames = FALSE))
         }
-        dt = datatable(df2, escape = FALSE, rownames = FALSE, selection = 'none',
+        dt = datatable(job_tb2, escape = FALSE, rownames = FALSE, selection = 'none',
             options = list(
                 pageLength = 25
             ), callback = JS("
@@ -148,8 +149,8 @@ table.on( 'draw', function () {
 	    
 	    # autoInvalidate()
 	    
-	    df = job_summary_df()
-	    tb = table(df$STAT)
+	    job_tb = job_summary_table()
+	    tb = table(job_tb$STAT)
 	    txt = paste0(qq("User <b>@{bsub_opt$user}</b> has "), paste(qq("<span class='@{names(tb)}'>@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}</span>", collapse = FALSE), collapse = ", "), qq(" within one week. Summary table was generated at @{format(Sys.time())}."))
 	    txt = paste0(txt, " ", as.character(actionLink("job_stats", "See job stats")))
         HTML(txt)
@@ -157,11 +158,11 @@ table.on( 'draw', function () {
     
 	observeEvent(input$select_job, {
 
-        df = job_summary_df()
+        job_tb = job_summary_table()
 
 	    job_id = gsub(" ", "", input$select_job)
-        job_name = df$JOB_NAME[df$JOBID == job_id]
-        job_status = df$STAT[df$JOBID == job_id]
+        job_name = job_tb$JOB_NAME[job_tb$JOBID == job_id]
+        job_status = job_tb$STAT[job_tb$JOBID == job_id]
 	    message(qq("[@{format(Sys.time())}] Click 'job @{job_id}'"))
 
 	    output$job_log = renderUI({
@@ -247,15 +248,15 @@ table.on( 'draw', function () {
 
     observeEvent(input$select_dep, {
 
-        df = job_summary_df()
+        job_tb = job_summary_table()
 
         job_id = gsub(" ", "", input$select_dep)
-        job_name = df$JOB_NAME[df$JOBID == job_id]
-        job_status = df$STAT[df$JOBID == job_id]
+        job_name = job_tb$JOB_NAME[job_tb$JOBID == job_id]
+        job_status = job_tb$STAT[job_tb$JOBID == job_id]
         message(qq("[@{format(Sys.time())}] Click dependency for 'job @{job_id}'"))
 
         # test whether the pipeline can be rerun
-        g = job_dependency_igraph(job_id, df)
+        g = job_dependency_igraph(job_id, job_tb)
         all_job_ids = V(g)$name
 
         job_tb2 = job_tb[job_tb$JOBID %in% all_job_ids, , drop = FALSE]
@@ -275,7 +276,7 @@ table.on( 'draw', function () {
         output$dependency_plot = renderGrViz({
             showNotification("Generating job dependency tree...", duration = 5)
             message(qq("[@{format(Sys.time())}] Generating job dependency tree '@{job_id} <@{job_name}> @{job_status}'"))
-            dot = job_dependency_dot(job_id, df)
+            dot = job_dependency_dot(job_id, job_tb)
             grViz(dot, width = 868, height = 600)
         })
         
@@ -313,7 +314,7 @@ table.on( 'draw', function () {
         job_id = input$kill_job_id
         job_id = gsub("@.*$", "", job_id)
         job_id = strsplit(job_id, ";")[[1]]
-        tb = job_summary_df()
+        tb = job_summary_table()
 
         if(length(job_id) == 0) {
             output$kill_job_info = renderText({
@@ -354,18 +355,20 @@ table.on( 'draw', function () {
     
     observeEvent(input$kill_job_confirm, {
         killing_job_id = input$killing_job_id
-
         showNotification(qq("Kill jobs"), duration = 5)
         withCallingHandlers({
-                shinyjs::html("kill_job_output", "")
-                for(id in killing_job_id) {
-                    message(qq("Kill job @{id}"))
-                    try(bkill(id), silent = TRUE)
-                }
-                message("Reload the app...")
-            }, message = function(m) {
-                shinyjs::html(id = "kill_job_output", html = m$message, add = TRUE)
-            })
+            shinyjs::html("kill_job_output", "")
+            for(id in killing_job_id) {
+                message(qq("Kill job @{id}"))
+                try(bkill(id), silent = TRUE)
+            }
+            for(sec in 10:1) {
+                message(qq("Reload the app (sleep @{sec} seconds)"))
+                Sys.sleep(1)
+            }
+        }, message = function(m) {
+            shinyjs::html(id = "kill_job_output", html = m$message, add = TRUE)
+        })
         session$reload()
     })
     
@@ -375,20 +378,20 @@ table.on( 'draw', function () {
 
     observeEvent(input$job_stats, {
 
-        df = job_summary_df()
+        job_tb = job_summary_table()
 
         message(qq("[@{format(Sys.time())}] query global job statistics"))
 
         output$job_barplot = renderPlot({
             showNotification("Generating job barplot...", duration = 2)
             message(qq("[@{format(Sys.time())}] generating job barplot"))
-            bjobs_barplot(job_tb = df)
+            bjobs_barplot(job_tb = job_tb)
         })
 
         output$job_timeline = renderPlot({
             showNotification("Generating job timeline...", duration = 2)
             message(qq("[@{format(Sys.time())}] generating job timeline"))
-            bjobs_timeline(job_tb = df)
+            bjobs_timeline(job_tb = job_tb)
         })
         
         showModal(modalDialog(
@@ -414,15 +417,16 @@ table.on( 'draw', function () {
         showNotification(qq("rerun pipeline by @{job_id}..."), duration = 5)
 
         withCallingHandlers({
-                shinyjs::html("rerun_pipeline_output", "")
-                # pipeline_rerun(job_id)
-                message(qq("rerun @{job_id}"))
-                message("Reload the app...")
-            },
-            message = function(m) {
-                shinyjs::html(id = "rerun_pipeline_output", html = m$message, add = TRUE)
+            shinyjs::html("rerun_pipeline_output", "")
+            pipeline_rerun(job_id)
+            for(sec in 10:1) {
+                message(qq("Reload the app (sleep @{sec} seconds)"))
+                Sys.sleep(1)
             }
-        )
+        },
+        message = function(m) {
+            shinyjs::html(id = "rerun_pipeline_output", html = m$message, add = TRUE)
+        })
 
         session$reload()
     })

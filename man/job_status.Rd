@@ -3,7 +3,7 @@
 \name{job_status_by_name}
 \alias{job_status_by_name}
 \alias{job_status_by_id}
-\title{Job status by ID or name}
+\title{Job status by job ID or name}
 \usage{
 job_status_by_name(job_name)
 
@@ -14,8 +14,11 @@ job_status_by_id(job_id)
 
 \item{job_id}{A single job ID.}
 }
+\value{
+A vector of job status, with job IDs are names.
+}
 \description{
-Job status by ID or name
+Job status by job ID or name
 }
 \examples{
 \dontrun{

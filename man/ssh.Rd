@@ -10,7 +10,7 @@ ssh_connect(...)
 ssh_disconnect()
 }
 \arguments{
-\item{...}{Pass to `ssh::ssh_connect`.}
+\item{...}{Pass to \code{\link[ssh:ssh]{ssh::ssh_connect()}}.}
 }
 \description{
 Connect to submisstion via ssh

@@ -68,22 +68,22 @@ bsub_cmd(
 )
 }
 \arguments{
-\item{code}{The code chunk, it should be embraced by ``\{`` ``\}``.}
+\item{code}{The code chunk, it should be embraced by \code{{}}.}
 
-\item{name}{If name is not specified, an internal name calculated by [`digest::digest()`] on the chunk is automatically assigned.}
+\item{name}{If name is not specified, an internal name calculated by \code{\link[digest:digest]{digest::digest()}} on the chunk is automatically assigned.}
 
-\item{packages}{A character vector with package names that will be loaded before running the script. There is a special name `_in_session_`
+\item{packages}{A character vector with package names that will be loaded before running the script. There is a special name \verb{_in_session_}
 that loads all the packages loaded in current R session.}
 
-\item{image}{A character vector of RData/rda files that will be loaded before running the script.
-When `image` is set to `TRUE`, all variables in [`.GlobalEnv`] will be saved
+\item{image}{A character vector of \code{.RData}/\code{.rda} files that will be loaded before running the script.
+When \code{image} is set to \code{TRUE}, all variables in \code{\link{.GlobalEnv}} will be saved
 into a temporary file and all attached packages will be recorded. The temporary files
 will be removed after the job is finished.}
 
-\item{variables}{A character vector of variable names that will be loaded before running the script. There is a special name `_all_functions_`
+\item{variables}{A character vector of variable names that will be loaded before running the script. There is a special name \verb{_all_functions_}
 that saves all functions defined in the global environment.}
 
-\item{share}{A character vector of variables names for which the variables are shared between jobs. Note the temporary .RData files are not deleted
+\item{share}{A character vector of variables names for which the variables are shared between jobs. Note the temporary \code{.RData} files are not deleted
 automatically.}
 
 \item{working_dir}{The working directory.}
@@ -106,16 +106,16 @@ automatically.}
 
 \item{local}{Run job locally (not submitting to the LSF cluster)?}
 
-\item{script}{In `bsub_chunk()`, it is the path of a script where code chunks will be extracted and sent to the cluster. 
-It is always used with `start` and `end` arguments. In `bsub_script()`, it is the path of the R script to submit.}
+\item{script}{In \code{bsub_chunk()}, it is the path of a script where code chunks will be extracted and sent to the cluster.
+It is always used with \code{start} and \code{end} arguments. In \code{bsub_script()}, it is the path of the R script to submit.}
 
 \item{start}{A numeric vector that contains line indices of the starting code chunk or a character vector
 that contain regular expression to match the start of code chunks.}
 
-\item{end}{Same setting as `start`.}
+\item{end}{Same setting as \code{start}.}
 
 \item{save_var}{Whether save the last variable in the code chunk? Later the variable
-can be retrieved by [`retrieve_var()`].}
+can be retrieved by \code{\link[=retrieve_var]{retrieve_var()}}.}
 
 \item{sh_head}{Commands that are written as head of the sh script.}
 
@@ -129,7 +129,7 @@ can be retrieved by [`retrieve_var()`].}
 
 \item{sh}{Path of the bash script.}
 
-\item{env_var}{Environment variables. It should be a named vector. Note environment variables can also be directly set in `sh_head`.}
+\item{env_var}{Environment variables. It should be a named vector. Note environment variables can also be directly set in \code{sh_head}.}
 }
 \value{
 A job ID.
@@ -138,9 +138,11 @@ A job ID.
 Submit jobs
 }
 \details{
-`job_chunk()` submits R chunk.
-`job_script()` submits R script.
-`job_cmd()` submits general commands.
+\code{job_chunk()} submits R code chunk.
+
+\code{job_script()} submits R script with command-line arguments.
+
+\code{job_cmd()} submits general bash commands.
 }
 \examples{
 \dontrun{
@@ -155,6 +157,6 @@ bsub_script("/path/of/foo.R", name = ..., memory = ..., cores = ..., ...)
 bsub_script("/path/of/foo.R", argv = "--a 1 --b 3", ...)
 
 # put all arguments also in the command
-bsub_cmd("sometool -arg1 1 -arg2 2", name = ..., memory = ..., cores = ..., ...)
+bsub_cmd("some-tool -arg1 1 -arg2 2", name = ..., memory = ..., cores = ..., ...)
 }
 }

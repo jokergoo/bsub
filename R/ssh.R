@@ -1,7 +1,7 @@
 
 #' Connect to submisstion via ssh
 #'
-#' @param ... Pass to `ssh::ssh_connect`.
+#' @param ... Pass to [`ssh::ssh_connect()`].
 #' 
 #' @importFrom ssh ssh_session_info
 #' @rdname ssh

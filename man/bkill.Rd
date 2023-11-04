@@ -7,10 +7,10 @@
 bkill(job_id, filter = NULL)
 }
 \arguments{
-\item{job_id}{A vector of job IDs or a data frame returned by [`bjobs()`].}
+\item{job_id}{A vector of job IDs or a data frame returned by \code{\link[=bjobs]{bjobs()}}.}
 
 \item{filter}{Regular expression on job names (only the running and pending jobs). It is
-only used when `job_id` is not set.}
+only used when \code{job_id} is not set.}
 }
 \description{
 Kill jobs

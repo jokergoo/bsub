@@ -1,11 +1,13 @@
 
-#' Rerun a job
+#' Rerun jobs
 #' 
 #' @param job_id A single job ID. In `pipeline_rerun()`, it is the job ID of any one job in the pipeline.
 #' @param dependency A vector of job IDs that current job depends on.
 #' @param verbose Whether to print messages.
 #' @param job_tb The data frame returned from [`bjobs()`], internally used.
 #' 
+#' @returns
+#' `job_rerun()` returns the job IDs. `pipeline_rerun()` returns `NULL`.
 #' @rdname rerun
 #' @export
 job_rerun = function(job_id, dependency = character(0), verbose = TRUE, job_tb = NULL) {
@@ -50,7 +52,7 @@ job_rerun = function(job_id, dependency = character(0), verbose = TRUE, job_tb =
 
     name = job_tb$JOB_NAME
     mem = as.numeric(gsub("^.*mem=(.*?)\\].*$", "\\1", job_tb$COMBINED_RESREQ))
-    cores = job_tb$SLOT
+    cores = job_tb$NREQ_SLOT
     walltime = job_tb$RUNTIMELIMIT
     walltime = ceiling(walltime)
 
@@ -77,7 +79,7 @@ job_rerun = function(job_id, dependency = character(0), verbose = TRUE, job_tb =
 	    close(con)
 
 	    if(verbose) message("  - directly submit the new job")
-		job_id = bsub_cmd(sh = sh_file, name = name, mem = mem, hours = hour, cores = cores, dependency = dependency, ask = FALSE)
+		job_id = bsub_cmd(sh = sh_file, name = name, memory = mem, hours = hour, cores = cores, dependency = dependency, ask = FALSE)
 		file.remove(sh_file)
 
     } else {
@@ -105,7 +107,7 @@ job_rerun = function(job_id, dependency = character(0), verbose = TRUE, job_tb =
     	cmd = bsub_opt$bsub_template(name, hour, mem, cores, output, bsub_opt$group)
     	if(length(dependency)) {
 	        dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )
-	        cmd = qq("@{cmd} \\\n -w '@{dependency_str}' \\\n")
+	        cmd = qq("@{cmd} -w '@{dependency_str}' \\\n")
 	    }
     	cat(silver(qq("@{cmd} < '@{sh_file}'")), "\n")
 
@@ -137,6 +139,9 @@ job_env = function(job_id) {
 
 #' @param skip_done Whether to skip done jobs.
 #' 
+#' @details
+#' In `pipeline_rerun()`, the full set of jobs can be captured by one job in the pipeline.
+#' 
 #' @rdname rerun
 #' @export
 pipeline_rerun = function(job_id, skip_done = TRUE, verbose = TRUE) {
@@ -154,7 +159,7 @@ pipeline_rerun = function(job_id, skip_done = TRUE, verbose = TRUE) {
 	if(any(l_run_pend)) {
 		message("Found following RUN/PEND jobs:")
 		for(i in which(l_run_pend)) {
-			message(qq("  job @{job_tb2$JOBID[i]} <@{job_tb2$NAME[i]}>, @{job_tb2$STAT[i]}"))
+			message(qq("  job @{job_tb2$JOBID[i]} <@{job_tb2$JOB_NAME[i]}>, @{job_tb2$STAT[i]}"))
 		}
 		stop_wrap("There should be no RUN/PEND job if rerun the pipeine.")
 	}
@@ -162,10 +167,12 @@ pipeline_rerun = function(job_id, skip_done = TRUE, verbose = TRUE) {
 	if(length(all_job_ids) == 1) {
 		if(job_tb2$STAT[1] == "DONE") {
 			if(skip_done) {
-				message(qq("skip DONE job @{job_tb2$JOBID[i]} <@{job_tb2$NAME[i]}>"))
+				message(qq("skip DONE job @{job_tb2$JOBID[1]} <@{job_tb2$JOB_NAME[1]}>"))
 			} else {
 				job_rerun(job_id, verbose = verbose, job_tb = job_tb)
 			}
+		} else {
+			job_rerun(job_id, verbose = verbose, job_tb = job_tb)
 		}
 		return(invisible(NULL))
 	}
@@ -173,11 +180,13 @@ pipeline_rerun = function(job_id, skip_done = TRUE, verbose = TRUE) {
 	nr = nrow(job_tb2)
 	done_jobs = structure(rep(FALSE, nr), names = job_tb2$JOBID)
 	done_jobs[job_tb2$STAT == "DONE"] = TRUE
+
+	new_job_id = character(0)
 	for(i in seq_len(nr)) {
 		if(job_tb2$STAT[i] == "DONE" && skip_done) {
 			# skip
 			if(verbose) {
-				message(qq("skip DONE job @{job_tb2$JOBID[i]} <@{job_tb2$STAT[i]}>"))
+				message(qq("skip DONE job @{job_tb2$JOBID[i]} <@{job_tb2$JOB_NAME[i]}>"))
 			}
 		} else {
 			d = distances(g, which(V(g)$name == job_tb2$JOBID[i]), to = V(g), mode = "in")
@@ -187,7 +196,12 @@ pipeline_rerun = function(job_id, skip_done = TRUE, verbose = TRUE) {
 				dj = dj[dj]
 				p = setdiff(p, names(dj))
 			}
-			job_rerun(job_tb2$JOBID[i], dependency = p, verbose = verbose, job_tb = job_tb)
+			dep = character(0)
+			if(length(p)) {
+				dep = new_job_id[p]
+			}
+			jid = job_rerun(job_tb2$JOBID[i], dependency = dep, verbose = verbose, job_tb = job_tb)
+			new_job_id[as.character(job_tb2$JOBID[i])] = jid
 		}
 	}
 

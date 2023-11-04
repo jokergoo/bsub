@@ -41,12 +41,13 @@ monitor = function() {
 
 #' Visualize statistics of jobs
 #' 
-#' @param status Status of the jobs. Use "all" for all jobs.
+#' @param status Status of the jobs. Use "all" for all status.
 #' @param filter Regular expression to filter on job names.
 #' @param job_tb A data frame returned by [`bjobs()`]. Only internally used.
 #'
 #' @details
 #' `bjobs_barplot()` draws barplots of number of jobs per day.
+#' 
 #' `bjobs_timeline()` draws segments of duration of jobs. In the plot, each segment represents
 #' a job and the width of the segment correspond to its duration.
 #'
@@ -62,10 +63,11 @@ bjobs_barplot = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NUL
     job_tb$STAT = as.character(job_tb$STAT)
     job_tb$STAT[!job_tb$STAT %in% status] = "Others"
     job_tb$STAT = factor(job_tb$STAT, levels = intersect(c(status, "Others"), as.character(job_tb$STAT)))
+    job_tb = job_tb[as.double(Sys.time() - job_tb$SUBMIT_TIME, units = "secs") >= 7*24*60*60, , drop = FALSE]
 
     if(nrow(job_tb) == 0) {
         plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE, ann = FALSE)
-        text(0.5, 0.5, "No job was found.")
+        text(0.5, 0.5, "No job was found in the most recent week.")
         return(invisible(NULL))
     }
 
@@ -75,7 +77,7 @@ bjobs_barplot = function(status = c("RUN", "EXIT", "PEND", "DONE"), filter = NUL
     p = p + ggplot2::scale_fill_manual(breaks = names(STATUS_COL), values = STATUS_COL)
     tb = table(job_tb$STAT)
     tb =  tb[tb > 0]
-    p = p + ggplot2::ggtitle(paste0(paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " within one week"))
+    p = p + ggplot2::ggtitle(paste0(paste(qq("@{tb} @{names(tb)} job@{ifelse(tb == 1, '', 's')}", collapse = FALSE), collapse = ", "), " in the most recent one week"))
     print(p)
 }
 

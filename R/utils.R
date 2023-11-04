@@ -4,6 +4,12 @@ message_wrap = function (..., appendLF = TRUE) {
     message(x, appendLF = appendLF)
 }
 
+warning_wrap = function (..., appendLF = TRUE) {
+    x = paste0(...)
+    x = paste(strwrap(x), collapse = "\n")
+    warning(x, call. = FALSE)
+}
+
 stop_wrap = function (...) {
     x = paste0(...)
     x = paste(strwrap(x), collapse = "\n")

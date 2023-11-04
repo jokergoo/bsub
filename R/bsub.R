@@ -1,17 +1,17 @@
 
 #' Submit jobs
 #'
-#' @param code The code chunk, it should be embraced by ``\{`` ``\}``.
+#' @param code The code chunk, it should be embraced by `{}`.
 #' @param name If name is not specified, an internal name calculated by [`digest::digest()`] on the chunk is automatically assigned. 
 #' @param packages A character vector with package names that will be loaded before running the script. There is a special name `_in_session_`
 #'     that loads all the packages loaded in current R session.
-#' @param image A character vector of RData/rda files that will be loaded before running the script.
+#' @param image A character vector of `.RData`/`.rda` files that will be loaded before running the script.
 #'       When `image` is set to `TRUE`, all variables in [`.GlobalEnv`] will be saved
 #'       into a temporary file and all attached packages will be recorded. The temporary files
 #'       will be removed after the job is finished.
 #' @param variables A character vector of variable names that will be loaded before running the script. There is a special name `_all_functions_`
 #'       that saves all functions defined in the global environment.
-#' @param share A character vector of variables names for which the variables are shared between jobs. Note the temporary .RData files are not deleted
+#' @param share A character vector of variables names for which the variables are shared between jobs. Note the temporary `.RData` files are not deleted
 #'        automatically.
 #' @param working_dir The working directory.
 #' @param hours Running time of the job.
@@ -34,14 +34,16 @@
 #' @param ask Whether to promote.
 #' 
 #' @details
-#' `job_chunk()` submits R chunk.
-#' `job_script()` submits R script.
-#' `job_cmd()` submits general commands.
+#' `job_chunk()` submits R code chunk.
+#' 
+#' `job_script()` submits R script with command-line arguments.
+#' 
+#' `job_cmd()` submits general bash commands.
 #'
 #' @returns A job ID.
 #' @export
 #' @importFrom codetools findGlobals
-#' @importFrom utils sessionInfo
+#' @importFrom utils sessionInfo find
 #' @import crayon
 #' @rdname bsub
 #' @examples
@@ -57,7 +59,7 @@
 #' bsub_script("/path/of/foo.R", argv = "--a 1 --b 3", ...)
 #' 
 #' # put all arguments also in the command
-#' bsub_cmd("sometool -arg1 1 -arg2 2", name = ..., memory = ..., cores = ..., ...)
+#' bsub_cmd("some-tool -arg1 1 -arg2 2", name = ..., memory = ..., cores = ..., ...)
 #' }
 bsub_chunk = function(code, 
     name = NULL,
@@ -140,7 +142,7 @@ bsub_chunk = function(code,
                     }
                 }
                 packages = gsub("package:", "", packages)
-                packages = unique(package)
+                packages = unique(packages)
                 packages = setdiff(packages, c("base", "stats", "graphics", "grDevices", "utils", "datasets", "methods"))
                 if(length(packages)) {
                     message_wrap(qq("There are packages (@{paste(packages, collapse = ', ')}) not specified in the code chunk. Automatically detech them. Note this is approximate."))
@@ -284,7 +286,8 @@ bsub_chunk = function(code,
     tail = c(tail, "invisible(file.remove(\"@{tmp}\"))\n\n")  # the R script is already loaded in memory, the temp R script can be deleted
 
     if(save_var) {
-        tail = c(tail, qq("saveRDS(.Last.value, file = '@{output_dir}/@{name_uid}_returned_var.rds')"))
+        code = paste0("R_BSUB_RETURN_VAR = ", code)
+        tail = c(tail, qq("saveRDS(R_BSUB_RETURN_VAR, file = '@{output_dir}/@{name_uid}_returned_var.rds')"))
     }
 
     tail = c(tail, "invisible(NULL)\n")
@@ -625,7 +628,7 @@ fi"), con)
     cmd = bsub_opt$bsub_template(name, hours, memory, cores, output, bsub_opt$group)
     if(length(dependency)) {
         dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )
-        cmd = qq("@{cmd} \\\n -w '@{dependency_str}' \\\n")
+        cmd = qq("@{cmd} -w '@{dependency_str}' \\\n")
     }
     cmd = qq("@{cmd} < '@{sh_file}'")
     cat(silver(cmd), "\n")
@@ -635,7 +638,7 @@ fi"), con)
     cmd = qq("@{cmd} -env 'all,R_BSUB_NAME_UID=@{name_uid},R_BSUB_TEMP_DIR=@{temp_dir}' -Jd 'R_BSUB_NAME_UID=@{name_uid},R_BSUB_TEMP_DIR=@{temp_dir}'")
     if(length(dependency)) {
         dependency_str = paste( paste("done(", dependency, ")"), collapse = " && " )
-        cmd = qq("@{cmd} \\\n -w '@{dependency_str}' \\\n")
+        cmd = qq("@{cmd} -w '@{dependency_str}' \\\n")
     }
     cmd = qq("@{cmd} < '@{sh_file}'")
 
@@ -652,10 +655,11 @@ fi"), con)
 #' Submit a random job
 #' 
 #' @param name Job name.
+#' @param secs Seconds to sleep.
 #' @param ... Pass to [`bsub_chunk()`].
 #' 
 #' @details
-#' It simply runs `Sys.sleep(30)` in the job.
+#' It simply runs `Sys.sleep(secs)` in the job.
 #' 
 #' @export
 #' @importFrom stats runif
@@ -664,13 +668,14 @@ fi"), con)
 #' \dontrun{
 #' random_job()
 #' }
-random_job = function(name, ...) {
+random_job = function(name, secs = 30, ...) {
     if(missing(name)) {
         name = paste0("R_random_job_", digest::digest(runif(1), "crc32"))
     }
+    secs = secs
     bsub_chunk({
-        Sys.sleep(30)
-    }, name = name, ...)
+        Sys.sleep(secs)
+    }, name = name, variables = "secs", ...)
 }
 
 

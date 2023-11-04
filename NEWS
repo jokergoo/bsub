@@ -1,3 +1,10 @@
+Changes in version 2.0.0
+
+* greatly improved the web monitor
+* add functions to rerun failed jobs
+
+---------------------------------------
+
 Changes in version 1.1.4
 
 * improved the monitor

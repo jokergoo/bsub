@@ -8,9 +8,9 @@
 #' @returns
 #' `job_dependency_all()` returns a list that contains three elements:
 #'
-#' -`dep_mat`: a two column matrix containing dependencies from parents to children.
-#' -`id2name`: a named vector containing mapping from job IDs to job names.
-#' -`id2stat`: a named vector containing mapping from job IDs to job status.
+#' - `dep_mat`: a two column matrix containing dependencies from parents to children.
+#' - `id2name`: a named vector containing mapping from job IDs to job names.
+#' - `id2stat`: a named vector containing mapping from job IDs to job status.
 #'
 #' `job_dependency_igraph()` returns a [`igraph::igraph`] object which contains a dependency
 #' graph induced by the input job ID.

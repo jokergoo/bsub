@@ -31,7 +31,7 @@ bjobs_done(max = Inf, filter = NULL)
 bjobs_exit(max = Inf, filter = NULL)
 }
 \arguments{
-\item{status}{Status of the jobs. Use "all" for all jobs.}
+\item{status}{Status of the jobs. Use "all" for all status}
 
 \item{max}{Maximal number of recent jobs.}
 
@@ -41,7 +41,8 @@ bjobs_exit(max = Inf, filter = NULL)
 
 \item{job_id}{A single job ID, internally used.}
 
-\item{fields}{Supported output fields, check \url{https://www.ibm.com/docs/en/spectrum-lsf/10.1.0?topic=information-customize-job-output}.}
+\item{fields}{Supported output fields, check \url{https://www.ibm.com/docs/en/spectrum-lsf/10.1.0?topic=information-customize-job-output}.
+The value can be a vector of field names or a single string that already includes output fields separated by space.}
 }
 \value{
 A data frame with selected job summaries.
@@ -53,15 +54,16 @@ Summary of jobs
 There is an additional column "RECENT" which is the order
 for the job with the same name. 1 means the most recent job.
 
-You can directly type ``bjobs`` without parentheses which runs `bjobs` with defaults.
+You can directly type \code{bjobs} without parentheses which runs \code{bjobs} with defaults.
+\itemize{
+\item \code{brecent} shows the most recent.
+\item \code{bjobs_done} shows the "DONE" jobs.
+\item \code{bjobs_exit} shows the "EXIT" jobs.
+\item \code{bjobs_pending} shows the "PEND" jobs.
+\item \code{bjobs_running} shows the "RUN" jobs.
+}
 
-- `brecent` shows the most recent.
-- `bjobs_done` shows the "DONE" jobs.
-- `bjobs_exit` shows the "EXIT" jobs.
-- `bjobs_pending` shows the "PEND" jobs.
-- `bjobs_running` shows the "RUN" jobs.
-
-`bjobs_raw()` returns the table from the original `bsubs -a -o '...'` call.
+\code{bjobs_raw()} returns the table from the original \verb{bsubs -a -o '...'} call.
 }
 \examples{
 \dontrun{

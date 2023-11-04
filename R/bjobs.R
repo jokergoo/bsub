@@ -1,7 +1,7 @@
 
 #' Summary of jobs
 #'
-#' @param status Status of the jobs. Use "all" for all jobs.
+#' @param status Status of the jobs. Use "all" for all status
 #' @param max Maximal number of recent jobs.
 #' @param filter Regular expression on job names.
 #' @param print Whether to print the table.
@@ -37,9 +37,9 @@
 bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TRUE, job_id = NULL) {
 
     if(is.null(job_id)) {
-        cmd = "bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time runtimelimit slots mem max_mem dependency exec_cwd combined_resreq delimiter=\",\"' 2>&1"
+        cmd = "bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time runtimelimit nreq_slot mem max_mem dependency exec_cwd combined_resreq delimiter=\",\"' 2>&1"
     } else {
-        cmd = qq("bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time runtimelimit slots mem max_mem dependency exec_cwd combined_resreq delimiter=\",\"' @{job_id} 2>&1")
+        cmd = qq("bjobs -a -o 'jobid stat job_name queue submit_time start_time finish_time runtimelimit nreq_slot mem max_mem dependency exec_cwd combined_resreq delimiter=\",\"' @{job_id} 2>&1")
     }
     ln = run_cmd(cmd, print = FALSE)
     
@@ -141,7 +141,8 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
 }
 class(bjobs) = "bjobs"
 
-#' @param fields Supported output fields, check \url{https://www.ibm.com/docs/en/spectrum-lsf/10.1.0?topic=information-customize-job-output}.
+#' @param fields Supported output fields, check \url{https://www.ibm.com/docs/en/spectrum-lsf/10.1.0?topic=information-customize-job-output}. 
+#'        The value can be a vector of field names or a single string that already includes output fields separated by space.
 #' @details
 #' `bjobs_raw()` returns the table from the original `bsubs -a -o '...'` call.
 #' @rdname bjobs
@@ -174,7 +175,7 @@ bjobs_reset_timestamp = function() {
 
 
 format_summary_table = function(df) {
-    df2 = df[, c("JOBID", "STAT", "JOB_NAME", "RECENT","SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "SLOTS", "MEM", "MAX_MEM")]
+    df2 = df[, c("JOBID", "STAT", "JOB_NAME", "RECENT","SUBMIT_TIME", "TIME_PASSED", "TIME_LEFT", "NREQ_SLOT", "MEM", "MAX_MEM")]
 
     df2$TIME_PASSED = format_difftime(df2$TIME_PASSED)
     df2$TIME_LEFT = format_difftime(df2$TIME_LEFT)

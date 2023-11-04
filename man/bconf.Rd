@@ -4,7 +4,7 @@
 \name{bconf}
 \alias{bconf}
 \alias{print.bconf}
-\title{Print current configuations}
+\title{Print current configurations}
 \format{
 An object of class \code{bconf} of length 1.
 }
@@ -14,20 +14,20 @@ bconf
 \method{print}{bconf}(x, ...)
 }
 \arguments{
-\item{x}{A `bconf` object.}
+\item{x}{A \code{bconf} object.}
 
 \item{...}{Other parameters.}
 }
 \value{
-A `bconf` object.
+A \code{bconf} object.
 }
 \description{
-Print current configuations
+Print current configurations
 }
 \details{
-This function is only for printing. Use [`bsub_opt()`] to change configurations.
+This function is only for printing. Use \code{\link[=bsub_opt]{bsub_opt()}} to change configurations.
 
-You simply type ``bconf`` (without the brackets) in the interactive R console.
+You simply type \code{bconf} (without the brackets) in the interactive R console.
 }
 \examples{
 bconf

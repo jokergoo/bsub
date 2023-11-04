@@ -7,7 +7,7 @@
 \method{print}{bjobs}(x, ...)
 }
 \arguments{
-\item{x}{A `bjobs` object.}
+\item{x}{A \code{bjobs} object.}
 
 \item{...}{other arguments.}
 }

@@ -4,12 +4,14 @@
 \alias{random_job}
 \title{Submit a random job}
 \usage{
-random_job(name, ...)
+random_job(name, secs = 30, ...)
 }
 \arguments{
 \item{name}{Job name.}
 
-\item{...}{Pass to [`bsub_chunk()`].}
+\item{secs}{Seconds to sleep.}
+
+\item{...}{Pass to \code{\link[=bsub_chunk]{bsub_chunk()}}.}
 }
 \value{
 A job ID.
@@ -18,7 +20,7 @@ A job ID.
 Submit a random job
 }
 \details{
-It simply runs `Sys.sleep(30)` in the job.
+It simply runs \code{Sys.sleep(secs)} in the job.
 }
 \examples{
 \dontrun{

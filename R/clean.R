@@ -3,8 +3,8 @@
 #' @param ask Whether to promote.
 #'
 #' @details
-#' The temporary files might be used by the running/pending jobs. Deleting them might affect some of the jobs.
-#' You better delete them after all jobs are done.
+#' The temporary files might be used by the running/pending jobs. Deleting them would affect some jobs.
+#' You should better delete them after all jobs are done.
 #'
 #' @export
 #' @examples
@@ -93,7 +93,7 @@ remove_temp_files = function(ask = TRUE) {
 #' @param print Whether to print messages.
 #'
 #' @details
-#' For the failed jobs, LSF cluster might generate a core dump file and R might generate a .RDataTmp file.
+#' For the failed jobs, LSF cluster might generate a core dump file and R might generate a `.RDataTmp` file.
 #'
 #' Note if you manually set working directory in your R code/script, the R dump file can be not caught.
 #'

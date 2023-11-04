@@ -18,17 +18,18 @@ bjobs_timeline(
 )
 }
 \arguments{
-\item{status}{Status of the jobs. Use "all" for all jobs.}
+\item{status}{Status of the jobs. Use "all" for all status.}
 
 \item{filter}{Regular expression to filter on job names.}
 
-\item{job_tb}{A data frame returned by [`bjobs()`]. Only internally used.}
+\item{job_tb}{A data frame returned by \code{\link[=bjobs]{bjobs()}}. Only internally used.}
 }
 \description{
 Visualize statistics of jobs
 }
 \details{
-`bjobs_barplot()` draws barplots of number of jobs per day.
-`bjobs_timeline()` draws segments of duration of jobs. In the plot, each segment represents
+\code{bjobs_barplot()} draws barplots of number of jobs per day.
+
+\code{bjobs_timeline()} draws segments of duration of jobs. In the plot, each segment represents
 a job and the width of the segment correspond to its duration.
 }

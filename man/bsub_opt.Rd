@@ -25,58 +25,56 @@ Parameters for bsub
 }
 \details{
 There are following global parameters:
+\itemize{
+\item \code{packages}: A character vector with package names that will be loaded before running the script.
+\item \code{image}: A character vector of RData/rda files that will be loaded before running the script.
+\item \code{temp_dir}: Path of temporary folder where the temporary R/bash scripts will be put.
+\item \code{output_dir}: Path of output folder where the output/flag files will be put.
+\item \code{enforce}: If a flag file for the job is found, whether to enforce to rerun the job.
+\item \code{R_version}: The version of R.
+\item \code{working_dir}: The working directory.
+\item \code{ignore}: Whether ignore \code{bsub_chunk}, \code{bsub_script} and \code{bsub_cmd}.
+\item \code{local}: Run job locally (not submitting to the LSF cluster)?
+\item \code{call_Rscript}: How to call \code{Rscript} by specifying an R version number.
+\item \code{submission_node}: A list of node names for submitting jobs.
+\item \code{login_node}: This value basically is the same as \code{submission_node} unless the login nodes are different from submission nodes.
+\item \code{sh_head}: Commands that are written as head of the sh script.
+\item \code{user}: Username on the submission node.
+\item \code{group}: The user group
+\item \code{ssh_envir}: The commands for setting bash environment for successfully running bjobs, bsub, ...
+\item \code{bsub_template}: Template for constructing \code{bsub} command.
+\item \code{parse_time}: A function that parses time string from the LSF \code{bjobs} command to a \code{POSIXct} object.
+\item \code{verbose}: Whether to print more messages.
+}
 
--`packages` A character vector with package names that will be loaded before running the script.
--`image` A character vector of RData/rda files that will be loaded before running the script.
--`temp_dir` Path of temporary folder where the temporary R/bash scripts will be put.
--`output_dir` Path of output folder where the output/flag files will be put.
--`enforce` If a flag file for the job is found, whether to enforce to rerun the job.
--`R_version` The version of R.
--`working_dir` The working directory.
--`ignore` Whether ignore `bsub_chunk`, `bsub_script` and `bsub_cmd`.
--`local` Run job locally (not submitting to the LSF cluster)?
--`call_Rscript` How to call `Rscript` by specifying an R version number.
--`submission_node` A list of node names for submitting jobs.
--`login_node` This value basically is the same as ``submission_node`` unless the login nodes are different from submission nodes.
--`sh_head` Commands that are written as head of the sh script.
--`user` Username on the submission node.
--`group` The user group
--`ssh_envir` The commands for setting bash environment for successfully running bjobs, bsub, ...
--`bsub_template` Template for constructing `bsub` command.
--`parse_time` A function that parses time string from the LSF `bjobs` command to a `POSIXct` object.
--`verbose` Whether to print more messages.
-
-`ssh_envir` should be properly set so that LSF binaries such as `bsub` or `bjobs` can be properly found.
+\code{ssh_envir} should be properly set so that LSF binaries such as \code{bsub} or \code{bjobs} can be properly found.
 There are some environment variables initialized when logging in the bash terminal while they are not initialized with the
 ssh connection. Thus, some environment variables should be manually set.
 
-An example for `ssh_envir` is as follows. The `LSF_ENVDIR` and `LSF_SERVERDIR` should be defined and exported.
+An example for \code{ssh_envir} is as follows. The \code{LSF_ENVDIR} and \code{LSF_SERVERDIR} should be defined and exported.
 
-```r
-c("source /etc/profile",
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{c("source /etc/profile",
   "export LSF_ENVDIR=/opt/lsf/conf",
   "export LSF_SERVERDIR=/opt/lsf/10.1/linux3.10-glibc2.17-x86_64/etc")
-```
+}\if{html}{\out{</div>}}
 
 The values of these two variables can be obtained by entering following commands in your bash terminal (on the submission node):
 
-```
-echo $LSF_ENVDIR
+\if{html}{\out{<div class="sourceCode">}}\preformatted{echo $LSF_ENVDIR
 echo $LSF_SERVERDIR
-```
+}\if{html}{\out{</div>}}
 
-The time strings by LSF `bjobs` command might be different for different configurations. The **bsub**
-package needs to convert the time strings to `POSIXlt` objects for calculating the time difference. Thus, if
-the default time string parsing fails, users need to provide a user-defined function and set with ``parse_time``
-option in `bsub_opt`. The function accepts a vector of time strings and returns a `POSIXlt` object. For example,
-if the time string returned from ``bjobs`` command is in a form of ``Dec 1 18:00:00 2019``, the parsing function
+The time strings by LSF \code{bjobs} command might be different for different configurations. The \strong{bsub}
+package needs to convert the time strings to \code{POSIXlt} objects for calculating the time difference. Thus, if
+the default time string parsing fails, users need to provide a user-defined function and set with \code{parse_time}
+option in \code{bsub_opt}. The function accepts a vector of time strings and returns a \code{POSIXlt} object. For example,
+if the time string returned from \code{bjobs} command is in a form of \verb{Dec 1 18:00:00 2019}, the parsing function
 can be defined as:
 
-```r
-bsub_opt$parse_time = function(x) {
-    as.POSIXlt(x, format = "\\%b \\%d \\%H:\\%M:\\%S \\%Y")
-}
-```
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{bsub_opt$parse_time = function(x) \{
+    as.POSIXlt(x, format = "\\\\\%b \\\\\%d \\\\\%H:\\\\\%M:\\\\\%S \\\\\%Y")
+\}
+}\if{html}{\out{</div>}}
 }
 \examples{
 # The default bsub_opt

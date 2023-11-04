@@ -13,25 +13,25 @@
 #' @details
 #' There are following global parameters:
 #' 
-#' -`packages` A character vector with package names that will be loaded before running the script.
-#' -`image` A character vector of RData/rda files that will be loaded before running the script.
-#' -`temp_dir` Path of temporary folder where the temporary R/bash scripts will be put.
-#' -`output_dir` Path of output folder where the output/flag files will be put.
-#' -`enforce` If a flag file for the job is found, whether to enforce to rerun the job.
-#' -`R_version` The version of R.
-#' -`working_dir` The working directory.
-#' -`ignore` Whether ignore `bsub_chunk`, `bsub_script` and `bsub_cmd`.
-#' -`local` Run job locally (not submitting to the LSF cluster)?
-#' -`call_Rscript` How to call `Rscript` by specifying an R version number.
-#' -`submission_node` A list of node names for submitting jobs.
-#' -`login_node` This value basically is the same as ``submission_node`` unless the login nodes are different from submission nodes.
-#' -`sh_head` Commands that are written as head of the sh script.
-#' -`user` Username on the submission node.
-#' -`group` The user group
-#' -`ssh_envir` The commands for setting bash environment for successfully running bjobs, bsub, ...
-#' -`bsub_template` Template for constructing `bsub` command.
-#' -`parse_time` A function that parses time string from the LSF `bjobs` command to a `POSIXct` object.
-#' -`verbose` Whether to print more messages.
+#' - `packages`: A character vector with package names that will be loaded before running the script.
+#' - `image`: A character vector of RData/rda files that will be loaded before running the script.
+#' - `temp_dir`: Path of temporary folder where the temporary R/bash scripts will be put.
+#' - `output_dir`: Path of output folder where the output/flag files will be put.
+#' - `enforce`: If a flag file for the job is found, whether to enforce to rerun the job.
+#' - `R_version`: The version of R.
+#' - `working_dir`: The working directory.
+#' - `ignore`: Whether ignore `bsub_chunk`, `bsub_script` and `bsub_cmd`.
+#' - `local`: Run job locally (not submitting to the LSF cluster)?
+#' - `call_Rscript`: How to call `Rscript` by specifying an R version number.
+#' - `submission_node`: A list of node names for submitting jobs.
+#' - `login_node`: This value basically is the same as ``submission_node`` unless the login nodes are different from submission nodes.
+#' - `sh_head`: Commands that are written as head of the sh script.
+#' - `user`: Username on the submission node.
+#' - `group`: The user group
+#' - `ssh_envir`: The commands for setting bash environment for successfully running bjobs, bsub, ...
+#' - `bsub_template`: Template for constructing `bsub` command.
+#' - `parse_time`: A function that parses time string from the LSF `bjobs` command to a `POSIXct` object.
+#' - `verbose`: Whether to print more messages.
 #'
 #' `ssh_envir` should be properly set so that LSF binaries such as `bsub` or `bjobs` can be properly found.
 #' There are some environment variables initialized when logging in the bash terminal while they are not initialized with the
@@ -238,12 +238,12 @@ check_temp_dir = function(x, ask = TRUE) {
     }
 }
 
-#' Print current configuations
+#' Print current configurations
 #'
 #' @details
 #' This function is only for printing. Use [`bsub_opt()`] to change configurations.
 #'
-#' You simply type ``bconf`` (without the brackets) in the interactive R console.
+#' You simply type `bconf` (without the brackets) in the interactive R console.
 #'
 #' @returns A `bconf` object.
 #'

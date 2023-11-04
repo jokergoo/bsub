@@ -16,7 +16,7 @@ A vector of file names.
 Check whether there are dump files
 }
 \details{
-For the failed jobs, LSF cluster might generate a core dump file and R might generate a .RDataTmp file.
+For the failed jobs, LSF cluster might generate a core dump file and R might generate a \code{.RDataTmp} file.
 
 Note if you manually set working directory in your R code/script, the R dump file can be not caught.
 }

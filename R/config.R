@@ -1,11 +1,13 @@
 
 #' Configure bsub global options
 #' 
+#' @param verbose Whether to print messages.
+#' 
 #' @details
 #' It sets the submission nodes, user name and how to call `Rscript`.
-config_bsub = function() {
+config_bsub = function(verbose = TRUE) {
 	submission_node = readline(prompt = "What is the name of your submission node? ")
-	user = readline(prompt = "What is your user name on @{submission_node}? ")
+	user = readline(prompt = qq("What is your user name on @{submission_node}? "))
 
 	bsub_opt$submission_node = submission_node
 	bsub_opt$user = user
@@ -21,10 +23,23 @@ config_bsub = function() {
                            qq("export LSF_ENVDIR=@{LSF_ENVDIR}"),
                            qq("export LSF_SERVERDIR=@{LSF_SERVERDIR}"))
 
-	call_Rscript = readline(prompt = "How is `Rscript` called, taking {version} as the variable for version? ")
-	bsub_opt$call_Rscript = function(version) qq(call_Rscript, code.pattern = "\\{CODE\\}")
+	R_version = readline(prompt = "What is the R version? ")
+	bsub_opt$R_version = R_version
 
-	if(verbose) qqcat("configure for user '@{bsub_opt$user}' on node @{paste(bsub_opt$submission_node, collapse = ', ')}.\n")
+	call_Rscript = readline(prompt = "How is `Rscript` called, taking {version} as the variable for version? ")
+	call_Rscript = gsub("\\{", "@{", call_Rscript)
+	call_Rscript_fun = eval(parse(text = qq('function(version) qq("@{call_Rscript}")')))
+
+	Rscript_call = call_Rscript_fun(paste0(R.version$major, ".", R.version$minor))
+	oe = try(run_cmd(qq("@{Rscript_call} --version")), silent = TRUE)
+	if(inherits(oe, "try-error")) {
+		warning_wrap(qq("Cannot run `@{Rscript_call} --version` on the submission node, check your `bsub_opt$call_Rscript` global option."))
+	}
+	bsub_opt$call_Rscript = call_Rscript_fun
+
+	if(verbose) {
+		print(bconf)
+	}
 	
 	invisible(NULL)
 }

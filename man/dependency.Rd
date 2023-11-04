@@ -16,25 +16,26 @@ job_dependency_dot(job_id, job_tb = NULL)
 job_dependency_diagram(job_id, job_tb = NULL, ...)
 }
 \arguments{
-\item{job_tb}{A data frame from [`bjobs()`]. Internally used.}
+\item{job_tb}{A data frame from \code{\link[=bjobs]{bjobs()}}. Internally used.}
 
 \item{job_id}{A single job ID.}
 
-\item{...}{Pass to [`DiagrammeR::grViz()`], such as the size of the html widget.}
+\item{...}{Pass to \code{\link[DiagrammeR:grViz]{DiagrammeR::grViz()}}, such as the size of the html widget.}
 }
 \value{
-`job_dependency_all()` returns a list that contains three elements:
+\code{job_dependency_all()} returns a list that contains three elements:
+\itemize{
+\item \code{dep_mat}: a two column matrix containing dependencies from parents to children.
+\item \code{id2name}: a named vector containing mapping from job IDs to job names.
+\item \code{id2stat}: a named vector containing mapping from job IDs to job status.
+}
 
--`dep_mat`: a two column matrix containing dependencies from parents to children.
--`id2name`: a named vector containing mapping from job IDs to job names.
--`id2stat`: a named vector containing mapping from job IDs to job status.
-
-`job_dependency_igraph()` returns a [`igraph::igraph`] object which contains a dependency
+\code{job_dependency_igraph()} returns a \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} object which contains a dependency
 graph induced by the input job ID.
 
-`job_dependency_dot()` returns a DOT code for GraphViz visualization.
+\code{job_dependency_dot()} returns a DOT code for GraphViz visualization.
 
-`job_dependency_diagram()` makes a HTML-based dependency diagram.
+\code{job_dependency_diagram()} makes a HTML-based dependency diagram.
 }
 \description{
 Job dependencies

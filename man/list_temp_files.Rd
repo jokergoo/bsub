@@ -16,8 +16,8 @@ remove_temp_files(ask = TRUE)
 Clear temporary dir
 }
 \details{
-The temporary files might be used by the running/pending jobs. Deleting them might affect some of the jobs.
-You better delete them after all jobs are done.
+The temporary files might be used by the running/pending jobs. Deleting them would affect some jobs.
+You should better delete them after all jobs are done.
 }
 \examples{
 \dontrun{
