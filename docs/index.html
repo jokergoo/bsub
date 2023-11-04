@@ -14,13 +14,15 @@
 <script src="pkgdown.js"></script><meta property="og:title" content="Submitter and Monitor of the LSF Cluster">
 <meta property="og:description" content="It submits R code/R scripts/shell commands to LSF cluster 
   (&lt;https://en.wikipedia.org/wiki/Platform_LSF&gt;, the bsub system) without 
-  leaving R. There is also an interactive shiny app for monitoring the job status.">
+  leaving R. There is also an interactive shiny application for monitoring job status.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -33,18 +35,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.99.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/bsub.html">Get started</a>
 </li>
@@ -54,7 +50,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jokergoo/bsub/">
+  <a href="https://github.com/jokergoo/bsub/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -71,99 +67,95 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="submitter-and-monitor-of-the-lsf-cluster" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#submitter-and-monitor-of-the-lsf-cluster" class="anchor"></a>Submitter and Monitor of the LSF Cluster</h1></div>
-
+<div class="section level1">
+<div class="page-header"><h1 id="submitter-and-monitor-of-the-lsf-cluster">Submitter and Monitor of the LSF Cluster<a class="anchor" aria-label="anchor" href="#submitter-and-monitor-of-the-lsf-cluster"></a>
+</h1></div>
+<p><a href="https://github.com/jokergoo/bsub/actions" class="external-link"><img src="https://github.com/jokergoo/bsub/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <a href="https://cran.r-project.org/web/packages/bsub/index.html" class="external-link"><img src="https://www.r-pkg.org/badges/version/bsub" alt="CRAN"></a></p>
 <p>It sends R code/R scripts/shell commands to LSF cluster without leaving R.</p>
-<div id="install" class="section level3">
-<h3 class="hasAnchor">
-<a href="#install" class="anchor"></a>Install</h3>
+<div class="section level3">
+<h3 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"jokergoo/bsub"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"jokergoo/bsub"</span><span class="op">)</span></span></code></pre></div>
 <p>If you want the full functionality of the package, you need to install a few more packages:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">'jokergoo/bsub'</span>, dependencies <span class="op">=</span> <span class="st">'Suggests'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'jokergoo/bsub'</span>, dependencies <span class="op">=</span> <span class="st">'Suggests'</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="documentation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h3>
-<p>The online documentation is available at <a href="https://jokergoo.github.io/bsub/" class="uri">https://jokergoo.github.io/bsub/</a>.</p>
+<div class="section level3">
+<h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h3>
+<p>The online documentation is available at <a href="https://jokergoo.github.io/bsub/" class="external-link uri">https://jokergoo.github.io/bsub/</a>.</p>
 <p>There are the following vignettes:</p>
 <ul>
-<li><a href="https://jokergoo.github.io/bsub_vignettes/bsub_intro.html">Send R code/R scripts/shell commands to LSF cluster</a></li>
-<li><a href="https://jokergoo.github.io/bsub_vignettes/configure_bsub_package.html">Configure bsub package</a></li>
-<li><a href="https://jokergoo.github.io/bsub_vignettes/two_ssh.html">What if you need to establish two ssh connections to reach the submission node</a></li>
+<li><a href="https://jokergoo.github.io/bsub_vignettes/bsub_intro.html" class="external-link">Send R code/R scripts/shell commands to LSF cluster</a></li>
+<li><a href="https://jokergoo.github.io/bsub_vignettes/configure_bsub_package.html" class="external-link">Configure bsub package</a></li>
+<li><a href="https://jokergoo.github.io/bsub_vignettes/two_ssh.html" class="external-link">What if you need to establish two ssh connections to reach the submission node</a></li>
 </ul>
 </div>
-<div id="submit-jobs" class="section level3">
-<h3 class="hasAnchor">
-<a href="#submit-jobs" class="anchor"></a>Submit jobs</h3>
+<div class="section level3">
+<h3 id="submit-jobs">Submit jobs<a class="anchor" aria-label="anchor" href="#submit-jobs"></a>
+</h3>
 <p>Directly submit R chunk:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/bsub">bsub</a></span><span class="op">)</span>
-
-<span class="co"># R code</span>
-<span class="fu"><a href="reference/bsub_chunk.html">bsub_chunk</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"example"</span>, memory <span class="op">=</span> <span class="fl">10</span>, hours <span class="op">=</span> <span class="fl">10</span>, cores <span class="op">=</span> <span class="fl">4</span>, 
-<span class="op">{</span>
-    <span class="va">fit</span> <span class="op">=</span> <span class="fu">NMF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/NMF/man/nmf.html">nmf</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
-    <span class="co"># you better save `fit` into a permanent file</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">fit</span>, file <span class="op">=</span> <span class="st">"/path/of/fit.rds"</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/bsub" class="external-link">bsub</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># R code</span></span>
+<span><span class="fu"><a href="reference/bsub.html">bsub_chunk</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"example"</span>, memory <span class="op">=</span> <span class="fl">10</span>, hours <span class="op">=</span> <span class="fl">10</span>, cores <span class="op">=</span> <span class="fl">4</span>, </span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">fit</span> <span class="op">=</span> <span class="fu">NMF</span><span class="fu">::</span><span class="fu">nmf</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span>    <span class="co"># you better save `fit` into a permanent file</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">fit</span>, file <span class="op">=</span> <span class="st">"/path/of/fit.rds"</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Submit an R script:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># R script</span>
-<span class="fu"><a href="reference/bsub_script.html">bsub_script</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"example"</span>,
-    script <span class="op">=</span> <span class="st">"/path/of/foo.R"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># R script</span></span>
+<span><span class="fu"><a href="reference/bsub.html">bsub_script</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"example"</span>,</span>
+<span>    script <span class="op">=</span> <span class="st">"/path/of/foo.R"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <p>Submit shell commands:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># shell commands</span>
-<span class="fu"><a href="reference/bsub_cmd.html">bsub_cmd</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"example"</span>,
-    cmd <span class="op">=</span> <span class="st">"samtools view ..."</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># shell commands</span></span>
+<span><span class="fu"><a href="reference/bsub.html">bsub_cmd</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"example"</span>,</span>
+<span>    cmd <span class="op">=</span> <span class="st">"samtools view ..."</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <p>Kill jobs:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/bkill.html">bkill</a></span><span class="op">(</span><span class="va">job_id</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/bkill.html">bkill</a></span><span class="op">(</span><span class="va">job_id</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="view-job-info" class="section level3">
-<h3 class="hasAnchor">
-<a href="#view-job-info" class="anchor"></a>View job info</h3>
+<div class="section level3">
+<h3 id="view-job-info">View job info<a class="anchor" aria-label="anchor" href="#view-job-info"></a>
+</h3>
 <p>View job summaries:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bjobs</span>
-<span class="va">brecent</span>
-<span class="va">bjobs_running</span>
-<span class="va">bjobs_pending</span>
-<span class="va">bjobs_done</span>
-<span class="va">bjobs_exit</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">bjobs</span></span>
+<span><span class="va">brecent</span></span>
+<span><span class="va">bjobs_running</span></span>
+<span><span class="va">bjobs_pending</span></span>
+<span><span class="va">bjobs_done</span></span>
+<span><span class="va">bjobs_exit</span></span></code></pre></div>
 <p>An example of the job queries is as follows:</p>
-<p><img src="https://user-images.githubusercontent.com/449218/71292253-2577ad00-2374-11ea-9402-855e7f01652c.png" alt="image"></p>
+<div class="figure">
+<img src="https://user-images.githubusercontent.com/449218/71292253-2577ad00-2374-11ea-9402-855e7f01652c.png" alt=""><p class="caption">image</p>
+</div>
 <p>View job log:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/job_log.html">job_log</a></span><span class="op">(</span><span class="va">job_id</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/job_log.html">job_log</a></span><span class="op">(</span><span class="va">job_id</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="interactive-job-monitor" class="section level3">
-<h3 class="hasAnchor">
-<a href="#interactive-job-monitor" class="anchor"></a>Interactive job monitor</h3>
+<div class="section level3">
+<h3 id="interactive-job-monitor">Interactive job monitor<a class="anchor" aria-label="anchor" href="#interactive-job-monitor"></a>
+</h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/monitor.html">monitor</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/monitor.html">monitor</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>The job summary table:</p>
-<p>
-<img width="907" alt="monitor" src="https://user-images.githubusercontent.com/449218/71278574-40d4bf00-2358-11ea-9849-339aeb324601.png"></p>
+<p><img width="907" alt="monitor" src="https://github.com/jokergoo/bsub/assets/449218/9970a50d-dbf6-4477-9a8b-5344f641b8ba"></p>
 <p>Job log:</p>
-<p>
-<img width="905" alt="job_log" src="https://user-images.githubusercontent.com/449218/71278573-403c2880-2358-11ea-8c82-c99677c0ebb0.png"></p>
-<p>Job dependency tree:</p>
-<p>
-<img width="895" alt="dependency_tree" src="https://user-images.githubusercontent.com/449218/71278571-403c2880-2358-11ea-8e05-69c064148b2d.png"></p>
-<p>Kill jobs:</p>
-<p>
-<img width="895" alt="Screenshot 2019-12-22 at 16 03 49" src="https://user-images.githubusercontent.com/449218/71323523-8ddda000-24d4-11ea-8fd3-350cbe93763c.png"></p>
+<p><img width="905" alt="job_log" src="https://github.com/jokergoo/bsub/assets/449218/b2faa77c-6dc1-4578-b52c-73bc7a739ba9"></p>
+<p>Job dependency diagram:</p>
+<p><img width="895" alt="dependency_graph" src="https://github.com/jokergoo/bsub/assets/449218/eaf85ef6-32bb-4c09-a3d4-1069cf11a404"></p>
 </div>
-<div id="license" class="section level3">
-<h3 class="hasAnchor">
-<a href="#license" class="anchor"></a>License</h3>
+<div class="section level3">
+<h3 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h3>
 <p>MIT @ Zuguang Gu</p>
 </div>
 </div>
@@ -171,46 +163,51 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=bsub">https://​cloud.r-project.org/​package=bsub</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/jokergoo/bsub/">https://​github.com/​jokergoo/​bsub/​</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li>
-<a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
-</li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Zuguang Gu <br><small class="roles"> Maintainer </small>  </li>
+<li><a href="https://cloud.r-project.org/package=bsub" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/jokergoo/bsub/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/jokergoo/bsub/actions"><img src="https://github.com/jokergoo/bsub/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://cran.r-project.org/web/packages/bsub/index.html"><img src="https://www.r-pkg.org/badges/version/bsub" alt="CRAN"></a></li>
+<li>
+<a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
+</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing bsub</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Zuguang Gu <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7395-8709" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+</ul>
+</div>
+
+
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Zuguang Gu.</p>
+  <p></p>
+<p>Developed by Zuguang Gu.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -218,6 +215,8 @@
 
   
 
+
+  
 
   </body>
 </html>
