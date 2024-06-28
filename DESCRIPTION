@@ -1,8 +1,8 @@
 Package: bsub
 Type: Package
 Title: Submitter and Monitor of the 'LSF Cluster'
-Version: 2.0.2
-Date: 2024-03-29
+Version: 2.0.3
+Date: 2024-06-28
 Author: Zuguang Gu
 Authors@R: person("Zuguang", "Gu", email = "z.gu@dkfz.de", role = c("aut", "cre"),
                   comment = c('ORCID'="0000-0002-7395-8709"))

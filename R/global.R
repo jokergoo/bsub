@@ -265,22 +265,22 @@ print.bconf = function(x, ...) {
     flag = 0
     msg = NULL
     if(!file.exists(bsub_opt$temp_dir)) {
-        msg = c(msg, qq("!! The temp_dir (@{bsub_opt$temp_dir}) does not exist."))
+        msg = c(msg, crayon::red(qq("!! The temp_dir (@{bsub_opt$temp_dir}) does not exist.")))
         flag = 1
     }
     if(bsub_opt$temp_dir != bsub_opt$output_dir) {
         if(!file.exists(bsub_opt$output_dir)) {
-            msg = c(msg, qq("!! The output_dir (@{bsub_opt$output_dir}) does not exist."))
+            msg = c(msg, crayon::red(qq("!! The output_dir (@{bsub_opt$output_dir}) does not exist.")))
             flag = 2
         }
     }
     if(flag) {
         if(flag == 1) {
-            msg = c(msg, "!! The directory can be created manually, or by setting a value to",
-                         "!! `bsub_opt$temp_dir`, or by the first call of `bsub_*()`.")
+            msg = c(msg, crayon::red("!! The directory can be created manually, or by setting a value to"),
+                         crayon::red("!! `bsub_opt$temp_dir`, or by the first call of `bsub_*()`."))
         } else {
-            msg = c(msg, "!! The directory can be created manually, or by setting a value to",
-                         "!! `bsub_opt$output_dir`, or by the first call of `bsub_*()`.")
+            msg = c(msg, crayon::red("!! The directory can be created manually, or by setting a value to"),
+                         crayon::red("!! `bsub_opt$output_dir`, or by the first call of `bsub_*()`."))
         }
 
         cat("\n")
@@ -296,42 +296,42 @@ get_bconf_message = function(x, ...) {
     if(is.null(x$user)) {
         msg = c(msg, "  * user is not defined")
     } else {
-        msg = c(msg, qq("  * user for connecting submission node: @{x$user}"))
+        msg = c(msg, qq("  * user for connecting submission node: @{crayon::green(x$user)}"))
     }
 
     if(!is.null(x$group)) {
-        msg = c(msg, qq("  * user group : @{x$group}"))
+        msg = c(msg, qq("  * user group : @{crayon::green(x$group)}"))
     }
 
     if(is.null(x$submission_node)) {
-        msg = c(msg, qq("  ! submission node is not defined"))
+        msg = c(msg, qq(crayon::red("  ! submission node is not defined")))
     } else {
-        msg = c(msg, qq("  * submission node: @{paste(x$submission_node, collapse = ', ')}"))
+        msg = c(msg, qq("  * submission node: @{crayon::green(paste(x$submission_node, collapse = ', '))}"))
 
         if(length(setdiff(x$login_node, x$submission_node))) {
-            msg = c(msg, qq("  * login node: @{paste(x$login_node, collapse = ', ')}"))
+            msg = c(msg, qq("  * login node: @{crayon::green(paste(x$login_node, collapse = ', '))}"))
         }
     }
     
     if(!is.null(x$R_version)) {
-        msg = c(msg, qq("  * global R version: @{x$R_version}"))
+        msg = c(msg, qq("  * global R version: @{crayon::green(x$R_version)}"))
     }
 
     msg = c(msg, "  * command to call `Rscript`:")
-    msg = c(msg, paste0("     ", deparse(body(x$call_Rscript)), " foo.R"))
+    msg = c(msg, crayon::green(paste0("     ", deparse(body(x$call_Rscript)), " foo.R")))
 
     if(!is.null(x$package)) {
-        msg = c(msg, qq("  * Global R packages: @{paste(x$packages, collapse=',')}"))
+        msg = c(msg, qq("  * Global R packages: @{crayon::green(paste(x$packages, collapse=','))}"))
     }
 
     if(!is.null(x$image)) {
         msg = c(msg, "  * Global image files that will be loaded to every job:")
         for(f in x$image) {
-            msg = c(msg, qq("    - @{f}"))
+            msg = c(msg, crayon::green(qq("    - @{f}")))
         }
     }
 
-    msg = c(msg, qq("  * temporary directory: @{x$temp_dir}"))
+    msg = c(msg, qq("  * temporary directory: @{crayon::green(x$temp_dir)}"))
 
     if(!x$enforce) {
         msg = c(msg, "  - successful jobs are skipped.")

@@ -1,1 +1,23 @@
 destination: docs
+
+navbar:
+  title: "cola"
+  left:
+    - text: "Get started"
+      href: articles/bsub.html
+    - text: "Articles"
+      menu:
+        - text: "Send R code/R scripts/shell commands to LSF cluster"
+          href: articles/bsub_intro.html
+        - text: "Configure bsub package"
+          href: articles/configure_bsub_package.html
+        - text: "Establish two ssh connections to reach the submission node"
+          href: articles/two_ssh.html
+
+    - text: "Reference"
+      href: reference/index.html
+
+
+template:
+  includes:
+    after_body: "<style>nav[data-toggle='toc'] .nav .nav {display: block;}</style>"

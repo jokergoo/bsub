@@ -45,7 +45,10 @@ job_dependency_all = function(job_tb = NULL) {
     job_tb2 = job_tb[job_tb$DEPENDENCY != "-", , drop = FALSE]
     
     if(nrow(job_tb2) == 0) {
-        return(NULL)
+        dep_mat = cbind(parent = character(0),
+                     child = character(0))
+
+        return(list(dep_mat = dep_mat, id2name = id2name, id2stat = id2stat))
     }
     
     dep = lapply(strsplit(job_tb2$DEPENDENCY, " && "), function(x) {

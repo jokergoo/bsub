@@ -7,12 +7,14 @@ message_wrap = function (..., appendLF = TRUE) {
 warning_wrap = function (..., appendLF = TRUE) {
     x = paste0(...)
     x = paste(strwrap(x), collapse = "\n")
+    x = crayon::magenta(x)
     warning(x, call. = FALSE)
 }
 
 stop_wrap = function (...) {
     x = paste0(...)
     x = paste(strwrap(x), collapse = "\n")
+    x = crayon::red(x)
     stop(x, call. = FALSE)
 }
 

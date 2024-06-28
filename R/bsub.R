@@ -116,6 +116,7 @@ bsub_chunk = function(code,
             stop(qq("start line (#@{start}) should be no larger than the end line (#@{end})."))
         }
         code = script[start:end]
+        code_validated = FALSE
     } else {
 
         if(length(variables) == 0) {
@@ -149,13 +150,48 @@ bsub_chunk = function(code,
                 }
             }
 
+            code_validated = TRUE
+
             code = deparse(expr)
         } else {
             code = deparse(substitute(code))
+            code_validated = FALSE
         }
     }
     code = paste(code, collapse = "\n")
     code = paste0(code, "\n")
+
+    if(!code_validated) {
+        expr = parse(text = code)
+        code_fun = function() {}
+        body(code_fun) = expr
+        gl = findGlobals(code_fun, merge = FALSE)
+        variables = setdiff(gl$variables, variables)
+
+        if(length(variables)) {
+            warning_wrap(qq("There are variables (@{paste(variables, collapse = ', ')}) not defined in the code chunk."))
+        }
+
+        p2 = character(0)
+        if(!identical(image, TRUE)) {
+            functions = gl$functions
+            for(f in functions) {
+                p = find(f)
+                if(length(p)) {
+                    if(grep("package:", p)) {
+                        p2 = c(p2, p)
+                    } else if(p == ".GlobalEnv") {
+                        variables = c(variables, f)
+                    }
+                }
+            }
+            packages = union(gsub("package:", "", p2), packages)
+            packages = setdiff(packages, c("base", "stats", "graphics", "grDevices", "utils", "datasets", "methods"))
+            if(length(packages)) {
+                warning_wrap(qq("There are packages (@{paste(packages, collapse = ', ')}) not specified in the code chunk."))
+            }
+        }
+    }
 
     if(is.null(name)) {
         name = paste0("R_code_", digest::digest(code, "crc32"))
@@ -214,7 +250,7 @@ bsub_chunk = function(code,
 
     # if `image` is true, save all variables and all packages that are loaded
     if(identical(image, TRUE)) {
-        variables = c(variables, ls(envir = .GlobalEnv, all.names = TRUE))
+        variables = c(variables, ls(envir = parent.frame(), all.names = TRUE))
         packages = c(rev(names(sessionInfo()$otherPkgs)), packages)
         image = NULL
     }
@@ -222,8 +258,8 @@ bsub_chunk = function(code,
     ## a special tag for variables
     if(length(variables)) {
         if(any(grepl("^_all_functions", variables))) {
-            var_name = ls(envir = .GlobalEnv, all.names = TRUE)
-            l = sapply(var_name, function(x) inherits(get(x, envir = .GlobalEnv), "function"))
+            var_name = ls(envir = parent.frame(), all.names = TRUE)
+            l = sapply(var_name, function(x) inherits(get(x, envir = parent.frame()), "function"))
             var_name = var_name[l]
             variables = c(variables, var_name)
         }
@@ -235,6 +271,8 @@ bsub_chunk = function(code,
             packages = c(packages, rev(names(sessionInfo()$otherPkgs)))
         }
     }
+
+    # analyze code
 
     head = "############## temporary R script ##############"
     tail = ""

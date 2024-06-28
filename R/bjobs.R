@@ -49,6 +49,14 @@ bjobs = function(status = c("RUN", "PEND"), max = Inf, filter = NULL, print = TR
         return(invisible(NULL))
     }
 
+    i = grep("^JOBID,STAT,JOB_NAME", ln)
+    if(length(i) == 0) {
+        cat("no output from bjobs\n")
+        return(invisible(NULL))
+    }
+
+    ln = ln[seq(i, length(ln))]
+
     df = read.csv(textConnection(paste(ln, collapse = "\n")), stringsAsFactors = FALSE)
     df$STAT = factor(df$STAT)
 

@@ -17,14 +17,27 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bsub</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav"><li>
-  <a href="../articles/bsub.html">Get started</a>
-</li>
+      <ul class="nav navbar-nav"><li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/bsub_intro.html">Send R code/R scripts/shell commands to LSF cluster</a>
+    </li>
+    <li>
+      <a href="../articles/configure_bsub_package.html">Configure bsub package</a>
+    </li>
+    <li>
+      <a href="../articles/two_ssh.html">Establish two ssh connections to reach the submission node</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -121,47 +134,76 @@ for the job with the same name. 1 means the most recent job.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">bjobs</span> <span class="co"># this is the same as bjobs()</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs</span><span class="op">(</span><span class="op">)</span> <span class="co"># all running and pending jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs</span><span class="op">(</span>status <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="co"># all jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs</span><span class="op">(</span>status <span class="op">=</span> <span class="st">"RUN"</span><span class="op">)</span> <span class="co"># all running jobs, you can also use `bjobs_running`</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs</span><span class="op">(</span>status <span class="op">=</span> <span class="st">"PEND"</span><span class="op">)</span> <span class="co"># all pending jobs, you can also use `bjobs_pending`</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs</span><span class="op">(</span>status <span class="op">=</span> <span class="st">"DONE"</span><span class="op">)</span> <span class="co"># all done jobs, you can also use `bjobs_done`</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs</span><span class="op">(</span>status <span class="op">=</span> <span class="st">"EXIT"</span><span class="op">)</span> <span class="co"># all exit jobs, you can also use `bjobs_exit`</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs</span><span class="op">(</span>status <span class="op">=</span> <span class="st">"all"</span>, max <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="co"># last 20 jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs</span><span class="op">(</span>status <span class="op">=</span> <span class="st">"DONE"</span>, filter <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span> <span class="co"># done jobs with name '.*example.*'</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">brecent</span>  <span class="co"># this is the same as `brecent()`</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">brecent</span><span class="op">(</span><span class="op">)</span> <span class="co"># last 20 jobs (from all status)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">brecent</span><span class="op">(</span>max <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="co"># last 50 jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">brecent</span><span class="op">(</span>filter <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span> <span class="co"># last 20 jobs with name ".*example.*"</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">bjobs_running</span>  <span class="co"># this is the same as `bjobs_running()`</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_running</span><span class="op">(</span><span class="op">)</span> <span class="co"># all running jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_running</span><span class="op">(</span>max <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="co"># last 50 running jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_running</span><span class="op">(</span>filter <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span> <span class="co"># running jobs with name ".*example.*"</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">bjobs_pending</span>  <span class="co"># this is the same as `bjobs_pending()`</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_pending</span><span class="op">(</span><span class="op">)</span> <span class="co"># all pending jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_pending</span><span class="op">(</span>max <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="co"># last 50 pending jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_pending</span><span class="op">(</span>filter <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span> <span class="co"># pending jobs with name ".*example.*"</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">bjobs_done</span>  <span class="co"># this is the same as `bjobs_done()`</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_done</span><span class="op">(</span><span class="op">)</span> <span class="co"># all done jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_done</span><span class="op">(</span>max <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="co"># last 50 done jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_done</span><span class="op">(</span>filter <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span> <span class="co"># done jobs with name ".*example.*"</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">bjobs_exit</span>  <span class="co"># this is the same as `bjobs_exit()`</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_exit</span><span class="op">(</span><span class="op">)</span> <span class="co"># all exit jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_exit</span><span class="op">(</span>max <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="co"># last 50 exit jobs</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
 <span class="r-in"><span><span class="fu">bjobs_exit</span><span class="op">(</span>filter <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span> <span class="co"># exit jobs with name ".*example.*"</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ssh_connect():</span> bsub_opt$submission_node is not defined. No node to connect.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -184,7 +226,5 @@ for the job with the same name. 1 means the most recent job.</p>
   
 
 
-  
-
-  </body></html>
+  <style>nav[data-toggle='toc'] .nav .nav {display: block;}</style></body></html>
 

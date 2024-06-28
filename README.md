@@ -8,28 +8,24 @@ It sends R code/R scripts/shell commands to LSF cluster without leaving R.
 
 ### Install
 
+Directly from CRAN:
+
+```r
+install.packages("bsub")
+```
+
+Or from GitHub:
+
 ```r
 if (!requireNamespace("devtools", quietly = TRUE))
     install.packages("devtools")
 devtools::install_github("jokergoo/bsub")
 ```
 
-If you want the full functionality of the package, you need to install a few more packages:
-
-```r
-devtools::install_github('jokergoo/bsub', dependencies = 'Suggests')
-```
-
 ### Documentation
 
 The online documentation is available at https://jokergoo.github.io/bsub/.
 
-
-There are the following vignettes:
-
-- [Send R code/R scripts/shell commands to LSF cluster](https://jokergoo.github.io/bsub_vignettes/bsub_intro.html)
-- [Configure bsub package](https://jokergoo.github.io/bsub_vignettes/configure_bsub_package.html)
-- [What if you need to establish two ssh connections to reach the submission node](https://jokergoo.github.io/bsub_vignettes/two_ssh.html)
 
 ### Submit jobs
 
@@ -69,6 +65,16 @@ Kill jobs:
 bkill(job_id)
 ```
 
+### Job dependencies
+
+```r
+
+job1 = bsub_chunk(...)
+job2 = bsub_chunk(...)
+bsub_chunk(..., dependency = c(job1, job2))
+```
+
+
 ### View job info
 
 View job summaries:
@@ -84,7 +90,7 @@ bjobs_exit
 
 An example of the job queries is as follows:
 
-![image](https://user-images.githubusercontent.com/449218/71292253-2577ad00-2374-11ea-9402-855e7f01652c.png)
+![](https://user-images.githubusercontent.com/449218/71292253-2577ad00-2374-11ea-9402-855e7f01652c.png)
 
 View job log: 
 
@@ -110,7 +116,6 @@ Job log:
 Job dependency diagram:
 
 <p><img width="895" alt="dependency_graph" src="https://github.com/jokergoo/bsub/assets/449218/eaf85ef6-32bb-4c09-a3d4-1069cf11a404"></p>
-
 
 
 ### License

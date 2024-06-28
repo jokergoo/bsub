@@ -3,5 +3,8 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   bsub: bsub.html
-last_built: 2023-11-04T20:28Z
+  bsub_intro: bsub_intro.html
+  configure_bsub_package: configure_bsub_package.html
+  two_ssh: two_ssh.html
+last_built: 2024-03-31T16:10Z
 

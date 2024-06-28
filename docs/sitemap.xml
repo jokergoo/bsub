@@ -10,7 +10,16 @@
     <loc>/articles/bsub.html</loc>
   </url>
   <url>
+    <loc>/articles/bsub_intro.html</loc>
+  </url>
+  <url>
+    <loc>/articles/configure_bsub_package.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/two_ssh.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -77,6 +86,9 @@
   </url>
   <url>
     <loc>/reference/dependency.html</loc>
+  </url>
+  <url>
+    <loc>/reference/formatFileSize.html</loc>
   </url>
   <url>
     <loc>/reference/get_dependency.html</loc>

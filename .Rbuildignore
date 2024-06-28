@@ -10,3 +10,16 @@ test_no_run
 sftp-config.json
 .DS_Store
 ^\.github$
+
+
+vignettes/bjobs_barplot.png
+vignettes/bjobs_timeline.png
+vignettes/bsub.Rmd
+vignettes/bsub_intro.Rmd
+vignettes/configure_bsub_package.Rmd
+vignettes/dependency_tree.png
+vignettes/job_log.png
+vignettes/kill_jobs.png
+vignettes/monitor.png
+vignettes/readme.md
+vignettes/two_ssh.Rmd
