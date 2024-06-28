@@ -57,43 +57,53 @@ dt_bind_events = function() {
       'cursor': 'pointer'
     };
 
-    $('.dataTable tbody tr :nth-child(4)').on('click', function(event) {
+    var nc = $(".dataTable thead tr th").length;
+    var offset;
+    if(nc == 11) {
+    	offset = 1;
+    } else if(nc == 12) {
+    	offset = 0;
+    }
+
+    $('.dataTable tbody tr :nth-child('+ (4-offset) +')').on('click', function(event) {
         var job_id = $(this).siblings().slice(0, 1).text();
         Shiny.onInputChange('select_job', 0);
         Shiny.onInputChange('select_job', job_id);
     }).css(styles);
 
-    $('.dataTable tbody tr :nth-child(2)').on('click', function(event) {
-    	if($(this).text() != "") {
-	    	var job_id = $(this).siblings().slice(0, 1).text();
-	        Shiny.onInputChange('select_dep', 0);
-	        Shiny.onInputChange('select_dep', job_id);
-	    }
-    }).css(styles);
+    if(nc == 12) {
+	    $('.dataTable tbody tr :nth-child(2)').on('click', function(event) {
+	    	if($(this).text() != "") {
+		    	var job_id = $(this).siblings().slice(0, 1).text();
+		        Shiny.onInputChange('select_dep', 0);
+		        Shiny.onInputChange('select_dep', job_id);
+		    }
+	    }).css(styles);
+	}
 
-    $('.dataTable tbody tr :nth-child(3)').on('click', function(event) {
+    $('.dataTable tbody tr :nth-child('+ (3-offset) +')').on('click', function(event) {
     	var job_id = $(this).siblings().slice(0, 1).text();
         Shiny.onInputChange('select_dep', 0);
         Shiny.onInputChange('select_dep', job_id);
     }).css("cursor", "pointer");
 
     $('.dataTable tbody tr :nth-child(1)').each(function() {
-    	var status = $(this).siblings().slice(1, 2).text();
+    	var status = $(this).siblings().slice(1-offset, 2-offset).text();
     	if(status == "RUN" || status == "PEND") {
     		var job_id = $(this).text();
     		$(this).html("<input type='checkbox' class='job_checkbox' name='job_id_kill' value='"+job_id+"' /> " + job_id)
     	}
     })
 
-    $('.dataTable tbody tr :nth-child(3)').each(function() {
+    $('.dataTable tbody tr :nth-child('+ (3-offset) +')').each(function() {
     	var status = $(this).html();
     	$(this).html("<span class='" + status + "'>" + status + "</span");
     })
 
-    $('.dataTable tbody tr :nth-child(9)').addClass("dt-right");
-    $('.dataTable thead tr :nth-child(9)').addClass("dt-right");
+    $('.dataTable tbody tr :nth-child(' + (9-offset) + ')').addClass("dt-right");
+    $('.dataTable thead tr :nth-child(' + (9-offset) + ')').addClass("dt-right");
 
-    var k = $('.dataTable tbody tr :nth-child(3)').filter(function() {
+    var k = $('.dataTable tbody tr :nth-child('+ (3-offset) + ')').filter(function() {
     	var status = $(this).text();
     	return status == "RUN" || status == "PEND"
     }).length;
