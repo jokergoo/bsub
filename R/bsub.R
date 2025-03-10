@@ -321,7 +321,7 @@ bsub_chunk = function(code,
     if(bsub_opt$debug) {  # print R code to out file
         head = c(head, qq("cat(readLines(\"@{tmp}\"), sep = \"\\n\")"))
     }
-    tail = c(tail, "invisible(file.remove(\"@{tmp}\"))\n\n")  # the R script is already loaded in memory, the temp R script can be deleted
+    tail = c(tail, qq("invisible(file.remove(\"@{tmp}\"))\n\n"))  # the R script is already loaded in memory, the temp R script can be deleted
 
     if(save_var) {
         code = paste0("R_BSUB_RETURN_VAR = ", code)
