@@ -166,10 +166,10 @@ bsub_chunk = function(code,
         code_fun = function() {}
         body(code_fun) = expr
         gl = findGlobals(code_fun, merge = FALSE)
-        variables = setdiff(gl$variables, variables)
+        variables_unimported = setdiff(gl$variables, variables)
 
-        if(length(variables)) {
-            warning_wrap(qq("There are variables (@{paste(variables, collapse = ', ')}) not defined in the code chunk."))
+        if(length(variables_unimported)) {
+            warning_wrap(qq("There are variables (@{paste(variables_unimported, collapse = ', ')}) not defined and not imported in the code chunk."))
         }
 
         p2 = character(0)
