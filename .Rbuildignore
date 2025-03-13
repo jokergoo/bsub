@@ -14,7 +14,6 @@ sftp-config.json
 
 vignettes/bjobs_barplot.png
 vignettes/bjobs_timeline.png
-vignettes/bsub.Rmd
 vignettes/bsub_intro.Rmd
 vignettes/configure_bsub_package.Rmd
 vignettes/dependency_tree.png

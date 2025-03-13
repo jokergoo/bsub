@@ -10,6 +10,6 @@ vignette: >
 
 There are the following vignettes:
 
-- [Send R code/R scripts/shell commands to LSF cluster](https://jokergoo.github.io/bsub/bsub_intro.html)
-- [Configure bsub package](https://jokergoo.github.io/bsub/configure_bsub_package.html)
-- [Establish two ssh connections to reach the submission node](https://jokergoo.github.io/bsub/two_ssh.html)
+- [Send R code/R scripts/shell commands to LSF cluster](https://jokergoo.github.io/bsub/articles/bsub_intro.html)
+- [Configure bsub package](https://jokergoo.github.io/bsub/articles/configure_bsub_package.html)
+- [Establish two ssh connections to reach the submission node](https://jokergoo.github.io/bsub/articles/two_ssh.html)
