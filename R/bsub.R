@@ -367,6 +367,7 @@ bsub_chunk = function(code,
 bsub_script = function(script, 
     argv = "", 
     name = NULL, 
+    working_dir = bsub_opt$working_dir,
     hours = 1, 
     memory = 1, 
     cores = 1,
@@ -453,6 +454,10 @@ bsub_script = function(script,
     cat(cyan(qq("- job: '@{magenta(name)}' from script @{basename(script)}\n")))
     
     command = qq("@{bsub_opt$call_Rscript(R_version)} '@{script}' @{argv};")
+
+    if(working_dir != "") {
+        sh_head = paste0(sh_head, "\n", qq("cd '@{working_dir}'\n"))
+    }
 
     bsub_submit(
         command = command, 
