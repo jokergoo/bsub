@@ -135,9 +135,9 @@ bsub_chunk = function(code,
                 for(f in functions) {
                     p = find(f)
                     if(length(p)) {
-                        if(grep("package:", p)) {
-                            packages = c(packages, p)
-                        } else if(p == ".GlobalEnv") {
+                        if(grep("package:", p[1])) {
+                            packages = c(packages, p[1])
+                        } else if(p[1] == ".GlobalEnv") {
                             variables = c(variables, f)
                         }
                     }
@@ -178,9 +178,9 @@ bsub_chunk = function(code,
             for(f in functions) {
                 p = find(f)
                 if(length(p)) {
-                    if(grep("package:", p)) {
-                        p2 = c(p2, p)
-                    } else if(p == ".GlobalEnv") {
+                    if(grep("package:", p[1])) {
+                        p2 = c(p2, p[1])
+                    } else if(p[1] == ".GlobalEnv") {
                         variables = c(variables, f)
                     }
                 }
