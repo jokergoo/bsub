@@ -35,6 +35,7 @@ bsub_script(
   script,
   argv = "",
   name = NULL,
+  working_dir = bsub_opt$working_dir,
   hours = 1,
   memory = 1,
   cores = 1,

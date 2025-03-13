@@ -1,3 +1,10 @@
+Changes in version 2.0.6
+
+* `bsub_script()`: allows to set `working_dir`.
+
+-------------------------------------
+
+
 Changes in version 2.0.4
 
 * minor changes.
